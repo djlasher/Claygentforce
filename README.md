@@ -98,6 +98,27 @@ Claygentforce/
     product-owner-agent.md
     qa-agent.md
     security-agent.md
+  scenarios/
+    README.md
+    TEMPLATE_SCENARIO/
+      README.md
+      SCENARIO_BRIEF.md
+      STAKEHOLDER_INTAKE.md
+      ACCEPTANCE_CRITERIA.md
+      ARCHITECTURE_DECISION.md
+      QA_REVIEW.md
+      SECURITY_REVIEW.md
+      DEPLOYMENT_REVIEW.md
+      RETROSPECTIVE.md
+    001-case-escalation-manager-visibility/
+      SCENARIO_BRIEF.md
+      STAKEHOLDER_INTAKE.md
+      ACCEPTANCE_CRITERIA.md
+      ARCHITECTURE_DECISION.md
+      QA_REVIEW.md
+      SECURITY_REVIEW.md
+      DEPLOYMENT_REVIEW.md
+      RETROSPECTIVE.md
   sfdx-project.json
   README.md
 
@@ -112,6 +133,8 @@ Start here:
 - docs/PROJECT_VISION.md — product vision and long-term direction
 - docs/AGENT_ROLES.md — role definitions for the simulated delivery team
 - docs/DELIVERY_SIMULATION_LOOP.md — repeatable delivery simulation flow
+- docs/SIMULATION_RUNBOOK.md — operational guide for running simulations
+- docs/TEMPLATE_STRATEGY.md — strategy for creating and maintaining reusable scenario templates
 - docs/ARCHITECTURE.md — repository and conceptual architecture
 - docs/AI_WORKFLOW_NOTES.md — how AI tools are used in the project workflow
 - docs/ISSUES_LOG.md — setup problems, tool friction, and fixes
@@ -162,6 +185,22 @@ Case Escalation and Manager Visibility
 
 A support team is missing urgent customer Cases. The learner must clarify escalation criteria, choose an automation and visibility approach, consider security and reporting, plan the build, and prepare for deployment.
 
+---
+
+## Scenario Templates
+
+Claygentforce includes a reusable scenario template folder:
+
+- scenarios/TEMPLATE_SCENARIO/
+
+New scenarios should be created by copying this folder, renaming it with the standard scenario naming pattern, and replacing the placeholder content.
+
+The template system helps preserve a consistent delivery lifecycle across scenarios while still allowing each scenario to contain realistic ambiguity, tradeoffs, risks, and consequences.
+
+Template strategy is documented in:
+
+- docs/TEMPLATE_STRATEGY.md
+  
 ---
 
 ## AI-Assisted Workflow
