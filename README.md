@@ -200,7 +200,7 @@ The template system helps preserve a consistent delivery lifecycle across scenar
 Template strategy is documented in:
 
 - docs/TEMPLATE_STRATEGY.md
-  
+
 ---
 
 ## AI-Assisted Workflow
