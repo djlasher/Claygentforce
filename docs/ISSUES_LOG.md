@@ -24,6 +24,7 @@ This file tracks setup problems, tool friction, confusing errors, and the fixes/
 [FAIL] Credential storage
 Failed to write item to store. [0x8]
 Not enough memory resources are available to process this command
+```
 
 ---
 
