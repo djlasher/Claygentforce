@@ -123,6 +123,7 @@ If the learner chooses weak architecture, later simulation consequences may incl
 - poor user experience
 
 ---
+
 ## Salesforce Admin Agent
 
 ### Purpose
@@ -174,6 +175,7 @@ If admin configuration is ignored or poorly designed, consequences may include:
 - user adoption issues
 
 ---
+
 ## Salesforce Developer Agent
 
 ### Purpose
