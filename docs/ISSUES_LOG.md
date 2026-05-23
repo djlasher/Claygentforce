@@ -69,14 +69,6 @@ When using AI to generate repository documentation, the output format matters as
 
 Large documentation updates should be chunked and verified before moving on.
 
-GitHub Connector Behavior Notes
-
-- GitHub access may appear to disconnect during long sessions.
-- Reconnection now occurs through Add Sources and the GitHub App flow.
-- The repository itself remains unaffected.
-- The ChatGPT Codex Connector GitHub App may need repository access granted manually.
-- Repo context may not persist identically across long-running conversations.
-
 ---
 
 # 2026-05-23 — GitHub connector appeared disconnected after app installation
