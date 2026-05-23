@@ -4,6 +4,25 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-23 — Added simulation runbook
+
+### Summary
+
+Added the Claygentforce simulation runbook.
+
+The runbook explains how to execute a simulation using repository documentation, role prompts, and scenario artifacts. It defines the standard simulation lifecycle, role invocation order, artifact update rules, context preservation rules, stage transition rules, readiness gates, consequence simulation, difficulty modes, failure states, retrospective workflow, and future automation direction.
+
+### Files Updated
+
+- docs/SIMULATION_RUNBOOK.md
+- docs/DEVLOG.md
+
+### Notes
+
+The runbook acts as the operational bridge between static repository documentation and future multi-agent simulation orchestration.
+
+It establishes that simulations should preserve decisions, assumptions, tradeoffs, consequences, and learning outcomes in repository files rather than relying only on chat history.
+
 ## 2026-05-23 — Documented GitHub connector reconnection issue
 
 ### Summary
