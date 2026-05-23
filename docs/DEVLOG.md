@@ -4,6 +4,36 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-23 — Added scenario template framework
+
+### Summary
+
+Added the reusable Claygentforce scenario template framework.
+
+The template framework provides a standard folder and artifact structure for creating future Salesforce delivery simulations quickly while preserving realistic ambiguity, discovery, architecture, QA, security, deployment, and retrospective workflows.
+
+### Files Updated
+
+- docs/TEMPLATE_STRATEGY.md
+- docs/DEVLOG.md
+- scenarios/TEMPLATE_SCENARIO/README.md
+- scenarios/TEMPLATE_SCENARIO/SCENARIO_BRIEF.md
+- scenarios/TEMPLATE_SCENARIO/STAKEHOLDER_INTAKE.md
+- scenarios/TEMPLATE_SCENARIO/ACCEPTANCE_CRITERIA.md
+- scenarios/TEMPLATE_SCENARIO/ARCHITECTURE_DECISION.md
+- scenarios/TEMPLATE_SCENARIO/QA_REVIEW.md
+- scenarios/TEMPLATE_SCENARIO/SECURITY_REVIEW.md
+- scenarios/TEMPLATE_SCENARIO/DEPLOYMENT_REVIEW.md
+- scenarios/TEMPLATE_SCENARIO/RETROSPECTIVE.md
+
+### Notes
+
+The template scenario folder mirrors the first completed scenario structure and supports future scenario creation by copying and renaming `scenarios/TEMPLATE_SCENARIO/`.
+
+The template strategy document defines naming rules, creation workflow, maintenance rules, AI-assisted usage, and quality expectations.
+
+This establishes Claygentforce as a reusable scenario framework rather than a one-off example.
+
 ## 2026-05-23 — Added simulation runbook
 
 ### Summary
