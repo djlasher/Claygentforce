@@ -256,12 +256,12 @@ A major early lesson: large AI-generated Markdown files should be copied in smal
 
 Next likely work:
 
-1. Create scenario folder structure.
-2. Define the first scenario template.
-3. Create the Case Escalation and Manager Visibility scenario brief.
-4. Create reusable artifact templates.
-5. Update README and docs as the simulation model evolves.
-6. Add Salesforce metadata only when it directly supports the first scenario.
+1. Create a simulation execution prompt that tells an AI assistant how to run a scenario using the runbook, role prompts, and scenario artifacts.
+2. Run the first manual simulation using `001-case-escalation-manager-visibility`.
+3. Capture lessons from the first simulation run in the scenario retrospective and devlog.
+4. Identify which parts of the manual simulation should be automated first.
+5. Add Salesforce metadata only when it directly supports a scenario learning objective.
+6. Explore lightweight orchestration options for loading scenario context and invoking role prompts.
 
 ---
 
