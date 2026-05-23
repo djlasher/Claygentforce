@@ -4,6 +4,26 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-23 — Added simulation runner prompt
+
+### Summary
+
+Added the Claygentforce simulation runner prompt.
+
+The simulation runner prompt defines how an AI assistant should orchestrate a scenario using the simulation runbook, role prompts, and scenario artifacts. It provides default scenario behavior, standard simulation flow, role invocation rules, stage output format, difficulty behavior, artifact update rules, consequence rules, and retrospective expectations.
+
+### Files Updated
+
+- prompts/simulation-runner.md
+- README.md
+- docs/DEVLOG.md
+
+### Notes
+
+The simulation runner prompt acts as the reusable starting point for future manual or automated Claygentforce simulation runs.
+
+It bridges the static role prompts and scenario artifacts into an executable workflow.
+
 ## 2026-05-23 — Added scenario template framework
 
 ### Summary
