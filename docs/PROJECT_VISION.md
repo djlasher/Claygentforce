@@ -16,12 +16,14 @@ Each agent represents a delivery role, such as:
 
 - Business Analyst
 - Technical Architect
+- Salesforce Admin
 - Salesforce Developer
 - QA Engineer
 - DevOps Engineer
 - Security Reviewer
 - Product Owner
 - Client Stakeholder
+- Incident Commander
 
 The learner interacts with these roles while working through realistic Salesforce delivery scenarios. The system should guide the learner through requirements, solution design, implementation, testing, deployment, review, and post-release support.
 
