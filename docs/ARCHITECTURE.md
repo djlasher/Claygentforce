@@ -32,10 +32,15 @@ Claygentforce/
     ISSUES_LOG.md
     AI_WORKFLOW_NOTES.md
   prompts/
+    admin-agent.md
     architect-agent.md
     ba-agent.md
-    qa-agent.md
+    client-stakeholder-agent.md
+    developer-agent.md
     devops-agent.md
+    incident-commander-agent.md
+    product-owner-agent.md
+    qa-agent.md
     security-agent.md
   sfdx-project.json
   README.md
@@ -343,8 +348,9 @@ The first goal is a clear, reusable foundation.
 - define first scenario
 - create scenario template
 - create architecture decision record template
-- create QA/security/devops review templates
-- create AI workflow notes
+- create BA/admin/developer/QA/security/DevOps review templates
+- create product owner, stakeholder, and incident response templates
+- keep AI workflow notes current
 
 ### Phase 2 — First Salesforce Scenario
 
