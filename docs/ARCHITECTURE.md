@@ -180,7 +180,7 @@ Potential simulation artifacts include:
 - release notes
 - incident report
 - retrospective notes
-- ---
+---
 
 ## Agent Architecture
 
