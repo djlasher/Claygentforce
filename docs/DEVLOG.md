@@ -4,6 +4,25 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-23 — Documented GitHub connector reconnection issue
+
+### Summary
+
+Documented a GitHub connector/session issue encountered during repository setup.
+
+The GitHub App was installed and repository access was granted, but ChatGPT temporarily could not browse repository files in the active chat until the connector state refreshed and the Claygentforce repository was confirmed.
+
+### Files Updated
+
+- docs/ISSUES_LOG.md
+- docs/DEVLOG.md
+
+### Notes
+
+The issue reinforced that project setup should distinguish between account-level connector authorization and active conversation-level repository access.
+
+After reconnection, ChatGPT confirmed access to `djlasher/Claygentforce` on the `main` branch.
+
 ## 2026-05-23 — Expanded role prompt set
 
 ### Summary
