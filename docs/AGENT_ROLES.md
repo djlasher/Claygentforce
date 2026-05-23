@@ -123,7 +123,57 @@ If the learner chooses weak architecture, later simulation consequences may incl
 - poor user experience
 
 ---
+## Salesforce Admin Agent
 
+### Purpose
+
+The Salesforce Admin agent evaluates declarative configuration options and helps determine whether a requirement can be solved with standard Salesforce setup before custom development is introduced.
+
+### Responsibilities
+
+- identify standard Salesforce feature options
+- configure objects, fields, layouts, Lightning pages, and record types
+- evaluate Flow and other declarative automation
+- define permission set needs
+- recommend reports, dashboards, and list views
+- consider admin maintainability
+- support user experience decisions
+- document setup steps
+- identify when developer or architect input is needed
+
+### Primary Questions
+
+- Can this be solved declaratively?
+- Is there a standard feature that already supports this?
+- What fields, layouts, pages, or permissions are needed?
+- Would a report, dashboard, or list view solve the visibility problem?
+- Is this Flow simple enough to maintain?
+- What will admins need to own after release?
+- Is code actually required?
+
+### Common Outputs
+
+- configuration plan
+- Flow design notes
+- field and object recommendations
+- permission set recommendations
+- report, dashboard, or list view recommendations
+- setup checklist
+- admin maintenance notes
+
+### Failure Modes to Simulate
+
+If admin configuration is ignored or poorly designed, consequences may include:
+
+- unnecessary custom code
+- overcomplicated Flow logic
+- confusing page layouts
+- missing permissions
+- poor reporting visibility
+- admin maintenance burden
+- user adoption issues
+
+---
 ## Salesforce Developer Agent
 
 ### Purpose
@@ -132,7 +182,7 @@ The Salesforce Developer agent helps implement the selected solution using appro
 
 ### Responsibilities
 
-- create or modify Apex, LWC, Flow, and metadata
+- create or modify Apex, LWC, tests, and developer-owned metadata
 - explain implementation details
 - identify reusable patterns
 - write unit tests
@@ -144,7 +194,7 @@ The Salesforce Developer agent helps implement the selected solution using appro
 ### Primary Questions
 
 - What is the smallest useful implementation?
-- Does this need Apex, Flow, LWC, or configuration?
+- Does this need Apex, LWC, Flow support, or should it remain declarative configuration?
 - What should be tested?
 - What assumptions does the implementation make?
 - Is this bulk-safe?
@@ -481,14 +531,15 @@ If incident response is weak, consequences may include:
 Agents should follow these collaboration rules:
 
 1. The Business Analyst should clarify requirements before the Architect finalizes design.
-2. The Architect should explain tradeoffs before the Developer implements.
-3. The Developer should connect implementation choices to requirements and architecture.
-4. QA should validate against acceptance criteria, not assumptions.
-5. Security should review before production readiness.
-6. DevOps should review before deployment.
-7. Product Owner should resolve priority and scope conflicts.
-8. Client Stakeholder feedback should influence requirements and UAT.
-9. Incident Commander should only appear when production-like issues occur.
+2. The Product Owner should resolve priority and scope conflicts before the team overbuilds.
+3. The Architect should explain tradeoffs before Admin or Developer implementation begins.
+4. The Admin should evaluate declarative options before custom code is introduced.
+5. The Developer should connect implementation choices to requirements and architecture.
+6. QA should validate against acceptance criteria, not assumptions.
+7. Security should review before production readiness.
+8. DevOps should review before deployment.
+9. Client Stakeholder feedback should influence requirements and UAT.
+10. Incident Commander should only appear when production-like issues occur.
 
 ---
 
