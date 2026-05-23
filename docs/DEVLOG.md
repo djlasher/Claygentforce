@@ -4,6 +4,45 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-23 — Expanded role prompt set
+
+### Summary
+
+Expanded the Claygentforce agent prompt set beyond the initial BA, Architect, QA, DevOps, and Security roles.
+
+Added additional role prompts to better reflect a realistic Salesforce delivery team and support richer simulations across configuration, development, stakeholder management, product ownership, and incident response.
+
+### Prompt Files Added
+
+- prompts/admin-agent.md
+- prompts/developer-agent.md
+- prompts/product-owner-agent.md
+- prompts/client-stakeholder-agent.md
+- prompts/incident-commander-agent.md
+
+### Documentation Updated
+
+- docs/PROJECT_VISION.md
+- docs/AGENT_ROLES.md
+- docs/ARCHITECTURE.md
+- docs/DEVLOG.md
+
+### Notes
+
+The Salesforce Admin role was added because many Salesforce delivery decisions should evaluate declarative configuration before custom code.
+
+The Salesforce Developer role remains focused on Apex, LWC, tests, implementation judgment, and developer-owned metadata.
+
+Product Owner, Client Stakeholder, and Incident Commander roles were added to make simulations more realistic beyond implementation alone.
+
+### Next Actions
+
+- create scenario folder structure
+- define first scenario template
+- define first scenario brief
+- update README with current project overview
+- begin artifact templates for ADRs, QA review, security review, deployment review, and incident response
+
 ## 2026-05-23 — Repaired truncated documentation and prompt files
 
 ### Summary
