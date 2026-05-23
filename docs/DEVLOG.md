@@ -62,11 +62,11 @@ The project is intentionally starting with documentation, architecture, and reus
 - `docs/DEVLOG.md`
 - `docs/ISSUES_LOG.md`
 - `docs/AI_WORKFLOW_NOTES.md`
-- `.claygentforce/prompts/architect-agent.md`
-- `.claygentforce/prompts/ba-agent.md`
-- `.claygentforce/prompts/qa-agent.md`
-- `.claygentforce/prompts/devops-agent.md`
-- `.claygentforce/prompts/security-agent.md`
+- `prompts/architect-agent.md`
+- `prompts/ba-agent.md`
+- `prompts/qa-agent.md`
+- `prompts/devops-agent.md`
+- `prompts/security-agent.md`
 
 ### Setup Issue Resolved
 
@@ -77,3 +77,4 @@ Root cause appeared to be a Windows Credential Manager / Git Credential Manager 
 ```text
 Failed to write item to store. [0x8]
 Not enough memory resources are available to process this command
+```
