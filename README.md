@@ -98,6 +98,7 @@ Claygentforce/
     product-owner-agent.md
     qa-agent.md
     security-agent.md
+    simulation-runner.md
   scenarios/
     README.md
     TEMPLATE_SCENARIO/
@@ -158,6 +159,7 @@ Current prompt files:
 - prompts/product-owner-agent.md
 - prompts/qa-agent.md
 - prompts/security-agent.md
+- prompts/simulation-runner.md
 
 These prompts define each role’s responsibilities, review concerns, expected outputs, readiness gates, tone, and simulation behavior.
 
