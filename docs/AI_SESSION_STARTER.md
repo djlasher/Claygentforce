@@ -260,3 +260,48 @@ The project should demonstrate that the builder understands Salesforce delivery 
 Do not solve the stakeholder’s first sentence.
 
 Discover the actual business problem, define a small useful release, document tradeoffs, validate readiness, and show consequences.
+
+---
+
+## Current Session Notes
+
+Last updated: 2026-05-23
+
+Recent work completed:
+
+- Created `docs/AI_SESSION_STARTER.md`.
+- Added it to the README Documentation start-here list.
+- Added a devlog entry documenting the AI session starter.
+- Verified the file landed correctly in GitHub and was not truncated.
+- Verified README and devlog updates landed correctly.
+
+Current workflow convention:
+
+- When the user replies with `k`, continue with the next recommended step.
+- After the user pushes changes, check the GitHub repository to verify the expected files landed correctly.
+- Do not assume local edits were pushed until repository verification confirms them.
+- Keep command blocks grouped together to reduce token usage.
+- At the end of each working session, update this file with the latest project state and recommended next step.
+
+Current recommended next step:
+
+Run the first manual simulation using:
+
+`scenarios/001-case-escalation-manager-visibility/`
+
+Start at:
+
+`Client Stakeholder Intake`
+
+Use:
+
+- `docs/SIMULATION_RUNBOOK.md`
+- `prompts/simulation-runner.md`
+- the role prompt for the active stage
+- the active scenario folder
+
+Goal of the next simulation run:
+
+Validate whether the current scenario artifacts and runner prompt are enough to guide a realistic Salesforce delivery simulation.
+
+Capture any gaps, awkward transitions, missing artifacts, unclear role behavior, or new durable learning in the appropriate scenario files, devlog, or this session starter.
