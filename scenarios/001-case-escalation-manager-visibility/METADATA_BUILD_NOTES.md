@@ -63,6 +63,12 @@ The manifest still includes wildcard entries for some metadata types from the in
 
 A tighter scenario-specific manifest may be useful later to reduce deploy/retrieve noise.
 
+Scenario-specific manifest added:
+
+- `manifest/scenario-001-package.xml`
+
+This manifest currently includes only Scenario 001 metadata and should be preferred for focused validation/deployment once a Salesforce org is authenticated.
+
 ---
 
 ## Metadata Deferred

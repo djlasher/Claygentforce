@@ -4,6 +4,26 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-23 — Added scenario-specific deployment manifest
+
+### Summary
+
+Added `manifest/scenario-001-package.xml` for focused Scenario 001 validation and deployment.
+
+The scenario-specific manifest currently includes only the initial Case high-risk fields.
+
+### Files Updated
+
+- manifest/scenario-001-package.xml
+- scenarios/001-case-escalation-manager-visibility/METADATA_BUILD_NOTES.md
+- docs/DEVLOG.md
+
+### Notes
+
+No Salesforce org is authenticated yet.
+
+First thing next session should be authenticating or connecting a Salesforce org, then validating this manifest against that org.
+
 ## 2026-05-23 — Added Flow design for first scenario
 
 ### Summary
