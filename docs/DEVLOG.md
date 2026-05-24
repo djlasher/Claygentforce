@@ -4,6 +4,27 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-23 — Added implementation plan for first scenario
+
+### Summary
+
+Added `IMPLEMENTATION_PLAN.md` for Scenario 001.
+
+The implementation plan bridges the scenario artifacts and future Salesforce metadata work by defining candidate fields, Flow behavior, manager visibility, notification approach, security assumptions, QA smoke tests, deployment sequence, open implementation decisions, and the recommended first build increment.
+
+### Files Updated
+
+- scenarios/001-case-escalation-manager-visibility/IMPLEMENTATION_PLAN.md
+- README.md
+- scenarios/README.md
+- docs/DEVLOG.md
+
+### Notes
+
+This marks the project’s transition from documentation-only simulation design toward scenario-driven Salesforce implementation.
+
+The recommended first build increment is intentionally small: create high-risk Case fields, create a manager list view, document Flow logic, and only build automation after criteria are finalized.
+
 ## 2026-05-23 — Added simulation run modes and first smoke test log
 
 ### Summary

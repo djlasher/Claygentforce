@@ -23,6 +23,7 @@ Claygentforce/
       SECURITY_REVIEW.md
       DEPLOYMENT_REVIEW.md
       RETROSPECTIVE.md
+      IMPLEMENTATION_PLAN.md
 
 ---
 
@@ -76,6 +77,14 @@ Defines deployment scope, metadata dependencies, validation steps, post-deployme
 ### RETROSPECTIVE.md
 
 Captures learning outcomes, decisions made, mistakes, consequences, and future improvements.
+
+### IMPLEMENTATION_PLAN.md
+
+Converts scenario requirements and architecture into a practical Salesforce build plan.
+
+This file should define candidate metadata, build sequence, Flow or automation approach, visibility requirements, permission assumptions, QA smoke tests, deployment sequence, and unresolved implementation decisions.
+
+It acts as the bridge between simulation artifacts and deployable Salesforce source.
 
 ---
 

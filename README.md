@@ -120,6 +120,7 @@ Claygentforce/
       SECURITY_REVIEW.md
       DEPLOYMENT_REVIEW.md
       RETROSPECTIVE.md
+      IMPLEMENTATION_PLAN.md
   sfdx-project.json
   README.md
 
