@@ -303,3 +303,88 @@ Primary accepted risks:
 Use declarative automation to make high-risk Cases visible first.
 
 Do not introduce custom code or complex escalation architecture until the business proves the first visibility layer is not enough.
+
+---
+
+## Candidate Output From First Smoke Test
+
+Source:
+
+`scenarios/001-case-escalation-manager-visibility/runs/2026-05-23-agent-smoke-test001.md`
+
+These candidate architecture notes came from the first Agent Smoke Test run.
+
+They are not final architecture decisions.
+
+They should be treated as an initial option for learner review and validation.
+
+---
+
+## Candidate Architecture Direction
+
+The likely MVP architecture should be declarative-first.
+
+The first release should prioritize maintainability, visibility, and clear criteria over a complex escalation engine.
+
+Potential components:
+
+- Case field or fields for high-risk status and reason
+- Record-triggered Flow for evaluating high-risk criteria
+- Manager list view for open high-risk Cases
+- Report or dashboard component for high-risk Case volume and aging
+- Lightweight notification only for the highest-priority events
+
+---
+
+## Candidate Declarative-First Rationale
+
+A declarative-first approach appears appropriate because:
+
+- the scenario is MVP-focused
+- the likely criteria are based on Case or related Account data
+- support admins should be able to understand and maintain the logic
+- manager visibility can likely be handled through list views, reports, dashboards, and permissions
+- notification behavior should remain lightweight to avoid alert fatigue
+
+---
+
+## Candidate Apex Restraint
+
+Apex should not be introduced for the MVP unless one or more of the following becomes true:
+
+- high-risk criteria require complex reusable logic that is difficult to maintain in Flow
+- external system data is required
+- performance or transaction complexity becomes a concern
+- the meaningful-update logic cannot be represented clearly in declarative automation
+- a custom user interface becomes necessary
+
+---
+
+## Candidate Tradeoffs
+
+Benefits of the likely MVP approach:
+
+- faster first release
+- easier admin maintenance
+- lower implementation complexity
+- easier stakeholder review
+- easier rollback if notification behavior is too noisy
+
+Risks:
+
+- vague high-risk criteria could create false positives or false negatives
+- broad notifications could cause alert fatigue
+- unclear manager visibility requirements could create security or sharing issues
+- stale Case logic may require more precise definition than the stakeholder initially provides
+
+---
+
+## Architecture Questions Still Open
+
+- What exact field stores customer tier?
+- Is severity already captured reliably on Case?
+- What field or event represents a meaningful update?
+- Should high-risk status be recalculated automatically, manually overridden, or both?
+- Should notification behavior differ by high-risk reason?
+- What existing Case sharing model must manager visibility respect?
+- Should reporting be part of MVP or only enabled by storing high-risk status?
