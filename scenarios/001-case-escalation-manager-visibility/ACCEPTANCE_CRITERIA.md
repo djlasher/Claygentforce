@@ -162,3 +162,72 @@ Before implementation, the high-risk criteria and manager access model must be f
 ## Guiding Principle
 
 The first release should make risky work visible and reviewable before trying to automate every escalation behavior.
+
+---
+
+## Candidate Output From First Smoke Test
+
+Source:
+
+`scenarios/001-case-escalation-manager-visibility/runs/2026-05-23-agent-smoke-test001.md`
+
+These candidate requirements came from the first Agent Smoke Test run.
+
+They are not final client-approved requirements.
+
+They should be treated as discovery output for future learner validation.
+
+---
+
+## Candidate MVP User Story
+
+As a Support Manager, I want Salesforce to identify and surface high-risk Cases so I can review urgent customer issues before they are missed or delayed.
+
+---
+
+## Candidate High-Risk Criteria
+
+A Case may be considered high-risk when one or more of the following are true:
+
+1. The Case is from a top-tier customer.
+2. The Case severity is marked severe or critical.
+3. The Case has had no meaningful update within an agreed time threshold.
+
+These criteria are intentionally not final.
+
+A learner should validate whether these are correct, measurable, and available in Salesforce data.
+
+---
+
+## Candidate Open Questions
+
+- Where does customer tier come from?
+- Is customer tier available on Account, Case, or another related record?
+- Who owns severity accuracy?
+- What values count as severe or critical?
+- What counts as a meaningful update?
+- What time threshold should make a Case stale?
+- Should high-risk status be stored on the Case?
+- Should users be able to manually override high-risk status?
+- Should managers be notified for every high-risk Case or only the most severe subset?
+- What does success look like for the first release?
+
+---
+
+## Candidate MVP Boundary
+
+Likely in scope for MVP:
+
+- identify high-risk Cases
+- show high-risk open Cases to Support Managers
+- provide light notification for the most urgent subset
+- support basic reporting on high-risk Case volume
+
+Likely out of scope for MVP:
+
+- complex SLA engine
+- Omni-Channel routing
+- AI classification
+- automatic reassignment
+- full Customer Success workflow
+- external integrations
