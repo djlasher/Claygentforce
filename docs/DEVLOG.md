@@ -15,7 +15,6 @@ The metadata build notes track actual Salesforce metadata progress, including cr
 ### Files Updated
 
 - scenarios/001-case-escalation-manager-visibility/METADATA_BUILD_NOTES.md
-- README.md
 - scenarios/README.md
 - docs/DEVLOG.md
 
