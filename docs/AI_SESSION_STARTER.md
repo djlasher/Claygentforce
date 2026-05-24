@@ -269,6 +269,13 @@ Last updated: 2026-05-23
 
 Recent work completed:
 
+- Added `docs/SIMULATION_RUN_MODES.md`.
+- Added the first scenario run log:
+  - `scenarios/001-case-escalation-manager-visibility/runs/2026-05-23-agent-smoke-test001.md`
+- Updated `README.md` to reference simulation run modes.
+- Updated `scenarios/README.md` to document scenario run logs.
+- Updated `docs/DEVLOG.md` with the run modes and smoke test log entry.
+- Verified all of the above landed in GitHub.
 - Created `docs/AI_SESSION_STARTER.md`.
 - Added it to the README Documentation start-here list.
 - Added a devlog entry documenting the AI session starter.
@@ -285,23 +292,14 @@ Current workflow convention:
 
 Current recommended next step:
 
-Run the first manual simulation using:
+Current recommended next step:
 
-`scenarios/001-case-escalation-manager-visibility/`
+Review the first smoke test log and decide whether any candidate outputs should graduate into canonical Scenario 001 artifacts, especially:
 
-Start at:
+- `ACCEPTANCE_CRITERIA.md`
+- `ARCHITECTURE_DECISION.md`
+- `QA_REVIEW.md`
+- `SECURITY_REVIEW.md`
+- `DEPLOYMENT_REVIEW.md`
 
-`Client Stakeholder Intake`
-
-Use:
-
-- `docs/SIMULATION_RUNBOOK.md`
-- `prompts/simulation-runner.md`
-- the role prompt for the active stage
-- the active scenario folder
-
-Goal of the next simulation run:
-
-Validate whether the current scenario artifacts and runner prompt are enough to guide a realistic Salesforce delivery simulation.
-
-Capture any gaps, awkward transitions, missing artifacts, unclear role behavior, or new durable learning in the appropriate scenario files, devlog, or this session starter.
+Do not blindly promote the whole smoke test. Select only durable, learner-useful outputs.
