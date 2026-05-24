@@ -292,8 +292,6 @@ Current workflow convention:
 
 Current recommended next step:
 
-Current recommended next step:
-
 Review the first smoke test log and decide whether any candidate outputs should graduate into canonical Scenario 001 artifacts, especially:
 
 - `ACCEPTANCE_CRITERIA.md`
