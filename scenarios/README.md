@@ -79,6 +79,49 @@ Captures learning outcomes, decisions made, mistakes, consequences, and future i
 
 ---
 
+## Scenario Run Logs
+
+Scenarios may include an optional `runs/` folder.
+
+Run logs capture specific manual, guided, or simulated executions of a scenario without turning the main scenario artifacts into long transcripts.
+
+Example structure:
+
+scenarios/
+  001-case-escalation-manager-visibility/
+    runs/
+      2026-05-23-agent-smoke-test001.md
+
+Run logs are useful for:
+
+- agent smoke tests
+- manual simulation transcripts
+- guided learner sessions
+- scenario validation notes
+- identifying missing artifacts
+- preserving what happened during a specific test run
+
+Run logs should not automatically replace the core scenario files.
+
+A run log may contain candidate requirements, architecture ideas, QA scenarios, security concerns, or stakeholder feedback, but those outputs should only be promoted into canonical scenario artifacts intentionally.
+
+Recommended run log contents:
+
+- run date
+- run mode
+- goal
+- context used
+- learner involvement
+- stage summaries
+- agent outputs
+- what worked
+- what felt awkward
+- missing artifacts
+- recommended follow-up changes
+- whether core scenario files should be updated
+  
+---
+
 ## Scenario Design Principles
 
 Scenarios should be realistic, not perfect.

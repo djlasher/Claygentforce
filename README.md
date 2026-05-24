@@ -136,6 +136,7 @@ Start here:
 - docs/AGENT_ROLES.md — role definitions for the simulated delivery team
 - docs/DELIVERY_SIMULATION_LOOP.md — repeatable delivery simulation flow
 - docs/SIMULATION_RUNBOOK.md — operational guide for running simulations
+- - docs/SIMULATION_RUN_MODES.md — supported simulation modes and run log guidance
 - docs/TEMPLATE_STRATEGY.md — strategy for creating and maintaining reusable scenario templates
 - docs/ARCHITECTURE.md — repository and conceptual architecture
 - docs/AI_WORKFLOW_NOTES.md — how AI tools are used in the project workflow
