@@ -131,6 +131,7 @@ The docs folder is the project memory layer.
 
 Start here:
 
+- docs/AI_SESSION_STARTER.md — first-read context for future AI-assisted sessions
 - docs/PROJECT_VISION.md — product vision and long-term direction
 - docs/AGENT_ROLES.md — role definitions for the simulated delivery team
 - docs/DELIVERY_SIMULATION_LOOP.md — repeatable delivery simulation flow

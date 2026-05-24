@@ -4,6 +4,26 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-23 — Added AI session starter
+
+### Summary
+
+Added `docs/AI_SESSION_STARTER.md` as the first-read context file for future AI-assisted Claygentforce sessions.
+
+The file captures the project identity, repository distinction from the earlier roguelite sandbox, current architecture principles, important folders, role prompt set, default simulation loop, first scenario context, near-term project direction, AI collaboration rules, token-saving instructions, strategic framing, and guiding principle.
+
+### Files Updated
+
+- docs/AI_SESSION_STARTER.md
+- README.md
+- docs/DEVLOG.md
+
+### Notes
+
+This file is intended to reduce repeated prompting and help future ChatGPT, Codex, GitHub Copilot, or other AI-assisted sessions continue from repository context instead of relying only on chat history.
+
+Future sessions should start by reading `docs/AI_SESSION_STARTER.md`, then `README.md`, `docs/DEVLOG.md`, `docs/SIMULATION_RUNBOOK.md`, `prompts/simulation-runner.md`, and the active scenario folder.
+
 ## 2026-05-23 — Added simulation runner prompt
 
 ### Summary
