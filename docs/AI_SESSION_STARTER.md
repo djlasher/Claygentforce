@@ -47,9 +47,11 @@ Claygentforce is the more strategically important career-leverage project focuse
 
 ## Current Repository Type
 
-Claygentforce is currently a documentation-first Salesforce DX project.
+Claygentforce is a Salesforce DX project with a documentation-first simulation framework.
 
-The repository intentionally starts with:
+The repository now includes both durable simulation context and the first small Salesforce metadata increment.
+
+The project intentionally started with:
 
 - project vision
 - architecture documentation
@@ -60,7 +62,7 @@ The repository intentionally starts with:
 - devlog and issue log
 - AI workflow notes
 
-Do not rush into Salesforce metadata, Apex, LWC, Flow, or automation unless the work directly supports a scenario learning objective.
+Salesforce metadata should still be added only when it directly supports a scenario learning or implementation objective.
 
 ---
 
@@ -72,9 +74,9 @@ The docs folder is the project memory layer.
 
 The prompts folder contains reusable role instructions.
 
-The scenarios folder contains repeatable simulation content.
+The scenarios folder contains repeatable simulation content and scenario-specific implementation notes.
 
-The force-app folder should be reserved for deployable Salesforce metadata when a scenario actually requires it.
+The force-app folder contains deployable Salesforce metadata when a scenario requires it.
 
 ---
 
@@ -85,10 +87,12 @@ The force-app folder should be reserved for deployable Salesforce metadata when 
   - architecture
   - delivery simulation loop
   - simulation runbook
+  - simulation run modes
   - template strategy
   - development log
   - issue log
   - AI workflow notes
+  - AI session starter
 
 - `prompts/`
   - reusable AI role prompts
@@ -97,12 +101,17 @@ The force-app folder should be reserved for deployable Salesforce metadata when 
 - `scenarios/`
   - reusable scenario template
   - first real scenario
+  - scenario-specific run logs
+  - implementation plan
+  - metadata build notes
+  - Flow design notes
 
 - `force-app/`
-  - Salesforce metadata only when needed
+  - Salesforce metadata created only when needed by a scenario
 
 - `manifest/`
   - Salesforce deployment/retrieval manifests
+  - scenario-specific manifest for Scenario 001
 
 ---
 
@@ -171,34 +180,80 @@ The learner should first clarify:
 
 ---
 
+## Current Salesforce Metadata State
+
+Initial Salesforce metadata exists for Scenario 001.
+
+Created metadata:
+
+- `force-app/main/default/objects/Case/fields/High_Risk__c.field-meta.xml`
+- `force-app/main/default/objects/Case/fields/High_Risk_Reason__c.field-meta.xml`
+
+Created manifests:
+
+- `manifest/package.xml`
+- `manifest/scenario-001-package.xml`
+
+`manifest/scenario-001-package.xml` is the preferred focused manifest for Scenario 001 validation/deployment once a Salesforce org is authenticated.
+
+No Salesforce org is authenticated or connected yet.
+
+Do not assume validation or deployment has occurred.
+
+---
+
+## Scenario 001 Key Artifacts
+
+Important current Scenario 001 files include:
+
+- `SCENARIO_BRIEF.md`
+- `STAKEHOLDER_INTAKE.md`
+- `ACCEPTANCE_CRITERIA.md`
+- `ARCHITECTURE_DECISION.md`
+- `IMPLEMENTATION_PLAN.md`
+- `METADATA_BUILD_NOTES.md`
+- `FLOW_DESIGN.md`
+- `QA_REVIEW.md`
+- `SECURITY_REVIEW.md`
+- `DEPLOYMENT_REVIEW.md`
+- `RETROSPECTIVE.md`
+- `runs/2026-05-23-agent-smoke-test001.md`
+- `runs/2026-05-23-artifact-promotion-plan001.md`
+
+---
+
 ## Near-Term Project Direction
 
-The next work should focus on making the simulation framework actually usable.
+The next work should focus on tying the simulator into Salesforce in very small, scenario-driven increments.
 
 Preferred next actions:
 
-1. Run the first manual simulation using `001-case-escalation-manager-visibility`.
-2. Capture gaps, awkward moments, and missing artifacts.
-3. Update scenario files with durable learnings.
-4. Improve the simulation runner prompt based on the first run.
-5. Add lightweight automation only after the manual workflow proves useful.
-6. Add Salesforce metadata only when it supports a specific scenario learning goal.
+1. Authenticate or connect a Salesforce org.
+2. Validate `manifest/scenario-001-package.xml` against the authenticated org.
+3. Fix any metadata validation issues.
+4. Deploy the initial Case high-risk fields only after validation succeeds.
+5. Retrieve or build subsequent metadata in small increments.
+6. Avoid hand-writing complex Flow XML unless necessary; prefer designing the Flow first, building it in an org, retrieving it, then committing reviewed metadata.
 
 ---
 
 ## Current Best Next Task
 
-The most useful immediate task is usually one of:
+First thing next session:
 
-- run Scenario 001 manually
-- improve the simulation runner prompt
-- add a compact scenario execution checklist
-- create a first simulation transcript artifact
-- create a learner response template
-- update the devlog after each meaningful change
-- document issues or tool friction in the issue log
+Authenticate or connect a Salesforce org for this project.
 
-Avoid creating unnecessary code before the simulation workflow has been validated.
+Then run validation against the focused Scenario 001 manifest:
+
+```bash
+sf project deploy validate --manifest manifest/scenario-001-package.xml --target-org YOUR_ORG_ALIAS
+```
+
+If validation succeeds, the next decision is whether to deploy the fields or continue setup first.
+
+Also consider connecting Notion so the Business Analyst agent can eventually write or sync user stories there.
+
+Do not build more Salesforce automation before the field metadata is validated against an org.
 
 ---
 
@@ -209,13 +264,16 @@ When helping with this repository:
 - read repository files before assuming project state
 - prefer small, reviewable changes
 - keep commands grouped together to save tokens
-- avoid huge copy/paste blocks with nested Markdown code fences
+- automatically chunk long Markdown or XML when copy/paste might break
+- avoid huge copy/paste blocks with nested Markdown code fences unless chunked
 - update `docs/DEVLOG.md` after meaningful changes
 - update `docs/ISSUES_LOG.md` when setup/tooling problems occur
-- preserve the documentation-first strategy
+- update this file at the end of each working session
+- preserve the scenario-driven strategy
 - do not invent completed work
 - do not blindly add complex architecture
 - do not overbuild before a scenario proves the need
+- do not create new documentation types unless they solve a clear problem
 
 ---
 
@@ -229,8 +287,9 @@ Start by reading:
 2. `README.md`
 3. `docs/DEVLOG.md`
 4. `docs/SIMULATION_RUNBOOK.md`
-5. `prompts/simulation-runner.md`
-6. the active scenario folder
+5. `docs/SIMULATION_RUN_MODES.md`
+6. `prompts/simulation-runner.md`
+7. the active scenario folder
 
 Then continue from the latest devlog entry and the user’s current request.
 
@@ -250,6 +309,7 @@ The core value is:
 - consequence-based learning
 - durable artifacts
 - repeatable Salesforce architecture practice
+- scenario-driven Salesforce implementation
 
 The project should demonstrate that the builder understands Salesforce delivery beyond implementation syntax.
 
@@ -261,6 +321,10 @@ Do not solve the stakeholder’s first sentence.
 
 Discover the actual business problem, define a small useful release, document tradeoffs, validate readiness, and show consequences.
 
+Metadata should follow the scenario.
+
+Do not add Salesforce components unless they support a documented learning or implementation objective.
+
 ---
 
 ## Current Session Notes
@@ -269,18 +333,23 @@ Last updated: 2026-05-23
 
 Recent work completed:
 
-- Added `docs/SIMULATION_RUN_MODES.md`.
-- Added the first scenario run log:
-  - `scenarios/001-case-escalation-manager-visibility/runs/2026-05-23-agent-smoke-test001.md`
-- Updated `README.md` to reference simulation run modes.
-- Updated `scenarios/README.md` to document scenario run logs.
-- Updated `docs/DEVLOG.md` with the run modes and smoke test log entry.
-- Verified all of the above landed in GitHub.
 - Created `docs/AI_SESSION_STARTER.md`.
 - Added it to the README Documentation start-here list.
 - Added a devlog entry documenting the AI session starter.
-- Verified the file landed correctly in GitHub and was not truncated.
-- Verified README and devlog updates landed correctly.
+- Added `docs/SIMULATION_RUN_MODES.md`.
+- Added the first scenario run log:
+  - `scenarios/001-case-escalation-manager-visibility/runs/2026-05-23-agent-smoke-test001.md`
+- Added artifact promotion plan:
+  - `scenarios/001-case-escalation-manager-visibility/runs/2026-05-23-artifact-promotion-plan001.md`
+- Promoted candidate smoke test output into `ACCEPTANCE_CRITERIA.md` and `ARCHITECTURE_DECISION.md`.
+- Added `IMPLEMENTATION_PLAN.md` for Scenario 001.
+- Added initial Salesforce metadata fields for Case high-risk tracking.
+- Added `METADATA_BUILD_NOTES.md` for Scenario 001.
+- Added `FLOW_DESIGN.md` for Scenario 001.
+- Added focused Scenario 001 manifest:
+  - `manifest/scenario-001-package.xml`
+- Updated README, scenario README, and devlog entries where appropriate.
+- Verified pushed changes in GitHub throughout the session.
 
 Current workflow convention:
 
@@ -288,16 +357,13 @@ Current workflow convention:
 - After the user pushes changes, check the GitHub repository to verify the expected files landed correctly.
 - Do not assume local edits were pushed until repository verification confirms them.
 - Keep command blocks grouped together to reduce token usage.
+- Automatically chunk long content when copy/paste may break.
 - At the end of each working session, update this file with the latest project state and recommended next step.
 
 Current recommended next step:
 
-Review the first smoke test log and decide whether any candidate outputs should graduate into canonical Scenario 001 artifacts, especially:
+Authenticate or connect a Salesforce org, then validate the focused Scenario 001 manifest.
 
-- `ACCEPTANCE_CRITERIA.md`
-- `ARCHITECTURE_DECISION.md`
-- `QA_REVIEW.md`
-- `SECURITY_REVIEW.md`
-- `DEPLOYMENT_REVIEW.md`
+Also consider connecting Notion so the Business Analyst agent can write or sync user stories there in a future workflow.
 
-Do not blindly promote the whole smoke test. Select only durable, learner-useful outputs.
+Do not continue adding documentation-only artifacts unless they solve a clear project need.
