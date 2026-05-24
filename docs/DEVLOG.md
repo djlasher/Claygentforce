@@ -4,6 +4,27 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-23 — Added metadata build notes for first scenario
+
+### Summary
+
+Added `METADATA_BUILD_NOTES.md` for Scenario 001.
+
+The metadata build notes track actual Salesforce metadata progress, including created Case fields, package manifest status, deferred metadata, open Salesforce implementation questions, validation and deploy commands, post-deploy smoke checks, and the next recommended metadata increment.
+
+### Files Updated
+
+- scenarios/001-case-escalation-manager-visibility/METADATA_BUILD_NOTES.md
+- README.md
+- scenarios/README.md
+- docs/DEVLOG.md
+
+### Notes
+
+This file separates actual Salesforce metadata implementation tracking from scenario design artifacts.
+
+It should be updated as fields, Flows, list views, reports, permission sets, and deployment validation steps are added.
+
 ## 2026-05-23 — Added initial Case high-risk fields
 
 ### Summary

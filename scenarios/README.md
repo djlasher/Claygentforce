@@ -86,6 +86,14 @@ This file should define candidate metadata, build sequence, Flow or automation a
 
 It acts as the bridge between simulation artifacts and deployable Salesforce source.
 
+### METADATA_BUILD_NOTES.md
+
+Tracks actual Salesforce metadata work for a scenario.
+
+This file should distinguish between metadata that has been created, metadata that is planned, metadata that is deferred, deployment or validation notes, and Salesforce-specific implementation questions.
+
+It should stay practical and implementation-focused.
+
 ---
 
 ## Scenario Run Logs
