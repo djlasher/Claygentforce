@@ -94,6 +94,14 @@ This file should distinguish between metadata that has been created, metadata th
 
 It should stay practical and implementation-focused.
 
+### FLOW_DESIGN.md
+
+Documents intended Flow behavior before Salesforce Flow metadata is created.
+
+This file should define Flow purpose, trigger timing, fields used, decision sequence, pseudocode, MVP scope, open Flow decisions, risks, and test scenarios.
+
+It helps keep automation scenario-driven and reviewable before committing to Flow XML.
+
 ---
 
 ## Scenario Run Logs

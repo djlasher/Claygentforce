@@ -4,6 +4,26 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-23 — Added Flow design for first scenario
+
+### Summary
+
+Added `FLOW_DESIGN.md` for Scenario 001.
+
+The Flow design documents intended record-triggered Flow behavior before Salesforce Flow metadata is created. It defines candidate Flow name, trigger timing, fields used, initial criteria, decision sequence, pseudocode, MVP recommendation, open decisions, risks, test scenarios, and build guidance.
+
+### Files Updated
+
+- scenarios/001-case-escalation-manager-visibility/FLOW_DESIGN.md
+- scenarios/README.md
+- docs/DEVLOG.md
+
+### Notes
+
+The recommended first Flow version is intentionally small: evaluate Case open/closed status, evaluate Priority, set `High_Risk__c`, and set `High_Risk_Reason__c`.
+
+Customer tier, stale Case logic, manual override, and notifications remain deferred until supporting fields and requirements are confirmed.
+
 ## 2026-05-23 — Added metadata build notes for first scenario
 
 ### Summary
