@@ -4,6 +4,32 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-23 — Added simulation run modes and first smoke test log
+
+### Summary
+
+Added documentation for Claygentforce simulation run modes and captured the first lightweight agent smoke test run for Scenario 001.
+
+The smoke test validated that `001-case-escalation-manager-visibility` can exercise the major simulated Salesforce delivery roles with one compact contribution per agent.
+
+The run also revealed an important product design need: Claygentforce should support shorter validation-oriented runs in addition to full learner-driven simulations.
+
+### Files Updated
+
+- docs/SIMULATION_RUN_MODES.md
+- scenarios/001-case-escalation-manager-visibility/runs/2026-05-23-agent-smoke-test001.md
+- README.md
+- scenarios/README.md
+- docs/DEVLOG.md
+
+### Notes
+
+`docs/SIMULATION_RUN_MODES.md` defines Full Learner Mode, Guided Learner Mode, Agent Smoke Test Mode, and Artifact Review Mode.
+
+Scenario run logs should live under a scenario-specific `runs/` folder so individual test executions can be preserved without bloating the core scenario artifacts.
+
+The first smoke test passed. Each major role produced a distinct and useful Salesforce delivery perspective.
+
 ## 2026-05-23 — Added AI session starter
 
 ### Summary
