@@ -4,6 +4,27 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-23 — Added initial Case high-risk fields
+
+### Summary
+
+Added the first Salesforce metadata for Scenario 001.
+
+The initial metadata increment adds Case fields used to identify and explain high-risk Cases for manager review.
+
+### Files Updated
+
+- force-app/main/default/objects/Case/fields/High_Risk__c.field-meta.xml
+- force-app/main/default/objects/Case/fields/High_Risk_Reason__c.field-meta.xml
+- manifest/package.xml
+- docs/DEVLOG.md
+
+### Notes
+
+This is the first step from documentation-only simulation design into Salesforce metadata implementation.
+
+The build remains intentionally small. Flow automation, list views, permissions, and reports are deferred until the field foundation is validated.
+
 ## 2026-05-23 — Added implementation plan for first scenario
 
 ### Summary
