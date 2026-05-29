@@ -26,6 +26,32 @@ Failed to write item to store. [0x8]
 Not enough memory resources are available to process this command
 ```
 
+The repository was not the root problem. Git operations could see the repo state, but the local Git Credential Manager / Windows Credential Manager flow could not reliably store or retrieve credentials.
+
+## Cause
+
+The likely cause was a local Windows Credential Manager or Git Credential Manager storage failure, not a GitHub repository permission problem.
+
+Because the remote used HTTPS, Git needed a valid stored credential or fresh authentication token. When credential storage failed, GitHub authentication prompts repeated even though the repository, branch, and remote configuration were otherwise correct.
+
+## Fix
+
+The immediate workaround was to continue repository work through tools that still had working GitHub access, including GitHub Desktop, manual pushes when available, and ChatGPT/GitHub connector edits once the connector was working.
+
+Recommended local fixes if the problem returns:
+
+1. Restart Windows to clear temporary credential-manager or memory-resource issues.
+2. Open Windows Credential Manager and remove stale GitHub/Git credentials if they appear corrupted.
+3. Re-authenticate GitHub Desktop or VS Code.
+4. Run `git credential-manager diagnose` again to confirm credential storage passes.
+5. Consider switching the repository remote from HTTPS to SSH if HTTPS credential storage continues to fail.
+
+## Lesson Learned
+
+Repeated GitHub login prompts do not always mean the repo, remote, or GitHub permissions are wrong.
+
+When Git operations can read repository state but cannot persist authentication, check the local credential manager before rebuilding project setup or changing repository configuration.
+
 ---
 
 # 2026-05-23 — Markdown copy/paste truncation from nested code fences
