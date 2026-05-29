@@ -1,10 +1,10 @@
 # Claygentforce
 
-Claygentforce is a Salesforce technical architect simulation and enablement project.
+Claygentforce is a Salesforce delivery team simulation and enablement project.
 
-The goal is to build a realistic, AI-assisted Salesforce delivery simulator that helps learners practice architecture decisions, implementation planning, DevOps workflows, QA review, security review, stakeholder tradeoffs, and incident response in a safe sandbox environment.
+The goal is to build a realistic, AI-assisted Salesforce delivery simulator that helps learners practice requirements discovery, architecture decisions, implementation planning, admin configuration, DevOps workflows, QA review, security review, stakeholder tradeoffs, and incident response in a safe sandbox environment.
 
-This project is intentionally starting with documentation, role prompts, and reusable project context before building complex Salesforce metadata or automation.
+This project is intentionally starting with documentation, role prompts, scenario artifacts, and small scenario-driven Salesforce metadata before building complex automation or a full simulator UI.
 
 ---
 
@@ -24,6 +24,7 @@ Each agent represents a different delivery perspective, including:
 - Product Owner
 - Client Stakeholder
 - Incident Commander
+- Simulation Runner
 
 The learner interacts with these roles while working through realistic Salesforce delivery scenarios.
 
@@ -54,7 +55,7 @@ Claygentforce is designed to make those experiences repeatable, inspectable, and
 
 ## Current Project Status
 
-Current status: Phase 0 / early Phase 1.
+Current status: early Phase 1 with a small Scenario 001 metadata increment started.
 
 The project currently includes:
 
@@ -62,27 +63,41 @@ The project currently includes:
 - manifest support
 - documentation scaffold
 - expanded role prompt set
+- simulation runbook and run modes
+- reusable scenario template
+- first scenario artifacts
 - issue and development logs
 - AI workflow notes
-- architecture and simulation loop documentation
+- initial Scenario 001 Case field metadata
+- focused Scenario 001 deployment manifest
 
-The project does not yet contain a full Salesforce application or automated simulator UI.
+The project does not yet contain a full Salesforce application, authenticated org connection, or automated simulator UI.
 
 That is intentional.
 
-The current focus is building a strong foundation before adding metadata or automation.
+The current focus is building a strong foundation, validating small Salesforce metadata increments, and keeping every build step tied to a scenario learning objective.
 
 ---
 
 ## Repository Structure
 
+```text
 Claygentforce/
   force-app/
+    main/default/objects/Case/fields/
+      High_Risk__c.field-meta.xml
+      High_Risk_Reason__c.field-meta.xml
   manifest/
+    package.xml
+    scenario-001-package.xml
   docs/
+    AI_SESSION_STARTER.md
     PROJECT_VISION.md
     AGENT_ROLES.md
     DELIVERY_SIMULATION_LOOP.md
+    SIMULATION_RUNBOOK.md
+    SIMULATION_RUN_MODES.md
+    TEMPLATE_STRATEGY.md
     ARCHITECTURE.md
     DEVLOG.md
     ISSUES_LOG.md
@@ -121,8 +136,14 @@ Claygentforce/
       DEPLOYMENT_REVIEW.md
       RETROSPECTIVE.md
       IMPLEMENTATION_PLAN.md
+      METADATA_BUILD_NOTES.md
+      FLOW_DESIGN.md
+      runs/
+        2026-05-23-agent-smoke-test001.md
+        2026-05-23-artifact-promotion-plan001.md
   sfdx-project.json
   README.md
+```
 
 ---
 
@@ -174,17 +195,19 @@ The initial Claygentforce simulation loop is:
 
 1. Scenario Intake
 2. Requirements Clarification
-3. Architecture and Tradeoff Review
-4. Implementation Planning
-5. Build
-6. QA Review
-7. Security Review
-8. DevOps and Release Review
-9. Stakeholder / UAT Review
-10. Outcome and Consequence Feedback
-11. Retrospective and Learning Notes
+3. Product Scope Review
+4. Architecture and Tradeoff Review
+5. Admin Configuration Review
+6. Developer Implementation Review
+7. Build
+8. QA Review
+9. Security Review
+10. DevOps and Release Review
+11. Stakeholder / UAT Review
+12. Outcome and Consequence Feedback
+13. Retrospective and Learning Notes
 
-The first candidate scenario is:
+The first active scenario is:
 
 Case Escalation and Manager Visibility
 
@@ -233,13 +256,18 @@ This repository is a Salesforce DX project.
 
 Basic commands:
 
-- git status
-- git pull
-- git push
-- sf project deploy start --manifest manifest/package.xml
-- sf project retrieve start --manifest manifest/package.xml
+```bash
+git status
+git pull
+git push
+sf project deploy validate --manifest manifest/scenario-001-package.xml --target-org YOUR_ORG_ALIAS
+sf project deploy start --manifest manifest/package.xml --target-org YOUR_ORG_ALIAS
+sf project retrieve start --manifest manifest/package.xml --target-org YOUR_ORG_ALIAS
+```
 
-Salesforce org authentication and deployment details will be added later when the first scenario requires metadata work.
+Salesforce org authentication has not happened yet.
+
+Validate the focused Scenario 001 manifest before assuming any metadata is deployable in a real org.
 
 ---
 
@@ -261,12 +289,13 @@ A major early lesson: large AI-generated Markdown files should be copied in smal
 
 Next likely work:
 
-1. Create a simulation execution prompt that tells an AI assistant how to run a scenario using the runbook, role prompts, and scenario artifacts.
-2. Run the first manual simulation using `001-case-escalation-manager-visibility`.
-3. Capture lessons from the first simulation run in the scenario retrospective and devlog.
-4. Identify which parts of the manual simulation should be automated first.
-5. Add Salesforce metadata only when it directly supports a scenario learning objective.
-6. Explore lightweight orchestration options for loading scenario context and invoking role prompts.
+1. Authenticate or connect a Salesforce org.
+2. Validate `manifest/scenario-001-package.xml` against the authenticated org.
+3. Fix any metadata validation issues.
+4. Deploy or retrieve the first Scenario 001 metadata increment only after validation succeeds.
+5. Build the Scenario 001 Flow in the org or retrieve reviewed Flow metadata when ready.
+6. Continue adding Salesforce metadata only when it directly supports a scenario learning objective.
+7. Explore lightweight orchestration options for loading scenario context and invoking role prompts.
 
 ---
 
