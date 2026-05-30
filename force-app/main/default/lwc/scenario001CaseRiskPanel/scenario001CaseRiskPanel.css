@@ -1,0 +1,43 @@
+.delivery-channel {
+  border-top: 1px solid #dddbda;
+  padding-top: 1rem;
+}
+
+.channel-heading {
+  margin-bottom: 0.75rem;
+}
+
+.thread-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.thread-message {
+  border: 1px solid #dddbda;
+  border-left: 0.25rem solid #1b96ff;
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+  background: #ffffff;
+}
+
+.message-role {
+  color: #181818;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.message-focus {
+  color: #747474;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.message-label {
+  margin-top: 0.25rem;
+}
+
+.message-text {
+  color: #2e2e2e;
+  line-height: 1.5;
+  margin-top: 0.75rem;
+}

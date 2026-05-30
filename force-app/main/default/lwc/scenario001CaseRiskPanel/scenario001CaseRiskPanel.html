@@ -37,37 +37,35 @@
         </dl>
 
         <section
-          class="slds-m-top_medium"
+          class="delivery-channel slds-m-top_medium"
           aria-labelledby="delivery-team-channel-heading"
         >
           <h3
             id="delivery-team-channel-heading"
-            class="slds-text-heading_small slds-m-bottom_small"
+            class="channel-heading slds-text-heading_small"
           >
             Delivery Team Channel
           </h3>
 
-          <template for:each={guidanceMessages} for:item="message">
-            <article
-              key={message.role}
-              class="slds-box slds-box_x-small slds-theme_default slds-m-bottom_x-small"
-            >
-              <div
-                class="slds-grid slds-wrap slds-grid_align-spread slds-gutters_x-small"
+          <div class="thread-list">
+            <template for:each={guidanceMessages} for:item="message">
+              <article
+                key={message.role}
+                class="thread-message slds-theme_default"
               >
-                <div>
-                  <p class="slds-text-title_bold">{message.role}</p>
-                  <p class="slds-text-body_small slds-text-color_weak">
-                    {message.focus}
-                  </p>
-                </div>
-                <span class="slds-badge slds-m-top_xx-small"
-                  >{message.label}</span
+                <div
+                  class="slds-grid slds-wrap slds-grid_align-spread slds-gutters_x-small"
                 >
-              </div>
-              <p class="slds-m-top_x-small">{message.text}</p>
-            </article>
-          </template>
+                  <div>
+                    <p class="message-role">{message.role}</p>
+                    <p class="message-focus">{message.focus}</p>
+                  </div>
+                  <span class="message-label slds-badge">{message.label}</span>
+                </div>
+                <p class="message-text">{message.text}</p>
+              </article>
+            </template>
+          </div>
         </section>
       </template>
 
