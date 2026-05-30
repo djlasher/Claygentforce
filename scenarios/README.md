@@ -24,6 +24,9 @@ Claygentforce/
       DEPLOYMENT_REVIEW.md
       RETROSPECTIVE.md
       IMPLEMENTATION_PLAN.md
+      METADATA_BUILD_NOTES.md
+      FLOW_DESIGN.md
+      SMOKE_TEST_CHECKLIST.md
 
 ---
 
@@ -101,6 +104,14 @@ Documents intended Flow behavior before Salesforce Flow metadata is created.
 This file should define Flow purpose, trigger timing, fields used, decision sequence, pseudocode, MVP scope, open Flow decisions, risks, and test scenarios.
 
 It helps keep automation scenario-driven and reviewable before committing to Flow XML.
+
+### SMOKE_TEST_CHECKLIST.md
+
+Validates a scenario implementation in a Salesforce org after metadata is deployed.
+
+This file should define the metadata covered, preconditions, manual smoke test steps, expected results, known MVP limitations, pass/fail notes, and review questions that should inform the next implementation increment.
+
+It is especially useful once a scenario has real Salesforce metadata, UI, permissions, automation, or LWC behavior that must work together.
 
 ---
 
