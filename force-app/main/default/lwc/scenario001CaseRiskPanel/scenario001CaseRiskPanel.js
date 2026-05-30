@@ -4,6 +4,7 @@ import { getFieldValue, getRecord } from "lightning/uiRecordApi";
 import HIGH_RISK_FIELD from "@salesforce/schema/Case.High_Risk__c";
 import HIGH_RISK_OVERRIDE_FIELD from "@salesforce/schema/Case.High_Risk_Override__c";
 import HIGH_RISK_REASON_FIELD from "@salesforce/schema/Case.High_Risk_Reason__c";
+import CUSTOMER_TIER_FIELD from "@salesforce/schema/Case.Customer_Tier__c";
 import PRIORITY_FIELD from "@salesforce/schema/Case.Priority";
 import STATUS_FIELD from "@salesforce/schema/Case.Status";
 import IS_CLOSED_FIELD from "@salesforce/schema/Case.IsClosed";
@@ -12,6 +13,7 @@ const FIELDS = [
   HIGH_RISK_FIELD,
   HIGH_RISK_OVERRIDE_FIELD,
   HIGH_RISK_REASON_FIELD,
+  CUSTOMER_TIER_FIELD,
   PRIORITY_FIELD,
   STATUS_FIELD,
   IS_CLOSED_FIELD
@@ -101,6 +103,13 @@ const CLOSED_CASE_GUIDANCE = [
   }
 ];
 
+const STRATEGIC_CUSTOMER_GUIDANCE = {
+  role: "Product Owner",
+  focus: "Customer priority",
+  label: "Simulated review note",
+  text: "Strategic customer context may affect future escalation criteria, but Flow v2 does not use customer tier yet."
+};
+
 export default class Scenario001CaseRiskPanel extends LightningElement {
   @api recordId;
 
@@ -119,6 +128,10 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
 
   get isClosed() {
     return getFieldValue(this.caseRecord.data, IS_CLOSED_FIELD) === true;
+  }
+
+  get isStrategicCustomer() {
+    return this.customerTier === "Strategic";
   }
 
   get highRiskStatus() {
@@ -151,6 +164,10 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
     );
   }
 
+  get customerTier() {
+    return getFieldValue(this.caseRecord.data, CUSTOMER_TIER_FIELD) || "None";
+  }
+
   get priority() {
     return getFieldValue(this.caseRecord.data, PRIORITY_FIELD) || "None";
   }
@@ -164,10 +181,20 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
       return CLOSED_CASE_GUIDANCE;
     }
 
+    let selectedGuidance;
+
     if (this.isManualOverride) {
-      return MANUAL_OVERRIDE_GUIDANCE;
+      selectedGuidance = MANUAL_OVERRIDE_GUIDANCE;
+    } else {
+      selectedGuidance = this.isHighRisk
+        ? HIGH_RISK_GUIDANCE
+        : STANDARD_GUIDANCE;
     }
 
-    return this.isHighRisk ? HIGH_RISK_GUIDANCE : STANDARD_GUIDANCE;
+    if (this.isStrategicCustomer) {
+      return [...selectedGuidance, STRATEGIC_CUSTOMER_GUIDANCE];
+    }
+
+    return selectedGuidance;
   }
 }
