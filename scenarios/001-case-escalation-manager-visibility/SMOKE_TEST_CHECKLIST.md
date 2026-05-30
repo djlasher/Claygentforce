@@ -94,7 +94,7 @@ Confirm the testing user has access through either System Administrator permissi
 
 ### Current Limitation
 
-Flow v1 does not yet clear `High Risk` or `High Risk Reason` when a Case no longer meets criteria.
+Flow v2 does not yet clear `High Risk` or `High Risk Reason` when a Case no longer meets criteria.
 
 This is intentional for the first automation increment and should be reviewed before adding more logic.
 
@@ -165,8 +165,8 @@ Manual override takes precedence over priority-based criteria in Flow v2.
 
 ## Known MVP Limitations
 
-- Flow v1 only flags open High priority Cases.
-- Flow v1 does not clear high-risk values when priority changes or the Case closes.
+- Flow v2 flags open High priority Cases and open Cases with `High Risk Override` selected.
+- Flow v2 does not clear high-risk values when priority changes, override is disabled, or the Case closes.
 - Customer tier logic is not implemented.
 - Stale Case logic is not implemented.
 - Notifications are not implemented.
@@ -192,8 +192,8 @@ Use this section during manual testing.
 
 ## Next Review Questions
 
-- Should Flow v1 clear high-risk values when a Case no longer meets criteria?
+- Should Flow v2 clear high-risk values when a Case no longer meets criteria?
 - Should closed Cases always clear high-risk status, or only disappear from the open manager list view?
-- Should manual manager override be added before customer tier or stale Case logic?
-- Should the LWC show different guidance for closed Cases?
-- Should the next LWC increment visually resemble a delivery-team channel more strongly?
+- Should customer tier logic be added to the next high-risk criteria increment?
+- Should stale Case logic be added after customer tier criteria are clarified?
+- Should the LWC add richer static channel guidance for more Scenario 001 states?
