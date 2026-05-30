@@ -62,8 +62,19 @@ The project intentionally started with:
 - scenario artifacts
 - devlog and issue log
 - AI workflow notes
+- repeated command and workflow notes
 
 Salesforce metadata should still be added only when it directly supports a scenario learning or implementation objective.
+
+---
+
+## Reusable Commands and Workflow Context
+
+For repeated local paths, Codex instructions, validation commands, deploy commands, npm commands, chunking guidance, and the current manual review workflow, read:
+
+`docs/AI_COMMANDS_AND_WORKFLOWS.md`
+
+Use that file instead of repeatedly asking the user for the same local repo path, Salesforce org alias, or validation commands.
 
 ---
 
@@ -92,12 +103,14 @@ When updating docs in the future:
 
 Do not continue large documentation-only expansion right now.
 
-The highest-value next milestone is:
+The current best next milestone is to continue evolving Scenario 001 from a basic Salesforce MVP slice toward the simulated delivery-team channel experience.
 
-1. Authenticate or connect a Salesforce org.
-2. Validate `manifest/scenario-001-package.xml`.
-3. Fix validation issues.
-4. Retrieve or deploy metadata in small scenario-driven increments.
-5. Build and review Flow behavior in an org before committing large Flow XML changes.
+Near-term work should favor:
 
-The project has enough foundational documentation to begin validating the simulator against real Salesforce implementation work.
+1. validating the current Scenario 001 manifest and smoke test checklist
+2. improving the `scenario001CaseRiskPanel` LWC in small increments
+3. making the delivery-team guidance feel more like a simulated channel
+4. avoiding Apex, external AI calls, and full orchestration until the static UI pattern is proven
+5. keeping each Salesforce metadata change tied to a scenario learning objective
+
+Claygentforce now has enough foundational documentation and Salesforce metadata to keep validating the simulator against real implementation work.
