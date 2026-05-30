@@ -1,3 +1,47 @@
+.scenario-signals {
+  border: 1px solid #dddbda;
+  border-radius: 0.25rem;
+  background: #f3f3f3;
+  padding: 0.75rem;
+}
+
+.signals-heading {
+  color: #444444;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.signals-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.signal-pill {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #dddbda;
+  border-radius: 999px;
+  display: inline-flex;
+  gap: 0.35rem;
+  min-height: 1.75rem;
+  padding: 0.25rem 0.65rem;
+}
+
+.signal-label {
+  color: #747474;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.signal-value {
+  color: #181818;
+  font-size: 0.75rem;
+}
+
 .delivery-channel {
   border-top: 1px solid #dddbda;
   padding-top: 1rem;

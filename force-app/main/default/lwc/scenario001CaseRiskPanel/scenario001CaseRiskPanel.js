@@ -158,6 +158,22 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
     return "Not Flagged";
   }
 
+  get flowSignal() {
+    if (this.isClosed) {
+      return "Closed visibility only";
+    }
+
+    if (this.isManualOverride) {
+      return "Override precedence";
+    }
+
+    if (this.isHighRisk) {
+      return "Priority criteria";
+    }
+
+    return "No active match";
+  }
+
   get highRiskReason() {
     return (
       getFieldValue(this.caseRecord.data, HIGH_RISK_REASON_FIELD) || "None"
