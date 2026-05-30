@@ -22,11 +22,21 @@ Preferred local checkout:
 
 `D:\Github Repos\Claygentforce`
 
-When using Codex or another file-editing AI tool, prefer the existing local checkout above.
+Codex should modify the preferred local checkout when possible.
+
+Before editing files, Codex should confirm whether it is modifying:
+
+`D:\Github Repos\Claygentforce`
+
+If Codex cannot modify that exact checkout, it must stop and say so before editing.
+
+Do not silently edit a separate `work/Claygentforce` checkout.
 
 If a separate generated workspace must be used, clearly state that and provide copy instructions back to:
 
 `D:\Github Repos\Claygentforce`
+
+After editing, summarize the exact local path that was modified.
 
 ---
 
@@ -59,6 +69,23 @@ Unless explicitly requested:
 
 ---
 
+## LWC Implementation Rules
+
+For Lightning Web Component work:
+
+- keep components read-only unless explicitly asked otherwise
+- use SLDS classes where practical
+- use plain scoped CSS for MVP styling
+- do not use Salesforce internal design tokens
+- do not use `force:*` tokens
+- do not use `--lwc-*` styling hooks unless they are already proven safe in this repo
+- avoid styling choices that require org theme assumptions
+- keep styling subtle and professional
+
+Reason: a previous LWC CSS update failed deployment because a styling hook compiled to an internal Salesforce token that custom namespace components cannot access.
+
+---
+
 ## Standard Files To Read First
 
 For general implementation context:
@@ -80,6 +107,7 @@ For Scenario 001 LWC work:
 - `force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.html`
 - `force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.js`
 - `force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.js-meta.xml`
+- `force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.css`
 
 Read only the files relevant to the current task.
 
