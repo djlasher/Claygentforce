@@ -4,6 +4,40 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-29 — Scenario 001 Case layout usability update
+
+### Summary
+
+Retrieved the Case page layout after adding a dedicated `Claygentforce Scenario 001` section.
+
+This makes the Scenario 001 high-risk fields usable from the normal Case UI instead of requiring backend edits.
+
+### Files Updated
+
+- force-app/main/default/layouts/Case-Case Layout.layout-meta.xml
+- docs/DEVLOG.md
+
+### Validation / Build Notes
+
+- The layout metadata was retrieved successfully into source.
+- The layout includes a custom section labeled `Claygentforce Scenario 001`.
+- The section includes editable `High_Risk__c` and `High_Risk_Reason__c` fields.
+- This resolves the earlier friction where test values had to be set from the backend because the fields were not on the page layout.
+
+### Notes
+
+This is the second usable Scenario 001 Salesforce slice after the `Open High-Risk Cases` list view.
+
+The MVP now supports creating or editing a Case in the UI, marking it high-risk, assigning a high-risk reason, and viewing it in the manager list view.
+
+### Next Actions
+
+- Decide whether to add a small permission set for scenario-specific Case field access.
+- Consider adding the layout and list view to `manifest/scenario-001-package.xml` so the focused Scenario 001 manifest represents the full current MVP slice.
+- Keep Flow implementation deferred until the manual MVP is reviewed.
+
+---
+
 ## 2026-05-29 — Scenario 001 org validation and manager list view
 
 ### Summary
