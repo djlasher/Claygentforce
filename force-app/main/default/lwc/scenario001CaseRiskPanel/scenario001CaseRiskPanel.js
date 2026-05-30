@@ -50,6 +50,12 @@ const STANDARD_GUIDANCE = [
     focus: "Automation scope",
     label: "Simulated review note",
     text: "Confirm whether the current criteria are sufficient before adding more automation."
+  },
+  {
+    role: "QA",
+    focus: "Regression watch",
+    label: "Simulated review note",
+    text: "Flow v2 does not currently clear prior high-risk values when criteria stop matching, so regression tests should cover priority and override changes."
   }
 ];
 
