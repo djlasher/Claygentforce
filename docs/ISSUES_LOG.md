@@ -4,6 +4,68 @@ This file tracks setup problems, tool friction, confusing errors, and the fixes/
 
 ---
 
+# 2026-05-29 — Salesforce DX, Codex, and AI workflow friction
+
+## Symptoms
+
+Several unrelated setup and workflow issues appeared during the first real Scenario 001 implementation session:
+
+- `sf` was not recognized by Windows or VS Code.
+- Node and npm were not initially available.
+- PowerShell blocked npm because script execution was disabled.
+- `npm run lint` failed before project dependencies were installed.
+- Codex generated LWC changes in its own `work/Claygentforce` checkout instead of the user's active local repository.
+- AI guidance started repeating too much project setup, command, and workflow context across prompts and docs.
+- ChatGPT briefly conflated different repository states instead of checking the repo first.
+
+## Cause
+
+This was a combination of local environment setup gaps and AI workflow drift.
+
+The local machine needed Salesforce CLI, Node/npm, PowerShell execution policy adjustment, and npm dependency installation before the Salesforce DX/LWC workflow was smooth.
+
+Separately, Codex operated in a separate workspace, which made it look like files were edited even though the user's active local checkout did not contain the changes.
+
+The documentation process also began duplicating context across multiple AI-facing files instead of keeping each file focused on a specific audience.
+
+## Fix
+
+The local environment was stabilized:
+
+- Salesforce CLI was installed and verified.
+- The Claygentforce org was authorized successfully.
+- Node and npm were installed and verified.
+- PowerShell execution policy was updated for the current user.
+- `npm install` was run successfully.
+- `npm run lint` completed successfully.
+
+The AI workflow docs were refocused:
+
+- `docs/AI_SESSION_STARTER.md` is now ChatGPT's project rehydration and current-state memory file.
+- `docs/AI_COMMANDS_AND_WORKFLOWS.md` is now Codex/task-execution guidance.
+- No new redundant Codex context file was created.
+- Future Codex prompts should stay short and point to the existing task guidance file plus the specific files being edited.
+
+The Codex workspace issue remains important:
+
+- If Codex edits a separate workspace, the changed files must be copied back into `D:\Github Repos\Claygentforce` before validation, deployment, commit, and push.
+- Repository inspection through GitHub should be used to verify what actually landed on `main`.
+
+## Lesson Learned
+
+AI assistance needs the same kind of architecture discipline as Salesforce metadata.
+
+Keep AI-facing documentation separated by purpose:
+
+- ChatGPT memory/current state belongs in `AI_SESSION_STARTER.md`.
+- Codex implementation conventions belong in `AI_COMMANDS_AND_WORKFLOWS.md`.
+- Devlog entries should be milestone-oriented, not one entry per tiny file change.
+- Issues should capture real friction, but not every transient hiccup.
+
+Before assuming work is complete, verify which workspace was edited and whether the intended files actually reached the repository.
+
+---
+
 # 2026-05-23 — GitHub credential popup / Windows Credential Manager failure
 
 ## Symptoms
