@@ -3,6 +3,7 @@
     <types>
         <members>Case.High_Risk__c</members>
         <members>Case.High_Risk_Reason__c</members>
+        <members>Case.High_Risk_Override__c</members>
         <name>CustomField</name>
     </types>
     <types>
