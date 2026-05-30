@@ -18,10 +18,11 @@ The day started with local Salesforce tooling setup and ended with a working Cas
 4. add the high-risk fields to the Case layout
 5. add a scenario-specific permission set
 6. build Flow v1 for simple high-risk Case flagging
-7. add and refine the first Scenario 001 Lightning Web Component
-8. add a Scenario 001 smoke test checklist
-9. update the focused Scenario 001 manifest to represent the full MVP slice
-10. retrieve source-controlled metadata back into the repository
+7. add manual override support and Flow v2 precedence
+8. add and refine the first Scenario 001 Lightning Web Component
+9. add a Scenario 001 smoke test checklist
+10. update the focused Scenario 001 manifest to represent the full MVP slice
+11. retrieve source-controlled metadata back into the repository
 
 This moved Claygentforce from documentation-only planning into a real Salesforce org-backed implementation with its first visible product UI.
 
@@ -30,16 +31,20 @@ This moved Claygentforce from documentation-only planning into a real Salesforce
 - manifest/scenario-001-package.xml
 - force-app/main/default/objects/Case/fields/High_Risk__c.field-meta.xml
 - force-app/main/default/objects/Case/fields/High_Risk_Reason__c.field-meta.xml
+- force-app/main/default/objects/Case/fields/High_Risk_Override__c.field-meta.xml
 - force-app/main/default/objects/Case/listViews/Open_High_Risk_Cases.listView-meta.xml
 - force-app/main/default/layouts/Case-Case Layout.layout-meta.xml
 - force-app/main/default/permissionsets/Claygentforce_Support_Manager.permissionset-meta.xml
 - force-app/main/default/flows/Scenario001_Case_High_Risk_Flagging.flow-meta.xml
+- force-app/main/default/flexipages/Case_Record_Page.flexipage-meta.xml
 - force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.html
 - force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.js
+- force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.css
 - force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.js-meta.xml
 - scenarios/001-case-escalation-manager-visibility/SMOKE_TEST_CHECKLIST.md
 - docs/AI_SESSION_STARTER.md
 - docs/AI_COMMANDS_AND_WORKFLOWS.md
+- docs/ISSUES_LOG.md
 - docs/DEVLOG.md
 
 ### Validation Notes
@@ -49,17 +54,19 @@ This moved Claygentforce from documentation-only planning into a real Salesforce
 - Node and npm were installed/configured so local JavaScript tooling can run.
 - `npm install` completed with zero reported vulnerabilities.
 - `npm run lint` completed successfully after dependencies were installed.
-- The focused Scenario 001 manifest now includes the fields, list view, layout, permission set, Flow, and Lightning Web Component that make up the current MVP slice.
-- The High Risk and High Risk Reason Case fields are now present in the org.
-- Field-level security initially had to be granted manually to the System Administrator profile before the fields were visible/editable.
+- The focused Scenario 001 manifest now includes the fields, list view, layout, permission set, Flow, Lightning Web Component, and FlexiPage that make up the current MVP slice.
+- The High Risk, High Risk Reason, and High Risk Override Case fields are now present in the org.
+- Field-level security initially had to be granted manually to the System Administrator profile before the scenario-specific permission set was added.
 - The Open High-Risk Cases list view was created manually, shared so it could be retrieved, and added to source control.
-- The Case layout now includes a dedicated Claygentforce Scenario 001 section with editable High_Risk__c and High_Risk_Reason__c fields.
-- A Claygentforce Support Manager permission set was added with Case read/create/edit access, tab visibility, and field read/edit access for the two Scenario 001 high-risk fields.
+- The Case layout now includes a dedicated Claygentforce Scenario 001 section with editable High_Risk__c, High_Risk_Reason__c, and High_Risk_Override__c fields.
+- A Claygentforce Support Manager permission set was added with Case access, tab visibility, and scenario field access.
 - Flow v1 was added as an active before-save record-triggered Flow on Case.
-- Flow v1 evaluates open High priority Cases and sets High_Risk__c to true with High_Risk_Reason__c set to Critical Severity.
+- Flow v1 evaluated open High priority Cases and set High_Risk__c to true with High_Risk_Reason__c set to Critical Severity.
+- Flow v2 added manual override precedence. Open Cases with High_Risk_Override__c set to true are marked high-risk with High_Risk_Reason__c set to Manual Review before priority-based criteria are evaluated.
 - The first LWC, scenario001CaseRiskPanel, was added as a Case record page component.
-- The LWC reads Case risk fields through lightning/uiRecordApi and displays Scenario 001 risk status plus static role-style delivery team guidance.
-- The LWC was refined so the guidance section is now a lightweight Delivery Team Channel with role names, focus areas, simulated review note labels, and closed Case guidance.
+- The LWC reads Case risk fields through lightning/uiRecordApi and displays Scenario 001 risk status plus a Delivery Team Channel.
+- The LWC was refined with scoped CSS so the guidance area reads as a lightweight delivery-team thread with role names, focus areas, simulated review note labels, and closed Case/manual override guidance.
+- A visual org test confirmed the manual override path with Priority set to Medium, High Risk Override enabled, High Risk Reason set to Manual Review, and the manual override channel messages displayed.
 - A test Case required Case Origin = Phone before save, which should be remembered for smoke testing.
 - Extra Case metadata retrieved during local development was cleaned out before continuing.
 
@@ -69,9 +76,9 @@ The current Scenario 001 MVP supports this workflow:
 
 1. Create or edit a Case in the Salesforce UI.
 2. Set Case Origin as required by the org.
-3. Set Priority to High while the Case is open.
+3. Set Priority to High while the Case is open, or enable High Risk Override.
 4. Save the Case.
-5. Flow v1 marks the Case as High Risk and sets the High Risk Reason to Critical Severity.
+5. Flow v2 marks qualifying Cases as High Risk and sets the High Risk Reason to Critical Severity or Manual Review.
 6. Review the Case in the Open High-Risk Cases list view.
 7. Open the Case record page and view Scenario 001 risk status and delivery team channel guidance in the LWC panel.
 
@@ -85,7 +92,7 @@ The first source-controlled Salesforce implementation slice is intentionally sma
 
 The project now has a cleaner permissions path through a scenario-specific permission set instead of relying only on full System Administrator profile edits.
 
-Flow v1 intentionally avoids customer tier logic, stale Case logic, notifications, assignment changes, manual override behavior, and custom code.
+Flow v2 intentionally still avoids customer tier logic, stale Case logic, notifications, assignment changes, clearing behavior, and custom code.
 
 The LWC intentionally avoids Apex, external AI calls, chat input, and orchestration. It provides the first visual pattern for role-style guidance inside Salesforce.
 
@@ -93,11 +100,10 @@ The AI support docs were also refocused: `AI_SESSION_STARTER.md` is ChatGPT proj
 
 ### Next Actions
 
-- Run or confirm a focused validate/deploy using the updated Scenario 001 manifest.
-- Execute the Scenario 001 smoke test checklist against the dev org.
-- Review whether Flow v1 should also clear high-risk values when a Case no longer meets criteria, or defer that until requirements are clearer.
-- Decide whether the next LWC increment should add stronger channel styling, static message grouping, or richer scenario-state guidance.
-- Document today's AI-process/tooling friction in `docs/ISSUES_LOG.md` before ending the session.
+- Execute the Scenario 001 smoke test checklist against the dev org and record any final findings.
+- Decide whether Flow v2 should eventually clear high-risk values when a Case no longer meets criteria, or defer that until requirements are clearer.
+- Decide whether the next Scenario 001 increment should add customer tier logic, stale Case logic, or richer static channel guidance.
+- Keep the LWC read-only and avoid Apex/external AI calls until the static UI pattern is proven.
 
 ---
 
