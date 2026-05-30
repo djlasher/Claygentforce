@@ -2,6 +2,7 @@ import { LightningElement, api, wire } from "lwc";
 import { getFieldValue, getRecord } from "lightning/uiRecordApi";
 
 import HIGH_RISK_FIELD from "@salesforce/schema/Case.High_Risk__c";
+import HIGH_RISK_OVERRIDE_FIELD from "@salesforce/schema/Case.High_Risk_Override__c";
 import HIGH_RISK_REASON_FIELD from "@salesforce/schema/Case.High_Risk_Reason__c";
 import PRIORITY_FIELD from "@salesforce/schema/Case.Priority";
 import STATUS_FIELD from "@salesforce/schema/Case.Status";
@@ -9,6 +10,7 @@ import IS_CLOSED_FIELD from "@salesforce/schema/Case.IsClosed";
 
 const FIELDS = [
   HIGH_RISK_FIELD,
+  HIGH_RISK_OVERRIDE_FIELD,
   HIGH_RISK_REASON_FIELD,
   PRIORITY_FIELD,
   STATUS_FIELD,
@@ -51,6 +53,27 @@ const STANDARD_GUIDANCE = [
   }
 ];
 
+const MANUAL_OVERRIDE_GUIDANCE = [
+  {
+    role: "Support Manager",
+    focus: "Manual manager review",
+    label: "Simulated review note",
+    text: "This Case is manually flagged for manager review."
+  },
+  {
+    role: "Architect",
+    focus: "Flow v2 precedence",
+    label: "Simulated review note",
+    text: "Manual override takes precedence over priority-based criteria in Flow v2."
+  },
+  {
+    role: "QA",
+    focus: "Override validation",
+    label: "Simulated review note",
+    text: "Confirm override behavior works even when Priority is not High."
+  }
+];
+
 const CLOSED_CASE_GUIDANCE = [
   {
     role: "Support Manager",
@@ -82,12 +105,22 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
     return getFieldValue(this.caseRecord.data, HIGH_RISK_FIELD) === true;
   }
 
+  get isManualOverride() {
+    return (
+      getFieldValue(this.caseRecord.data, HIGH_RISK_OVERRIDE_FIELD) === true
+    );
+  }
+
   get isClosed() {
     return getFieldValue(this.caseRecord.data, IS_CLOSED_FIELD) === true;
   }
 
   get highRiskStatus() {
     return this.isHighRisk ? "Flagged" : "Not Flagged";
+  }
+
+  get highRiskOverrideStatus() {
+    return this.isManualOverride ? "Enabled" : "Not Enabled";
   }
 
   get highRiskReason() {
@@ -107,6 +140,10 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
   get guidanceMessages() {
     if (this.isClosed) {
       return CLOSED_CASE_GUIDANCE;
+    }
+
+    if (this.isManualOverride) {
+      return MANUAL_OVERRIDE_GUIDANCE;
     }
 
     return this.isHighRisk ? HIGH_RISK_GUIDANCE : STANDARD_GUIDANCE;
