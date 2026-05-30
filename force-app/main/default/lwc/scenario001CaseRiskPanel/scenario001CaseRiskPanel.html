@@ -1,43 +1,81 @@
 <template>
-    <lightning-card title="Scenario 001 Risk Review" icon-name="standard:case">
-        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-            <template if:true={caseRecord.data}>
-                <dl class="slds-list_horizontal slds-wrap slds-text-body_regular">
-                    <dt class="slds-item_label slds-text-color_weak slds-truncate" title="High Risk">High Risk</dt>
-                    <dd class="slds-item_detail slds-truncate">{highRiskStatus}</dd>
+  <lightning-card title="Scenario 001 Risk Review" icon-name="standard:case">
+    <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+      <template if:true={caseRecord.data}>
+        <dl class="slds-list_horizontal slds-wrap slds-text-body_regular">
+          <dt
+            class="slds-item_label slds-text-color_weak slds-truncate"
+            title="High Risk"
+          >
+            High Risk
+          </dt>
+          <dd class="slds-item_detail slds-truncate">{highRiskStatus}</dd>
 
-                    <dt class="slds-item_label slds-text-color_weak slds-truncate" title="High Risk Reason">
-                        High Risk Reason
-                    </dt>
-                    <dd class="slds-item_detail slds-truncate">{highRiskReason}</dd>
+          <dt
+            class="slds-item_label slds-text-color_weak slds-truncate"
+            title="High Risk Reason"
+          >
+            High Risk Reason
+          </dt>
+          <dd class="slds-item_detail slds-truncate">{highRiskReason}</dd>
 
-                    <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Priority">Priority</dt>
-                    <dd class="slds-item_detail slds-truncate">{priority}</dd>
+          <dt
+            class="slds-item_label slds-text-color_weak slds-truncate"
+            title="Priority"
+          >
+            Priority
+          </dt>
+          <dd class="slds-item_detail slds-truncate">{priority}</dd>
 
-                    <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Status">Status</dt>
-                    <dd class="slds-item_detail slds-truncate">{status}</dd>
-                </dl>
+          <dt
+            class="slds-item_label slds-text-color_weak slds-truncate"
+            title="Status"
+          >
+            Status
+          </dt>
+          <dd class="slds-item_detail slds-truncate">{status}</dd>
+        </dl>
 
-                <section class="slds-m-top_medium" aria-labelledby="delivery-team-guidance-heading">
-                    <h3 id="delivery-team-guidance-heading" class="slds-text-heading_small slds-m-bottom_small">
-                        Delivery Team Guidance
-                    </h3>
+        <section
+          class="slds-m-top_medium"
+          aria-labelledby="delivery-team-channel-heading"
+        >
+          <h3
+            id="delivery-team-channel-heading"
+            class="slds-text-heading_small slds-m-bottom_small"
+          >
+            Delivery Team Channel
+          </h3>
 
-                    <template for:each={guidanceMessages} for:item="message">
-                        <article
-                            key={message.role}
-                            class="slds-box slds-box_x-small slds-theme_default slds-m-bottom_x-small"
-                        >
-                            <p class="slds-text-title_bold">{message.role}</p>
-                            <p class="slds-m-top_xx-small">{message.text}</p>
-                        </article>
-                    </template>
-                </section>
-            </template>
+          <template for:each={guidanceMessages} for:item="message">
+            <article
+              key={message.role}
+              class="slds-box slds-box_x-small slds-theme_default slds-m-bottom_x-small"
+            >
+              <div
+                class="slds-grid slds-wrap slds-grid_align-spread slds-gutters_x-small"
+              >
+                <div>
+                  <p class="slds-text-title_bold">{message.role}</p>
+                  <p class="slds-text-body_small slds-text-color_weak">
+                    {message.focus}
+                  </p>
+                </div>
+                <span class="slds-badge slds-m-top_xx-small"
+                  >{message.label}</span
+                >
+              </div>
+              <p class="slds-m-top_x-small">{message.text}</p>
+            </article>
+          </template>
+        </section>
+      </template>
 
-            <template if:true={caseRecord.error}>
-                <p class="slds-text-color_error">Scenario 001 risk details could not be loaded.</p>
-            </template>
-        </div>
-    </lightning-card>
+      <template if:true={caseRecord.error}>
+        <p class="slds-text-color_error">
+          Scenario 001 risk details could not be loaded.
+        </p>
+      </template>
+    </div>
+  </lightning-card>
 </template>
