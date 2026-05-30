@@ -5,5 +5,17 @@
         <members>Case.High_Risk_Reason__c</members>
         <name>CustomField</name>
     </types>
+    <types>
+        <members>Case.Open_High_Risk_Cases</members>
+        <name>ListView</name>
+    </types>
+    <types>
+        <members>Case-Case Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>Claygentforce_Support_Manager</members>
+        <name>PermissionSet</name>
+    </types>
     <version>66.0</version>
 </Package>

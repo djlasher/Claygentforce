@@ -31,6 +31,9 @@
     </types>
     <types>
         <members>*</members>
+        <name>ListView</name>
+    <types>
+        <members>*</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>
