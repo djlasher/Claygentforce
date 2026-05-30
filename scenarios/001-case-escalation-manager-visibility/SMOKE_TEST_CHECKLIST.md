@@ -100,7 +100,32 @@ This is intentional for the first automation increment and should be reviewed be
 
 ---
 
-## Test Case 4: Permission Set Supports Scenario Field Access
+## Test Case 4: Manual Override Flags Non-High Priority Open Case
+
+### Steps
+
+1. Create a new Case.
+2. Set `Case Origin` to `Phone`.
+3. Set `Status` to `New`.
+4. Set `Priority` to `Medium` or `Low`.
+5. Select `High Risk Override`.
+6. Save the Case.
+
+### Expected Result
+
+- `High Risk` is checked.
+- `High Risk Reason` is `Manual Review`.
+- The Case appears in the `Open High-Risk Cases` list view.
+- The LWC shows `High Risk Override` as `Enabled`.
+- The Delivery Team Channel shows manual override guidance.
+
+### Note
+
+Manual override takes precedence over priority-based criteria in Flow v2.
+
+---
+
+## Test Case 5: Permission Set Supports Scenario Field Access
 
 ### Steps
 
@@ -119,7 +144,7 @@ This is intentional for the first automation increment and should be reviewed be
 
 ---
 
-## Test Case 5: LWC Loads On Case Record Page
+## Test Case 6: LWC Loads On Case Record Page
 
 ### Steps
 
@@ -134,7 +159,7 @@ This is intentional for the first automation increment and should be reviewed be
 - High Risk Reason is displayed.
 - Priority is displayed.
 - Status is displayed.
-- Delivery Team Guidance messages are displayed.
+- Delivery Team Channel messages are displayed.
 
 ---
 
@@ -144,7 +169,6 @@ This is intentional for the first automation increment and should be reviewed be
 - Flow v1 does not clear high-risk values when priority changes or the Case closes.
 - Customer tier logic is not implemented.
 - Stale Case logic is not implemented.
-- Manual override behavior is not implemented.
 - Notifications are not implemented.
 - The LWC uses static role-style guidance, not live agent orchestration.
 - The LWC is not yet a full simulated delivery-team channel.
@@ -160,6 +184,7 @@ Use this section during manual testing.
 | High Priority Open Case Is Flagged         |           |       |
 | Non-High Priority Open Case Is Not Flagged |           |       |
 | Closed Case Excluded From List View        |           |       |
+| Manual Override Flags Open Case            |           |       |
 | Permission Set Supports Field Access       |           |       |
 | LWC Loads On Case Record Page              |           |       |
 
