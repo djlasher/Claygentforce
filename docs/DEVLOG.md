@@ -17,8 +17,9 @@ The day started with local Salesforce tooling setup and ended with a working Cas
 3. create a manager-facing high-risk Case list view
 4. add the high-risk fields to the Case layout
 5. add a scenario-specific permission set
-6. update the focused Scenario 001 manifest to represent the full MVP slice
-7. retrieve source-controlled metadata back into the repository
+6. build Flow v1 for simple high-risk Case flagging
+7. update the focused Scenario 001 manifest to represent the full MVP slice
+8. retrieve source-controlled metadata back into the repository
 
 This moved Claygentforce from documentation-only planning into a real Salesforce org-backed implementation.
 
@@ -30,45 +31,50 @@ This moved Claygentforce from documentation-only planning into a real Salesforce
 - force-app/main/default/objects/Case/listViews/Open_High_Risk_Cases.listView-meta.xml
 - force-app/main/default/layouts/Case-Case Layout.layout-meta.xml
 - force-app/main/default/permissionsets/Claygentforce_Support_Manager.permissionset-meta.xml
+- force-app/main/default/flows/Scenario001_Case_High_Risk_Flagging.flow-meta.xml
 - docs/DEVLOG.md
 
 ### Validation Notes
 
 - Salesforce CLI was installed and org authorization was completed successfully.
 - Java tooling was addressed for Salesforce DX VS Code support.
-- The focused Scenario 001 manifest now includes the fields, list view, layout, and permission set that make up the current MVP slice.
+- The focused Scenario 001 manifest now includes the fields, list view, layout, permission set, and Flow that make up the current MVP slice.
 - The High Risk and High Risk Reason Case fields are now present in the org.
 - Field-level security initially had to be granted manually to the System Administrator profile before the fields were visible/editable.
 - The Open High-Risk Cases list view was created manually, shared so it could be retrieved, and added to source control.
 - The Case layout now includes a dedicated Claygentforce Scenario 001 section with editable High_Risk__c and High_Risk_Reason__c fields.
 - A Claygentforce Support Manager permission set was added with Case read/create/edit access, tab visibility, and field read/edit access for the two Scenario 001 high-risk fields.
+- Flow v1 was added as an active before-save record-triggered Flow on Case.
+- Flow v1 evaluates open High priority Cases and sets High_Risk__c to true with High_Risk_Reason__c set to Critical Severity.
 - A test Case required Case Origin = Phone before save, which should be remembered for smoke testing.
 - Extra Case metadata retrieved during local development was cleaned out before continuing.
 
 ### Current MVP Behavior
 
-The current Scenario 001 MVP supports this manual workflow:
+The current Scenario 001 MVP supports this workflow:
 
 1. Create or edit a Case in the Salesforce UI.
 2. Set Case Origin as required by the org.
-3. Mark High Risk as true.
-4. Choose a High Risk Reason.
-5. Save the Case.
+3. Set Priority to High while the Case is open.
+4. Save the Case.
+5. Flow v1 marks the Case as High Risk and sets the High Risk Reason to Critical Severity.
 6. Review the Case in the Open High-Risk Cases list view.
 
 The list view filters to open high-risk Cases and includes High_Risk_Reason__c as a visible column.
 
 ### Notes
 
-The first source-controlled Salesforce implementation slice is intentionally small and manual. This keeps the project aligned with the principle of validating real delivery behavior before building automation.
+The first source-controlled Salesforce implementation slice is intentionally small. This keeps the project aligned with the principle of validating real delivery behavior before expanding automation.
 
 The project now has a cleaner permissions path through a scenario-specific permission set instead of relying only on full System Administrator profile edits.
+
+Flow v1 intentionally avoids customer tier logic, stale Case logic, notifications, assignment changes, manual override behavior, and custom code.
 
 ### Next Actions
 
 - Run or confirm a focused validate/deploy using the updated Scenario 001 manifest.
-- Add a Scenario 001 smoke test checklist for the manual MVP.
-- Keep Flow implementation deferred until the manual MVP and permission model are reviewed.
+- Add a Scenario 001 smoke test checklist for the manual and Flow-assisted MVP.
+- Review whether Flow v1 should also clear high-risk values when a Case no longer meets criteria, or defer that until requirements are clearer.
 
 ---
 
