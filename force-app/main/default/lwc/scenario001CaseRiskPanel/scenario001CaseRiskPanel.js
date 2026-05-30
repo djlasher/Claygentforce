@@ -129,6 +129,22 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
     return this.isManualOverride ? "Enabled" : "Not Enabled";
   }
 
+  get scenarioState() {
+    if (this.isClosed) {
+      return "Closed Case";
+    }
+
+    if (this.isManualOverride) {
+      return "Manual Override";
+    }
+
+    if (this.isHighRisk) {
+      return "Priority-Based High Risk";
+    }
+
+    return "Not Flagged";
+  }
+
   get highRiskReason() {
     return (
       getFieldValue(this.caseRecord.data, HIGH_RISK_REASON_FIELD) || "None"
