@@ -17,5 +17,9 @@
         <members>Claygentforce_Support_Manager</members>
         <name>PermissionSet</name>
     </types>
+    <types>
+        <members>Scenario001_Case_High_Risk_Flagging</members>
+        <name>Flow</name>
+    </types>
     <version>66.0</version>
 </Package>
