@@ -18,9 +18,10 @@ The day started with local Salesforce tooling setup and ended with a working Cas
 4. add the high-risk fields to the Case layout
 5. add a scenario-specific permission set
 6. build Flow v1 for simple high-risk Case flagging
-7. add the first Scenario 001 Lightning Web Component
-8. update the focused Scenario 001 manifest to represent the full MVP slice
-9. retrieve source-controlled metadata back into the repository
+7. add and refine the first Scenario 001 Lightning Web Component
+8. add a Scenario 001 smoke test checklist
+9. update the focused Scenario 001 manifest to represent the full MVP slice
+10. retrieve source-controlled metadata back into the repository
 
 This moved Claygentforce from documentation-only planning into a real Salesforce org-backed implementation with its first visible product UI.
 
@@ -36,6 +37,9 @@ This moved Claygentforce from documentation-only planning into a real Salesforce
 - force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.html
 - force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.js
 - force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.js-meta.xml
+- scenarios/001-case-escalation-manager-visibility/SMOKE_TEST_CHECKLIST.md
+- docs/AI_SESSION_STARTER.md
+- docs/AI_COMMANDS_AND_WORKFLOWS.md
 - docs/DEVLOG.md
 
 ### Validation Notes
@@ -55,6 +59,7 @@ This moved Claygentforce from documentation-only planning into a real Salesforce
 - Flow v1 evaluates open High priority Cases and sets High_Risk__c to true with High_Risk_Reason__c set to Critical Severity.
 - The first LWC, scenario001CaseRiskPanel, was added as a Case record page component.
 - The LWC reads Case risk fields through lightning/uiRecordApi and displays Scenario 001 risk status plus static role-style delivery team guidance.
+- The LWC was refined so the guidance section is now a lightweight Delivery Team Channel with role names, focus areas, simulated review note labels, and closed Case guidance.
 - A test Case required Case Origin = Phone before save, which should be remembered for smoke testing.
 - Extra Case metadata retrieved during local development was cleaned out before continuing.
 
@@ -68,7 +73,7 @@ The current Scenario 001 MVP supports this workflow:
 4. Save the Case.
 5. Flow v1 marks the Case as High Risk and sets the High Risk Reason to Critical Severity.
 6. Review the Case in the Open High-Risk Cases list view.
-7. Open the Case record page and view Scenario 001 risk status and delivery team guidance in the LWC panel.
+7. Open the Case record page and view Scenario 001 risk status and delivery team channel guidance in the LWC panel.
 
 The list view filters to open high-risk Cases and includes High_Risk_Reason__c as a visible column.
 
@@ -84,12 +89,15 @@ Flow v1 intentionally avoids customer tier logic, stale Case logic, notification
 
 The LWC intentionally avoids Apex, external AI calls, chat input, and orchestration. It provides the first visual pattern for role-style guidance inside Salesforce.
 
+The AI support docs were also refocused: `AI_SESSION_STARTER.md` is ChatGPT project rehydration, while `AI_COMMANDS_AND_WORKFLOWS.md` is Codex/task-execution guidance.
+
 ### Next Actions
 
 - Run or confirm a focused validate/deploy using the updated Scenario 001 manifest.
-- Add a Scenario 001 smoke test checklist for the manual, Flow-assisted, and LWC-assisted MVP.
+- Execute the Scenario 001 smoke test checklist against the dev org.
 - Review whether Flow v1 should also clear high-risk values when a Case no longer meets criteria, or defer that until requirements are clearer.
-- Decide whether the next LWC increment should improve visual styling, add closed Case guidance, or introduce a static simulated team channel message list.
+- Decide whether the next LWC increment should add stronger channel styling, static message grouping, or richer scenario-state guidance.
+- Document today's AI-process/tooling friction in `docs/ISSUES_LOG.md` before ending the session.
 
 ---
 
