@@ -1,8 +1,14 @@
 # AI Commands and Workflows
 
-This file stores repeated commands, local paths, and workflow conventions used while building Claygentforce.
+This file is for Codex and implementation-focused AI tooling.
 
-The goal is to reduce repeated prompting and keep AI-assisted development consistent.
+Its purpose is to reduce repeated prompting during implementation work.
+
+This is not the main ChatGPT project memory file.
+
+ChatGPT project rehydration and current-state context belong in:
+
+`docs/AI_SESSION_STARTER.md`
 
 ---
 
@@ -18,42 +24,49 @@ Preferred local checkout:
 
 When using Codex or another file-editing AI tool, prefer the existing local checkout above.
 
-If the tool must use a separate generated workspace, it should clearly state that and provide copy instructions back to:
+If a separate generated workspace must be used, clearly state that and provide copy instructions back to:
 
 `D:\Github Repos\Claygentforce`
 
 ---
 
-## Standard AI Context Header
+## Codex Operating Context
 
-Use this header for Codex or other implementation-focused AI tools:
+Claygentforce is a Salesforce delivery team simulation and enablement project.
 
-You are helping build Claygentforce, a Salesforce delivery team simulation and enablement project.
+This is not the previous game or roguelite sandbox project.
 
-This is not the previous game or roguelite sandbox project. Claygentforce is the active strategic project.
+The product direction is a simulated Salesforce delivery-team channel experience, similar to a Teams or Slack room, where different delivery roles provide contextual guidance, concerns, tradeoffs, and review notes.
 
-Claygentforce is building toward a simulated Salesforce delivery team channel experience, similar to a Teams or Slack room. The learner should eventually see delivery roles chime in with contextual guidance, concerns, tradeoffs, and review notes. This is not a generic chatbot.
+This is not intended to become a generic chatbot.
 
-Use the existing local checkout at:
+Make the smallest useful change.
 
-`D:\Github Repos\Claygentforce`
+Keep changes:
 
-Do not create or use a separate Codex-generated clone if avoidable. If a separate workspace must be used, clearly state that and provide copy instructions back to the local checkout.
+- scoped
+- reviewable
+- scenario-driven
+- grounded in existing repository docs
 
-Make the smallest useful change. Keep changes scoped, reviewable, and grounded in existing repository documentation.
+Unless explicitly requested:
+
+- do not create Apex
+- do not create external AI calls
+- do not create chat input
+- do not modify unrelated metadata
+- do not rewrite large docs unnecessarily
 
 ---
 
 ## Standard Files To Read First
 
-For general project context:
+For general implementation context:
 
 - `README.md`
 - `docs/AI_SESSION_STARTER.md`
 - `docs/ARCHITECTURE.md`
 - `docs/DEVLOG.md`
-- `docs/AGENT_ROLES.md`
-- `docs/DELIVERY_SIMULATION_LOOP.md`
 
 For Scenario 001 implementation work:
 
@@ -68,63 +81,17 @@ For Scenario 001 LWC work:
 - `force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.js`
 - `force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.js-meta.xml`
 
----
+Read only the files relevant to the current task.
 
-## Local Setup Commands
-
-Confirm Node and npm:
-
-`node --version`
-
-`npm --version`
-
-Install project dependencies:
-
-`npm install`
-
-Run lint:
-
-`npm run lint`
+Do not ingest unnecessary repository context for small targeted changes.
 
 ---
 
-## Salesforce Org Commands
+## Validation and Deploy Reference
 
-Confirm Salesforce CLI:
+If validation or deployment commands are needed, use the existing Salesforce DX and npm workflows already established in the repository.
 
-`sf --version`
-
-List authenticated orgs:
-
-`sf org list`
-
-Authorize the Claygentforce org if needed:
-
-`sf org login web --alias Claygentforce --set-default`
-
----
-
-## Scenario 001 Manifest Commands
-
-Validate the full Scenario 001 MVP slice:
-
-`sf project deploy validate --manifest manifest/scenario-001-package.xml --target-org Claygentforce`
-
-Deploy the full Scenario 001 MVP slice:
-
-`sf project deploy start --manifest manifest/scenario-001-package.xml --target-org Claygentforce`
-
----
-
-## Scenario 001 LWC Commands
-
-Validate only the Scenario 001 LWC:
-
-`sf project deploy validate --source-dir force-app/main/default/lwc/scenario001CaseRiskPanel --target-org Claygentforce`
-
-Deploy only the Scenario 001 LWC:
-
-`sf project deploy start --source-dir force-app/main/default/lwc/scenario001CaseRiskPanel --target-org Claygentforce`
+Do not repeatedly restate the full command list in every Codex prompt.
 
 ---
 
@@ -137,25 +104,24 @@ The current working pattern is:
 3. Human commits and pushes.
 4. Human sends `k` in chat.
 5. ChatGPT inspects the repository through GitHub.
-6. ChatGPT updates project memory files such as `docs/DEVLOG.md`, `docs/ISSUES_LOG.md`, or scenario documentation when appropriate.
+6. ChatGPT updates devlogs, issue logs, or supporting documentation when appropriate.
 
 Do not create a devlog entry for every tiny file change.
 
-Prefer milestone-oriented devlog entries that summarize related work from the same session or implementation phase.
+Prefer milestone-oriented devlog entries.
 
 ---
 
-## Chunking Strategy
+## Chunking Guidance
 
-When manually copying large Markdown content from chat:
+When generating large Markdown responses for manual copy/paste:
 
 - avoid nested fenced code blocks
 - use inline code for commands when possible
 - split content into smaller chunks
 - verify the file ending after saving
-- push and have the repository inspected before continuing
 
-This prevents Markdown copy/paste truncation.
+This prevents Markdown truncation during copy/paste.
 
 ---
 
@@ -165,26 +131,10 @@ The current Scenario 001 MVP includes:
 
 - Case high-risk fields
 - Case layout section
-- Support manager list view
-- Scenario-specific permission set
+- support manager list view
+- scenario-specific permission set
 - before-save Case Flow v1
 - read-only Case LWC risk panel
 - smoke test checklist
 
-Flow v1 intentionally avoids:
-
-- customer tier logic
-- stale Case logic
-- notifications
-- assignment changes
-- manual override behavior
-- custom code
-
-The LWC intentionally avoids:
-
-- Apex
-- external AI calls
-- chat input
-- live agent orchestration
-
-The LWC is the first visual foundation for the future simulated delivery-team channel experience.
+The LWC is being evolved toward a simulated delivery-team channel experience in small, reviewable increments.
