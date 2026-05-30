@@ -2,7 +2,7 @@
 
 This file is for ChatGPT session rehydration.
 
-Read this first before helping with Claygentforce so the assistant remembers the current project state, avoids repeating already-completed setup work, and does not confuse Claygentforce with earlier sandbox projects.
+Read this first before helping with Claygentforce so the assistant remembers the current project state, avoids repeating completed setup work, and does not confuse Claygentforce with earlier sandbox projects.
 
 ---
 
@@ -34,7 +34,7 @@ The project should help learners practice Salesforce delivery judgment, not just
 
 ## Important Context
 
-This repository is:
+Repository:
 
 `djlasher/Claygentforce`
 
@@ -74,30 +74,125 @@ Scenario 001 is:
 
 `Case Escalation and Manager Visibility`
 
-The current Scenario 001 MVP includes:
+The current Scenario 001 MVP is source-controlled and deployable through:
+
+`manifest/scenario-001-package.xml`
+
+The MVP includes:
 
 - `Case.High_Risk__c`
 - `Case.High_Risk_Reason__c`
+- `Case.High_Risk_Override__c`
+- `Case.Customer_Tier__c`
 - `Open High-Risk Cases` list view
-- `Case-Case Layout` section for Scenario 001 fields
+- `Case-Case Layout` with the `Claygentforce Scenario 001` section
 - `Claygentforce Support Manager` permission set
 - `Scenario001_Case_High_Risk_Flagging` before-save Case Flow
+- `Case_Record_Page` FlexiPage with the LWC placed on the Case record page
 - `scenario001CaseRiskPanel` Lightning Web Component
 - `SMOKE_TEST_CHECKLIST.md`
-- focused deployment manifest at `manifest/scenario-001-package.xml`
 
-Flow v1 currently flags open High priority Cases as high-risk and sets the high-risk reason to Critical Severity.
+The org was authenticated under the alias:
 
-Flow v1 intentionally avoids:
+`Claygentforce`
+
+The local repo path used by the user is:
+
+`D:\Github Repos\Claygentforce`
+
+---
+
+## Current Flow Behavior
+
+Flow file:
+
+`force-app/main/default/flows/Scenario001_Case_High_Risk_Flagging.flow-meta.xml`
+
+Flow v2 behavior:
+
+1. Runs before-save on Case create/update.
+2. Entry condition: open Cases only, `IsClosed = false`.
+3. Manual override is evaluated before priority.
+4. If `High_Risk_Override__c = true`:
+   - `High_Risk__c = true`
+   - `High_Risk_Reason__c = Manual Review`
+5. Else if `Priority = High`:
+   - `High_Risk__c = true`
+   - `High_Risk_Reason__c = Critical Severity`
+6. Otherwise Flow does not clear existing high-risk values yet.
+
+Flow v2 intentionally avoids:
 
 - customer tier logic
 - stale Case logic
 - notifications
 - assignment changes
-- manual override behavior
+- clearing behavior
 - custom code
 
-The LWC currently provides a read-only Scenario 001 Case risk panel and is being evolved toward a simulated delivery-team channel UI.
+Customer Tier exists as future escalation context but Flow v2 does not use it yet.
+
+---
+
+## Current LWC Behavior
+
+LWC folder:
+
+`force-app/main/default/lwc/scenario001CaseRiskPanel/`
+
+The LWC is read-only and uses `lightning/uiRecordApi` / `getRecord`.
+
+It reads:
+
+- `Case.High_Risk__c`
+- `Case.High_Risk_Override__c`
+- `Case.High_Risk_Reason__c`
+- `Case.Customer_Tier__c`
+- `Case.Priority`
+- `Case.Status`
+- `Case.IsClosed`
+
+It displays:
+
+- Scenario State
+- High Risk
+- High Risk Override
+- High Risk Reason
+- Customer Tier
+- Priority
+- Status
+- Scenario Signals strip
+- Delivery Team Channel
+
+Scenario State values:
+
+- `Closed Case`
+- `Manual Override`
+- `Priority-Based High Risk`
+- `Not Flagged`
+
+Scenario Signals display compact pills for:
+
+- State
+- Tier
+- Priority
+- Flow
+
+Flow Signal values:
+
+- `Closed visibility only`
+- `Override precedence`
+- `Priority criteria`
+- `No active match`
+
+Delivery Team Channel guidance priority:
+
+1. Closed Case guidance
+2. Manual Override guidance
+3. Open high-risk guidance
+4. Open not-flagged guidance
+
+If Customer Tier is `Strategic` and the Case is not closed, the LWC appends a Product Owner message explaining that Strategic customer context may affect future escalation criteria, but Flow v2 does not use customer tier yet.
 
 The LWC intentionally avoids:
 
@@ -105,6 +200,28 @@ The LWC intentionally avoids:
 - external AI calls
 - chat input
 - live agent orchestration
+
+It is the first visual UI foundation for the future simulated delivery-team channel experience.
+
+---
+
+## Visual / Org Validation Completed
+
+Visual testing in the org confirmed:
+
+- the LWC is visible on the Case record page
+- High priority open Cases are flagged
+- manual override works on a Medium priority open Case
+- manual override sets High Risk Reason to `Manual Review`
+- the Delivery Team Channel shows manual override messages
+- Scenario State displays `Manual Override`
+- Scenario Signals displays State, Tier, Priority, and Flow context
+
+Case creation in this org requires:
+
+`Case Origin = Phone`
+
+Remember this for smoke testing.
 
 ---
 
@@ -114,11 +231,14 @@ The user often completes local work, validates/deploys, commits, pushes, and the
 
 `k`
 
-When the user sends `k`, inspect the repository through GitHub, verify the relevant files, and update project memory only when useful.
+When the user sends `k`:
 
-Do not create a devlog entry for every tiny file change.
-
-Prefer milestone-oriented devlog entries that summarize related work from the same session or implementation phase.
+1. Inspect the repository through GitHub.
+2. Verify the relevant files.
+3. Update project memory files only when useful.
+4. Do not ask for file paths when the relevant repo structure is obvious.
+5. Do not create a devlog entry for every tiny file change.
+6. Prefer milestone-oriented devlog entries that summarize related work from the same session or implementation phase.
 
 ---
 
@@ -128,9 +248,36 @@ Prefer milestone-oriented devlog entries that summarize related work from the sa
 
 Do not treat it as ChatGPT's main memory file.
 
-For Codex prompts, keep prompts short and point Codex to `docs/AI_COMMANDS_AND_WORKFLOWS.md` plus the specific files it needs for the task.
+For Codex prompts:
 
-Avoid repeating the same long local path, repository setup, command list, and project warnings in every Codex prompt.
+- keep prompts short
+- point Codex to `docs/AI_COMMANDS_AND_WORKFLOWS.md`
+- include only the specific files relevant to the task
+- do not repeat long setup, path, warning, or command sections unless necessary
+
+Codex must confirm it is modifying:
+
+`D:\Github Repos\Claygentforce`
+
+If Codex cannot modify that exact checkout, it must stop before editing and say so.
+
+Do not allow Codex to silently edit a separate `work/Claygentforce` checkout.
+
+For LWC CSS, avoid Salesforce internal tokens, `force:*` tokens, and unsafe `--lwc-*` styling hooks. Plain scoped CSS is safer for this MVP.
+
+---
+
+## Known Tooling / Workflow Lessons
+
+Documented in `docs/ISSUES_LOG.md`:
+
+- Salesforce CLI was initially missing.
+- Node/npm were initially missing.
+- PowerShell execution policy initially blocked npm.
+- `npm install` was required before `npm run lint` would work.
+- Codex repeatedly created or edited files in a separate workspace before the workflow was tightened.
+- AI-facing documentation briefly duplicated context across multiple files and was corrected.
+- A previous LWC CSS attempt failed because a styling hook compiled to an internal Salesforce token inaccessible from namespace `c`.
 
 ---
 
@@ -144,6 +291,8 @@ When updating docs:
 - avoid creating redundant docs when an existing doc can be updated
 - keep `AI_SESSION_STARTER.md` focused on ChatGPT rehydration
 - keep `AI_COMMANDS_AND_WORKFLOWS.md` focused on Codex/task execution guidance
+- keep `DEVLOG.md` milestone-oriented
+- keep `ISSUES_LOG.md` focused on meaningful friction, not every transient hiccup
 
 ---
 
@@ -153,15 +302,15 @@ Do not restart setup work.
 
 Do not expand large documentation just for its own sake.
 
-The current best next milestone is to continue evolving Scenario 001 from a basic Salesforce MVP slice toward the simulated delivery-team channel experience.
+The next useful work is to continue Scenario 001 in small, scenario-driven increments.
 
-Near-term work should favor:
+Likely next options:
 
-1. inspecting the latest `scenario001CaseRiskPanel` LWC refinement after the user pushes it
-2. updating the devlog with the LWC channel refinement as part of the existing Scenario 001 milestone
-3. improving the LWC in small increments so it feels more like a simulated delivery-team channel
-4. keeping the component read-only and static until the UI pattern is proven
-5. avoiding Apex, external AI calls, and full orchestration for now
-6. keeping each Salesforce metadata change tied to a scenario learning objective
+1. Execute the smoke test checklist and record final findings.
+2. Decide whether Flow v2 should clear high-risk values when criteria stop matching.
+3. Add customer tier logic to Flow only after the criteria are clarified.
+4. Add stale Case logic only after the age threshold and business meaning are clarified.
+5. Add richer static Delivery Team Channel guidance if it improves the learning experience.
+6. Keep the LWC read-only and avoid Apex/external AI calls until the static UI pattern is proven.
 
 Claygentforce now has enough foundational documentation and Salesforce metadata to keep validating the simulator against real implementation work.
