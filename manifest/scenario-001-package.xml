@@ -25,5 +25,9 @@
         <members>scenario001CaseRiskPanel</members>
         <name>LightningComponentBundle</name>
     </types>
+    <types>
+        <members>Case_Record_Page</members>
+        <name>FlexiPage</name>
+    </types>
     <version>66.0</version>
 </Package>
