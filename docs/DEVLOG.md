@@ -8,7 +8,7 @@ This file tracks development progress, project milestones, validation steps, and
 
 ### Summary
 
-Expanded Scenario 001 from a basic escalation proof-of-concept into a richer Salesforce delivery simulation slice. The scenario now combines real Salesforce metadata with state-driven UI interpretation, operational observability, outcome/risk framing, and lightweight decision-path guidance.
+Expanded Scenario 001 from a basic escalation proof-of-concept into a richer Salesforce delivery simulation slice. The scenario now combines real Salesforce metadata with state-driven UI interpretation, operational observability, outcome/risk framing, learner reflection, progression modeling, and lightweight consequence-oriented simulation behavior.
 
 The project direction remains intentionally focused on:
 
@@ -26,10 +26,13 @@ The project direction remains intentionally focused on:
 - force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.css
 - scenarios/001-case-escalation-manager-visibility/SMOKE_TEST_CHECKLIST.md
 - scenarios/001-case-escalation-manager-visibility/runs/RUN-001-manager-override.md
+- scenarios/001-case-escalation-manager-visibility/runs/RUN-002-stale-escalation.md
+- scenarios/001-case-escalation-manager-visibility/runs/RUN-003-strategic-customer.md
 - scenarios/001-case-escalation-manager-visibility/runs/RUN-001-summary.md
 - docs/adr/ADR-001-before-save-flow.md
 - docs/adr/ADR-002-read-only-lwc.md
 - docs/adr/ADR-003-static-simulation-first.md
+- docs/AI_COMMANDS_AND_WORKFLOWS.md
 - docs/ISSUES_LOG.md
 - docs/DEVLOG.md
 
@@ -63,15 +66,19 @@ The deployment was stabilized using empty `<stringValue>` assignments instead, a
 
 ### LWC simulation surface
 
-The Scenario 001 LWC evolved from simple status rendering into a lightweight delivery simulation surface.
+The Scenario 001 LWC evolved from simple status rendering into a layered delivery simulation surface.
 
-Added or refined:
+Major additions and refinements:
 
-- centralized scenario states, flow signals, and guidance groups
-- grouped Delivery Team Channel sections: Initial Review, Automation Impact, QA Watch, and Next Decision
-- `Outcome and Risk` framing driven by scenario state
-- `Escalation Metrics` for active signal, escalation source, queue aging watch, and operational attention level
-- `Simulation Decision Paths` showing non-interactive next-step options with benefits and tradeoffs
+- centralized scenario states, flow signals, escalation metrics, progression models, and grouped guidance structures
+- grouped Delivery Team Channel sections with lightweight cross-role tension simulation
+- state-driven Outcome and Risk framing
+- Escalation Metrics for operational visibility and attention modeling
+- Simulation Decision Paths with benefits and tradeoffs
+- Learning Checkpoints tied to learner reflection prompts
+- Learner Progression and Scenario Progression modeling
+- compact Scenario Summary and operational context areas
+- improved section hierarchy, scanability, loading states, and error handling
 
 The implementation intentionally remains metadata-driven, lightweight, static, and read-only. No Apex, persistence, orchestration, or AI generation has been added.
 
@@ -83,14 +90,21 @@ Added the first lightweight architecture decision records for:
 - read-only LWC
 - static simulation before live agents
 
-Added the first Scenario 001 run artifacts under the scenario folder. RUN-001 captures the manager override path as simulated delivery evidence, including QA observations, architecture observations, lessons learned, and future enhancement ideas.
+Added initial scenario run artifacts representing distinct escalation paths:
+
+- manual override
+- stale escalation
+- strategic customer escalation
+
+The project intentionally shifted away from over-producing documentation artifacts and back toward simulation mechanics and progression modeling.
 
 ### Validation Notes
 
 - `npm run lint` completed successfully after each major LWC refactor.
 - Flow v3 deployed successfully after Flow metadata clearing assignments were corrected.
-- Strategic customer and stale escalation behavior are now deployable and source-controlled.
-- Grouped delivery timeline, escalation metrics, outcome/risk framing, and decision paths were visually validated in the Salesforce UI.
+- Strategic customer and stale escalation behavior are deployable and source-controlled.
+- Progression modeling, escalation metrics, learning checkpoints, and decision-path structures were visually validated in the Salesforce UI.
+- Loading and error-state handling were added for safer UI behavior.
 
 ### Current Architectural Direction
 
@@ -99,17 +113,29 @@ Scenario 001 is now functioning simultaneously as:
 - a real Salesforce metadata implementation
 - a lightweight delivery simulation
 - an architecture tradeoff teaching tool
+- a learner reflection surface
 - a future TA/FDE enablement portfolio artifact
 
-The project is intentionally evolving through small vertical slices instead of broad framework work.
+The project continues evolving through small vertical slices instead of broad framework work.
+
+The current implementation intentionally avoids:
+
+- Apex orchestration
+- persistence
+- external AI integration
+- live agent systems
+- interactive branching
+- chat interfaces
+
+Those capabilities remain future-phase concerns after the static simulation foundation stabilizes.
 
 ### Next Actions
 
-- Normalize remaining state display naming consistency.
-- Add or update scenario run artifacts for the new stale escalation and decision-path behavior.
-- Expand smoke/regression testing after the current UI and Flow patterns stabilize.
-- Continue expanding Scenario 001 through small consequence-oriented increments.
-- Begin preparing reusable patterns before Scenario 002 begins.
+- Continue evolving progression-oriented simulation behavior.
+- Introduce lightweight learner-driven branching concepts without persistence.
+- Expand scenario mechanics before investing heavily in smoke/regression testing.
+- Continue refining reusable patterns before Scenario 002 begins.
+- Keep implementation focused on meaningful simulation capability rather than reviewer/demo polish.
 
 ---
 
