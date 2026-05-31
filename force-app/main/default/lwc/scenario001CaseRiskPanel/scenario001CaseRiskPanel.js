@@ -540,6 +540,18 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
   @wire(getRecord, { recordId: "$recordId", fields: FIELDS })
   caseRecord;
 
+  get hasRecordData() {
+    return Boolean(this.caseRecord?.data);
+  }
+
+  get hasRecordError() {
+    return Boolean(this.caseRecord?.error);
+  }
+
+  get isLoading() {
+    return !this.hasRecordData && !this.hasRecordError;
+  }
+
   get isHighRisk() {
     return getFieldValue(this.caseRecord.data, HIGH_RISK_FIELD) === true;
   }

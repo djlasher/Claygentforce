@@ -1,7 +1,19 @@
 <template>
   <lightning-card title="Scenario 001 Risk Review" icon-name="standard:case">
     <div class="slds-p-horizontal_medium slds-p-bottom_medium">
-      <template if:true={caseRecord.data}>
+      <template if:true={isLoading}>
+        <div class="record-state record-state_loading">
+          <lightning-spinner
+            alternative-text="Loading Scenario 001 risk review"
+            size="small"
+          ></lightning-spinner>
+          <p class="record-state-text slds-m-top_medium">
+            Loading Scenario 001 risk review...
+          </p>
+        </div>
+      </template>
+
+      <template if:true={hasRecordData}>
         <dl class="slds-list_horizontal slds-wrap slds-text-body_regular">
           <dt
             class="slds-item_label slds-text-color_weak slds-truncate"
@@ -275,10 +287,16 @@
         </div>
       </template>
 
-      <template if:true={caseRecord.error}>
-        <p class="slds-text-color_error">
-          Scenario 001 risk details could not be loaded.
-        </p>
+      <template if:true={hasRecordError}>
+        <div class="record-state record-state_error" role="alert">
+          <p class="record-state-title slds-text-color_error">
+            Scenario 001 risk review could not be loaded.
+          </p>
+          <p class="record-state-text">
+            Refresh the record page or confirm this user has access to the Case
+            and Scenario 001 fields.
+          </p>
+        </div>
       </template>
     </div>
   </lightning-card>
