@@ -8,7 +8,7 @@ This file tracks development progress, project milestones, validation steps, and
 
 ### Summary
 
-Expanded Scenario 001 from a basic escalation proof-of-concept into a more structured delivery simulation slice with clearer escalation precedence, state-driven UI behavior, grouped delivery review messaging, and consequence-oriented learner framing.
+Expanded Scenario 001 from a basic escalation proof-of-concept into a richer Salesforce delivery simulation slice. The scenario now combines real Salesforce metadata with state-driven UI interpretation, operational observability, outcome/risk framing, and lightweight decision-path guidance.
 
 The project direction remains intentionally focused on:
 
@@ -25,6 +25,12 @@ The project direction remains intentionally focused on:
 - force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.js
 - force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.css
 - scenarios/001-case-escalation-manager-visibility/SMOKE_TEST_CHECKLIST.md
+- scenarios/001-case-escalation-manager-visibility/runs/RUN-001-manager-override.md
+- scenarios/001-case-escalation-manager-visibility/runs/RUN-001-summary.md
+- docs/adr/ADR-001-before-save-flow.md
+- docs/adr/ADR-002-read-only-lwc.md
+- docs/adr/ADR-003-static-simulation-first.md
+- docs/ISSUES_LOG.md
 - docs/DEVLOG.md
 
 ### Flow v3 escalation behavior
@@ -36,96 +42,55 @@ Current Flow v3 precedence:
 1. Closed Case handling
 2. Manual override precedence
 3. Strategic customer escalation
-4. Priority-based escalation
-5. Clean/no-match clearing behavior
+4. Stale escalation
+5. Priority-based escalation
+6. Clean/no-match clearing behavior
 
 Implemented behaviors:
 
 - Closed Cases clear High Risk values.
 - Manual override takes precedence over all automated escalation criteria.
-- Strategic customers automatically escalate through Customer_Tier__c.
+- Strategic customers automatically escalate through `Customer_Tier__c`.
+- Medium or High priority Cases older than the stale threshold can escalate through `Stale Escalation`.
 - High priority Cases still escalate automatically.
 - Cases that no longer match criteria clear prior escalation values.
 
 ### Deployment notes
 
-Salesforce Flow metadata deployments rejected both:
+Salesforce Flow metadata deployments rejected both `$GlobalConstant.EmptyString` and `$GlobalConstant.Null` inside assignment metadata used for clearing `High_Risk_Reason__c`.
 
-- `$GlobalConstant.EmptyString`
-- `$GlobalConstant.Null`
+The deployment was stabilized using empty `<stringValue>` assignments instead, and the issue was captured in `docs/ISSUES_LOG.md` for future Flow metadata work.
 
-inside assignment metadata used for clearing `High_Risk_Reason__c`.
-
-The deployment was stabilized using empty `<stringValue>` assignments instead.
-
-### LWC architecture refinement
+### LWC simulation surface
 
 The Scenario 001 LWC evolved from simple status rendering into a lightweight delivery simulation surface.
 
-Added centralized constants for:
+Added or refined:
 
-- scenario states
-- flow signals
-- guidance groups
+- centralized scenario states, flow signals, and guidance groups
+- grouped Delivery Team Channel sections: Initial Review, Automation Impact, QA Watch, and Next Decision
+- `Outcome and Risk` framing driven by scenario state
+- `Escalation Metrics` for active signal, escalation source, queue aging watch, and operational attention level
+- `Simulation Decision Paths` showing non-interactive next-step options with benefits and tradeoffs
 
-Current scenario states:
+The implementation intentionally remains metadata-driven, lightweight, static, and read-only. No Apex, persistence, orchestration, or AI generation has been added.
 
-- Closed Case
-- Manual Override
-- Strategic Risk
-- Priority-Based High Risk
-- Not Flagged
+### Architecture and run artifacts
 
-Current signal states:
+Added the first lightweight architecture decision records for:
 
-- Closed visibility only
-- Override precedence
-- Customer tier criteria
-- Priority criteria
-- No active match
+- before-save Flow
+- read-only LWC
+- static simulation before live agents
 
-### Delivery Team Channel enhancement
-
-The Delivery Team Channel was refactored into grouped delivery-review sections.
-
-Added grouped review stages:
-
-- Initial Review
-- Automation Impact
-- QA Watch
-- Next Decision
-
-Guidance is now intentionally grouped and ordered to better simulate real Salesforce delivery conversations across roles.
-
-The implementation intentionally remains:
-
-- metadata-driven
-- lightweight
-- static
-- read-only
-
-No Apex, persistence, orchestration, or AI generation has been added.
-
-### Outcome and Risk framing
-
-Added a lightweight `Outcome and Risk` panel driven from centralized scenario states.
-
-The panel introduces consequence-oriented learning behavior without requiring dynamic simulation infrastructure.
-
-Example concepts now represented:
-
-- escalation signal quality degradation from excessive manual overrides
-- strategic customer escalation volume growth
-- closed-case visibility tradeoffs
-- risk of overly narrow escalation criteria
+Added the first Scenario 001 run artifacts under the scenario folder. RUN-001 captures the manager override path as simulated delivery evidence, including QA observations, architecture observations, lessons learned, and future enhancement ideas.
 
 ### Validation Notes
 
 - `npm run lint` completed successfully after each major LWC refactor.
 - Flow v3 deployed successfully after Flow metadata clearing assignments were corrected.
-- Strategic customer escalation behavior is now deployable and source-controlled.
-- Grouped delivery timeline rendering was visually validated in the Salesforce UI.
-- Outcome and Risk rendering was visually validated in the Salesforce UI.
+- Strategic customer and stale escalation behavior are now deployable and source-controlled.
+- Grouped delivery timeline, escalation metrics, outcome/risk framing, and decision paths were visually validated in the Salesforce UI.
 
 ### Current Architectural Direction
 
@@ -140,9 +105,9 @@ The project is intentionally evolving through small vertical slices instead of b
 
 ### Next Actions
 
-- Add Architecture Decision Records (ADRs) for major implementation choices.
-- Introduce the first scenario run artifact under `runs/`.
 - Normalize remaining state display naming consistency.
+- Add or update scenario run artifacts for the new stale escalation and decision-path behavior.
+- Expand smoke/regression testing after the current UI and Flow patterns stabilize.
 - Continue expanding Scenario 001 through small consequence-oriented increments.
 - Begin preparing reusable patterns before Scenario 002 begins.
 
