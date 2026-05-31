@@ -7,7 +7,25 @@
         <label>High Risk Reason</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Clear_High_Risk_Case</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Closed_Case</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.IsClosed</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Clear_High_Risk_Case</targetReference>
+            </connector>
+            <label>Closed Case</label>
+        </rules>
         <rules>
             <name>Manual_Override</name>
             <conditionLogic>and</conditionLogic>
@@ -23,6 +41,23 @@
                 <targetReference>Update_Manual_Override_Case</targetReference>
             </connector>
             <label>Manual Override</label>
+        </rules>
+        <rules>
+            <name>Strategic_Customer</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference
+        >$Record.Customer_Tier__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Strategic</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference
+        >Update_Strategic_Customer_Case</targetReference>
+            </connector>
+            <label>Strategic Customer</label>
         </rules>
         <rules>
             <name>Critical_Priority</name>
@@ -64,6 +99,25 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordUpdates>
+        <name>Clear_High_Risk_Case</name>
+        <label>Clear High Risk Case</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>High_Risk_Reason__c</field>
+            <value>
+                <elementReference>$GlobalConstant.EmptyString</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>High_Risk__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
         <name>Update_High_Priority_Case</name>
         <label>Update High Priority Case</label>
         <locationX>0</locationX>
@@ -101,20 +155,31 @@
         </inputAssignments>
         <inputReference>$Record</inputReference>
     </recordUpdates>
+    <recordUpdates>
+        <name>Update_Strategic_Customer_Case</name>
+        <label>Update Strategic Customer Case</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>High_Risk_Reason__c</field>
+            <value>
+                <stringValue>Strategic Customer</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>High_Risk__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>High_Risk_Reason</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>IsClosed</field>
-            <operator>EqualTo</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </filters>
         <object>Case</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>

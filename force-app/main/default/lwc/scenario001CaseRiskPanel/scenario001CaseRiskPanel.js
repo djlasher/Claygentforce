@@ -57,7 +57,7 @@ const STANDARD_GUIDANCE = [
     role: "QA",
     focus: "Regression watch",
     label: "Simulated review note",
-    text: "Flow v2 does not currently clear prior high-risk values when criteria stop matching, so regression tests should cover priority and override changes."
+    text: "Flow v3 clears prior high-risk values when criteria stop matching, so regression tests should cover priority, override, and customer tier changes."
   }
 ];
 
@@ -70,9 +70,9 @@ const MANUAL_OVERRIDE_GUIDANCE = [
   },
   {
     role: "Architect",
-    focus: "Flow v2 precedence",
+    focus: "Flow v3 precedence",
     label: "Simulated review note",
-    text: "Manual override takes precedence over priority-based criteria in Flow v2."
+    text: "Manual override takes precedence over customer tier and priority-based criteria in Flow v3."
   },
   {
     role: "QA",
@@ -107,7 +107,7 @@ const STRATEGIC_CUSTOMER_GUIDANCE = {
   role: "Product Owner",
   focus: "Customer priority",
   label: "Simulated review note",
-  text: "Strategic customer context may affect future escalation criteria, but Flow v2 does not use customer tier yet."
+  text: "Strategic customer context now contributes to Scenario 001 escalation in Flow v3."
 };
 
 export default class Scenario001CaseRiskPanel extends LightningElement {
@@ -151,6 +151,10 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
       return "Manual Override";
     }
 
+    if (this.isStrategicCustomer) {
+      return "StrategicRisk";
+    }
+
     if (this.isHighRisk) {
       return "Priority-Based High Risk";
     }
@@ -165,6 +169,10 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
 
     if (this.isManualOverride) {
       return "Override precedence";
+    }
+
+    if (this.isStrategicCustomer) {
+      return "Customer tier criteria";
     }
 
     if (this.isHighRisk) {
