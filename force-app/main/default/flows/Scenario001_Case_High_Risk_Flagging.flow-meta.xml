@@ -106,7 +106,7 @@
         <inputAssignments>
             <field>High_Risk_Reason__c</field>
             <value>
-                <elementReference>$GlobalConstant.EmptyString</elementReference>
+                <stringValue />            
             </value>
         </inputAssignments>
         <inputAssignments>
