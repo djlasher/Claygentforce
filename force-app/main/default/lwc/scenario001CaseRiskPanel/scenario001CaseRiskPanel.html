@@ -156,95 +156,97 @@
           </div>
         </section>
 
-        <section
-          class="outcome-risk slds-m-top_medium"
-          aria-labelledby="outcome-risk-heading"
-        >
-          <h3
-            id="outcome-risk-heading"
-            class="outcome-risk-heading slds-text-heading_small"
+        <div class="simulation-stack slds-m-top_large">
+          <section
+            class="outcome-risk simulation-section"
+            aria-labelledby="outcome-risk-heading"
           >
-            Outcome and Risk
-          </h3>
-          <div class="outcome-risk-grid">
-            <div class="outcome-risk-item">
-              <p class="outcome-risk-label">Current Outcome</p>
-              <p class="outcome-risk-text">{outcomeAndRisk.outcome}</p>
+            <h3
+              id="outcome-risk-heading"
+              class="outcome-risk-heading simulation-section-heading slds-text-heading_small"
+            >
+              Outcome and Risk
+            </h3>
+            <div class="outcome-risk-grid">
+              <div class="outcome-risk-item">
+                <p class="outcome-risk-label">Current Outcome</p>
+                <p class="outcome-risk-text">{outcomeAndRisk.outcome}</p>
+              </div>
+              <div class="outcome-risk-item">
+                <p class="outcome-risk-label">Risk if Shipped As-Is</p>
+                <p class="outcome-risk-text">{outcomeAndRisk.risk}</p>
+              </div>
             </div>
-            <div class="outcome-risk-item">
-              <p class="outcome-risk-label">Risk if Shipped As-Is</p>
-              <p class="outcome-risk-text">{outcomeAndRisk.risk}</p>
-            </div>
-          </div>
-        </section>
+          </section>
 
-        <section
-          class="decision-paths slds-m-top_medium"
-          aria-labelledby="decision-paths-heading"
-        >
-          <h3
-            id="decision-paths-heading"
-            class="decision-paths-heading slds-text-heading_small"
+          <section
+            class="decision-paths simulation-section"
+            aria-labelledby="decision-paths-heading"
           >
-            Simulation Decision Paths
-          </h3>
-          <div class="decision-path-list">
-            <template for:each={decisionPaths} for:item="path">
-              <article key={path.recommendation} class="decision-path-item">
-                <p class="decision-path-title">{path.recommendation}</p>
-                <dl class="decision-path-details">
-                  <dt>Expected Benefit</dt>
-                  <dd>{path.benefit}</dd>
-                  <dt>Possible Tradeoff/Risk</dt>
-                  <dd>{path.tradeoff}</dd>
-                </dl>
-              </article>
-            </template>
-          </div>
-        </section>
+            <h3
+              id="decision-paths-heading"
+              class="decision-paths-heading simulation-section-heading slds-text-heading_small"
+            >
+              Simulation Decision Paths
+            </h3>
+            <div class="decision-path-list">
+              <template for:each={decisionPaths} for:item="path">
+                <article key={path.recommendation} class="decision-path-item">
+                  <p class="decision-path-title">{path.recommendation}</p>
+                  <dl class="decision-path-details">
+                    <dt>Expected Benefit</dt>
+                    <dd>{path.benefit}</dd>
+                    <dt>Possible Tradeoff/Risk</dt>
+                    <dd>{path.tradeoff}</dd>
+                  </dl>
+                </article>
+              </template>
+            </div>
+          </section>
 
-        <section
-          class="learning-checkpoint slds-m-top_medium"
-          aria-labelledby="learning-checkpoint-heading"
-        >
-          <h3
-            id="learning-checkpoint-heading"
-            class="learning-checkpoint-heading slds-text-heading_small"
+          <section
+            class="learning-checkpoint simulation-section"
+            aria-labelledby="learning-checkpoint-heading"
           >
-            Learning Checkpoint
-          </h3>
-          <ol class="learning-checkpoint-list">
-            <template for:each={learningCheckpoints} for:item="prompt">
-              <li key={prompt} class="learning-checkpoint-item">{prompt}</li>
-            </template>
-          </ol>
-        </section>
+            <h3
+              id="learning-checkpoint-heading"
+              class="learning-checkpoint-heading simulation-section-heading slds-text-heading_small"
+            >
+              Learning Checkpoint
+            </h3>
+            <ol class="learning-checkpoint-list">
+              <template for:each={learningCheckpoints} for:item="prompt">
+                <li key={prompt} class="learning-checkpoint-item">{prompt}</li>
+              </template>
+            </ol>
+          </section>
 
-        <section
-          class="learner-progression slds-m-top_medium"
-          aria-labelledby="learner-progression-heading"
-        >
-          <h3
-            id="learner-progression-heading"
-            class="learner-progression-heading slds-text-heading_small"
+          <section
+            class="learner-progression simulation-section"
+            aria-labelledby="learner-progression-heading"
           >
-            Learner Progression
-          </h3>
-          <dl class="learner-progression-grid">
-            <div class="learner-progression-item">
-              <dt>Current Skill Focus</dt>
-              <dd>{learnerProgression.currentSkillFocus}</dd>
-            </div>
-            <div class="learner-progression-item">
-              <dt>Suggested Next Skill</dt>
-              <dd>{learnerProgression.suggestedNextSkill}</dd>
-            </div>
-            <div class="learner-progression-item">
-              <dt>Scenario Complexity Level</dt>
-              <dd>{learnerProgression.complexityLevel}</dd>
-            </div>
-          </dl>
-        </section>
+            <h3
+              id="learner-progression-heading"
+              class="learner-progression-heading simulation-section-heading slds-text-heading_small"
+            >
+              Learner Progression
+            </h3>
+            <dl class="learner-progression-grid">
+              <div class="learner-progression-item">
+                <dt>Current Skill Focus</dt>
+                <dd>{learnerProgression.currentSkillFocus}</dd>
+              </div>
+              <div class="learner-progression-item">
+                <dt>Suggested Next Skill</dt>
+                <dd>{learnerProgression.suggestedNextSkill}</dd>
+              </div>
+              <div class="learner-progression-item">
+                <dt>Scenario Complexity Level</dt>
+                <dd>{learnerProgression.complexityLevel}</dd>
+              </div>
+            </dl>
+          </section>
+        </div>
       </template>
 
       <template if:true={caseRecord.error}>
