@@ -243,6 +243,40 @@ const LEARNING_CHECKPOINTS = {
   ]
 };
 
+// State-specific learner progression framing for the scenario arc.
+const LEARNER_PROGRESSION = {
+  Closed: {
+    currentSkillFocus: "Lifecycle clearing behavior",
+    suggestedNextSkill: "Historical visibility tradeoffs",
+    complexityLevel: "Beginner / Intermediate"
+  },
+  ManualOverride: {
+    currentSkillFocus: "Escalation precedence",
+    suggestedNextSkill: "Override governance",
+    complexityLevel: "Beginner / Intermediate"
+  },
+  StrategicRisk: {
+    currentSkillFocus: "Business-context escalation",
+    suggestedNextSkill: "Customer data governance",
+    complexityLevel: "Intermediate"
+  },
+  StaleEscalation: {
+    currentSkillFocus: "Operational aging risk",
+    suggestedNextSkill: "Threshold tuning and queue health",
+    complexityLevel: "Intermediate"
+  },
+  PriorityRisk: {
+    currentSkillFocus: "Basic criteria automation",
+    suggestedNextSkill: "Multi-factor escalation design",
+    complexityLevel: "Beginner"
+  },
+  Clean: {
+    currentSkillFocus: "Negative-path validation",
+    suggestedNextSkill: "Missed-risk analysis",
+    complexityLevel: "Beginner"
+  }
+};
+
 // Delivery Team Channel grouping and static role-message content.
 const GUIDANCE_GROUPS = {
   InitialReview: "Initial Review",
@@ -608,6 +642,23 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return LEARNING_CHECKPOINTS.PriorityRisk;
       default:
         return LEARNING_CHECKPOINTS.Clean;
+    }
+  }
+
+  get learnerProgression() {
+    switch (this.scenarioState) {
+      case SCENARIO_STATES.Closed:
+        return LEARNER_PROGRESSION.Closed;
+      case SCENARIO_STATES.ManualOverride:
+        return LEARNER_PROGRESSION.ManualOverride;
+      case SCENARIO_STATES.StrategicRisk:
+        return LEARNER_PROGRESSION.StrategicRisk;
+      case SCENARIO_STATES.StaleEscalation:
+        return LEARNER_PROGRESSION.StaleEscalation;
+      case SCENARIO_STATES.PriorityRisk:
+        return LEARNER_PROGRESSION.PriorityRisk;
+      default:
+        return LEARNER_PROGRESSION.Clean;
     }
   }
 
