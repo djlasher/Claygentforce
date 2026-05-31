@@ -23,6 +23,7 @@ const SCENARIO_STATES = {
   Closed: "Closed Case",
   ManualOverride: "Manual Override",
   StrategicRisk: "StrategicRisk",
+  StaleEscalation: "Stale Escalation",
   PriorityRisk: "Priority-Based High Risk",
   Clean: "Not Flagged"
 };
@@ -31,6 +32,7 @@ const FLOW_SIGNALS = {
   Closed: "Closed visibility only",
   ManualOverride: "Override precedence",
   StrategicRisk: "Customer tier criteria",
+  StaleEscalation: "Stale escalation criteria",
   PriorityRisk: "Priority criteria",
   Clean: "No active match"
 };
@@ -47,6 +49,11 @@ const OUTCOME_AND_RISK = {
   StrategicRisk: {
     outcome: "Strategic customers now receive automatic visibility.",
     risk: "Escalation volume may increase if customer tiers are overused."
+  },
+  StaleEscalation: {
+    outcome:
+      "Aging Medium or High priority Cases receive escalation visibility.",
+    risk: "Escalation fatigue may increase if queue aging is not managed."
   },
   PriorityRisk: {
     outcome: "High priority Cases receive automatic manager visibility.",
@@ -144,6 +151,37 @@ const MANUAL_OVERRIDE_GUIDANCE = [
   }
 ];
 
+const STALE_ESCALATION_GUIDANCE = [
+  {
+    group: GUIDANCE_GROUPS.InitialReview,
+    role: "Support Manager",
+    focus: "Delayed response visibility",
+    label: "Simulated review note",
+    text: "This Case is aging and now needs manager visibility before the backlog risk grows."
+  },
+  {
+    group: GUIDANCE_GROUPS.AutomationImpact,
+    role: "Architect",
+    focus: "Queue aging concerns",
+    label: "Simulated review note",
+    text: "Stale escalation helps surface queue aging, but the five-day threshold should be validated against real support expectations."
+  },
+  {
+    group: GUIDANCE_GROUPS.QaWatch,
+    role: "QA",
+    focus: "Stale criteria validation",
+    label: "Simulated review note",
+    text: "Confirm only open Medium or High priority Cases older than five days are marked as Stale Escalation."
+  },
+  {
+    group: GUIDANCE_GROUPS.NextDecision,
+    role: "Product Owner",
+    focus: "Escalation fatigue",
+    label: "Simulated review note",
+    text: "Review stale escalation volume so managers do not lose trust in the high-risk list."
+  }
+];
+
 const CLOSED_CASE_GUIDANCE = [
   {
     group: GUIDANCE_GROUPS.InitialReview,
@@ -200,6 +238,10 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
     return this.customerTier === "Strategic";
   }
 
+  get isStaleEscalation() {
+    return this.highRiskReason === SCENARIO_STATES.StaleEscalation;
+  }
+
   get highRiskStatus() {
     return this.isHighRisk ? "Flagged" : "Not Flagged";
   }
@@ -221,6 +263,10 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
       return SCENARIO_STATES.StrategicRisk;
     }
 
+    if (this.isStaleEscalation) {
+      return SCENARIO_STATES.StaleEscalation;
+    }
+
     if (this.isHighRisk) {
       return SCENARIO_STATES.PriorityRisk;
     }
@@ -236,6 +282,8 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return FLOW_SIGNALS.ManualOverride;
       case SCENARIO_STATES.StrategicRisk:
         return FLOW_SIGNALS.StrategicRisk;
+      case SCENARIO_STATES.StaleEscalation:
+        return FLOW_SIGNALS.StaleEscalation;
       case SCENARIO_STATES.PriorityRisk:
         return FLOW_SIGNALS.PriorityRisk;
       default:
@@ -251,6 +299,8 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return OUTCOME_AND_RISK.ManualOverride;
       case SCENARIO_STATES.StrategicRisk:
         return OUTCOME_AND_RISK.StrategicRisk;
+      case SCENARIO_STATES.StaleEscalation:
+        return OUTCOME_AND_RISK.StaleEscalation;
       case SCENARIO_STATES.PriorityRisk:
         return OUTCOME_AND_RISK.PriorityRisk;
       default:
@@ -286,6 +336,8 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return this.withStrategicCustomerGuidance(
           this.isHighRisk ? HIGH_RISK_GUIDANCE : STANDARD_GUIDANCE
         );
+      case SCENARIO_STATES.StaleEscalation:
+        return STALE_ESCALATION_GUIDANCE;
       case SCENARIO_STATES.PriorityRisk:
         return HIGH_RISK_GUIDANCE;
       default:

@@ -4,6 +4,35 @@ This file tracks setup problems, tool friction, confusing errors, and the fixes/
 
 ---
 
+# 2026-05-31 - Flow metadata clearing values failed deployment
+
+## Symptoms
+
+Scenario 001 Flow deployments failed when the Flow metadata tried to clear `High_Risk_Reason__c` using Salesforce global constants:
+
+- `$GlobalConstant.EmptyString`
+- `$GlobalConstant.Null`
+
+The failures appeared during metadata deployment even though the intended Flow behavior was simple field clearing.
+
+## Cause
+
+Salesforce Flow metadata handling for clearing field values can be inconsistent when assignments reference those global constants directly. The issue affected the generated Flow XML rather than the scenario logic.
+
+## Fix
+
+For Flow field-clearing assignments, use an explicit empty string value in the metadata:
+
+`<stringValue></stringValue>`
+
+This preserves the clearing behavior without relying on global constant references that can fail deployment.
+
+## Lesson Learned
+
+For future Flow metadata work, avoid `$GlobalConstant.EmptyString` and `$GlobalConstant.Null` in field-clearing assignments. Prefer explicit empty `<stringValue></stringValue>` assignments when the goal is to clear string or picklist-like values through Flow XML.
+
+---
+
 # 2026-05-29 — Salesforce DX, Codex, and AI workflow friction
 
 ## Symptoms

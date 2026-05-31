@@ -60,6 +60,43 @@
             <label>Strategic Customer</label>
         </rules>
         <rules>
+            <name>Stale_Escalation</name>
+            <conditionLogic>1 AND (2 OR 3) AND 4</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Closed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Priority</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Medium</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Priority</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>High</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference
+        >$Record.LastModifiedDate</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <elementReference>Stale_Cutoff_DateTime</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Stale_Escalation_Case</targetReference>
+            </connector>
+            <label>Stale Escalation</label>
+        </rules>
+        <rules>
             <name>Critical_Priority</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
@@ -76,6 +113,11 @@
         </rules>
     </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>Stale_Cutoff_DateTime</name>
+        <dataType>DateTime</dataType>
+        <expression>{!$Flow.CurrentDateTime} - 5</expression>
+    </formulas>
     <interviewLabel
   >Scenario001_Case_High_Risk_Flagging {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Scenario001_Case_High_Risk_Flagging</label>
@@ -106,7 +148,7 @@
         <inputAssignments>
             <field>High_Risk_Reason__c</field>
             <value>
-                <stringValue />            
+                <stringValue />
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -164,6 +206,25 @@
             <field>High_Risk_Reason__c</field>
             <value>
                 <stringValue>Strategic Customer</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>High_Risk__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Stale_Escalation_Case</name>
+        <label>Update Stale Escalation Case</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>High_Risk_Reason__c</field>
+            <value>
+                <stringValue>Stale Escalation</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
