@@ -9,6 +9,7 @@ import PRIORITY_FIELD from "@salesforce/schema/Case.Priority";
 import STATUS_FIELD from "@salesforce/schema/Case.Status";
 import IS_CLOSED_FIELD from "@salesforce/schema/Case.IsClosed";
 
+// Case fields used by the read-only record wire.
 const FIELDS = [
   HIGH_RISK_FIELD,
   HIGH_RISK_OVERRIDE_FIELD,
@@ -19,10 +20,11 @@ const FIELDS = [
   IS_CLOSED_FIELD
 ];
 
+// Central scenario states and the flow signal text displayed in the panel.
 const SCENARIO_STATES = {
   Closed: "Closed Case",
   ManualOverride: "Manual Override",
-  StrategicRisk: "StrategicRisk",
+  StrategicRisk: "Strategic Customer Risk",
   StaleEscalation: "Stale Escalation",
   PriorityRisk: "Priority-Based High Risk",
   Clean: "Not Flagged"
@@ -37,6 +39,7 @@ const FLOW_SIGNALS = {
   Clean: "No active match"
 };
 
+// Static outcome/risk teaching model for each scenario state.
 const OUTCOME_AND_RISK = {
   Closed: {
     outcome: "Closed Cases are removed from active escalation tracking.",
@@ -65,6 +68,7 @@ const OUTCOME_AND_RISK = {
   }
 };
 
+// Static operational observability model for the current escalation state.
 const ESCALATION_METRICS = {
   Closed: {
     activeSignal: "Cleared",
@@ -104,6 +108,7 @@ const ESCALATION_METRICS = {
   }
 };
 
+// Static implementation options shown as non-interactive simulation paths.
 const DECISION_PATHS = {
   Closed: [
     {
@@ -204,6 +209,7 @@ const DECISION_PATHS = {
   ]
 };
 
+// State-specific reflection prompts for learner review.
 const LEARNING_CHECKPOINTS = {
   Closed: [
     "What visibility should remain after a Case closes?",
@@ -237,6 +243,7 @@ const LEARNING_CHECKPOINTS = {
   ]
 };
 
+// Delivery Team Channel grouping and static role-message content.
 const GUIDANCE_GROUPS = {
   InitialReview: "Initial Review",
   AutomationImpact: "Automation Impact",
@@ -251,7 +258,7 @@ const GUIDANCE_GROUP_ORDER = [
   GUIDANCE_GROUPS.NextDecision
 ];
 
-const HIGH_RISK_GUIDANCE = [
+const PRIORITY_RISK_GUIDANCE = [
   {
     group: GUIDANCE_GROUPS.InitialReview,
     role: "Support Manager",
@@ -427,7 +434,7 @@ const CLOSED_CASE_GUIDANCE = [
   }
 ];
 
-const STRATEGIC_CUSTOMER_GUIDANCE = {
+const STRATEGIC_CUSTOMER_CONTEXT_GUIDANCE = {
   group: GUIDANCE_GROUPS.NextDecision,
   role: "Product Owner",
   focus: "Customer priority",
@@ -630,12 +637,12 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return this.withStrategicCustomerGuidance(MANUAL_OVERRIDE_GUIDANCE);
       case SCENARIO_STATES.StrategicRisk:
         return this.withStrategicCustomerGuidance(
-          this.isHighRisk ? HIGH_RISK_GUIDANCE : STANDARD_GUIDANCE
+          this.isHighRisk ? PRIORITY_RISK_GUIDANCE : STANDARD_GUIDANCE
         );
       case SCENARIO_STATES.StaleEscalation:
         return STALE_ESCALATION_GUIDANCE;
       case SCENARIO_STATES.PriorityRisk:
-        return HIGH_RISK_GUIDANCE;
+        return PRIORITY_RISK_GUIDANCE;
       default:
         return STANDARD_GUIDANCE;
     }
@@ -662,7 +669,7 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
       return [
         ...selectedGuidance,
         ...STRATEGIC_TENSION_GUIDANCE,
-        STRATEGIC_CUSTOMER_GUIDANCE
+        STRATEGIC_CUSTOMER_CONTEXT_GUIDANCE
       ];
     }
 
