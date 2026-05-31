@@ -65,6 +65,45 @@ const OUTCOME_AND_RISK = {
   }
 };
 
+const ESCALATION_METRICS = {
+  Closed: {
+    activeSignal: "Cleared",
+    source: "Closed Case",
+    queueAgingWatch: "Inactive",
+    attentionLevel: "Normal"
+  },
+  ManualOverride: {
+    activeSignal: "Active",
+    source: "Manual Intervention",
+    queueAgingWatch: "Monitor",
+    attentionLevel: "High"
+  },
+  StrategicRisk: {
+    activeSignal: "Active",
+    source: "Customer Tier",
+    queueAgingWatch: "Monitor",
+    attentionLevel: "High"
+  },
+  StaleEscalation: {
+    activeSignal: "Active",
+    source: "Queue Aging",
+    queueAgingWatch: "Active",
+    attentionLevel: "Elevated"
+  },
+  PriorityRisk: {
+    activeSignal: "Active",
+    source: "Priority Criteria",
+    queueAgingWatch: "Monitor",
+    attentionLevel: "Elevated"
+  },
+  Clean: {
+    activeSignal: "None",
+    source: "No Active Match",
+    queueAgingWatch: "Inactive",
+    attentionLevel: "Normal"
+  }
+};
+
 const GUIDANCE_GROUPS = {
   InitialReview: "Initial Review",
   AutomationImpact: "Automation Impact",
@@ -305,6 +344,23 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return OUTCOME_AND_RISK.PriorityRisk;
       default:
         return OUTCOME_AND_RISK.Clean;
+    }
+  }
+
+  get escalationMetrics() {
+    switch (this.scenarioState) {
+      case SCENARIO_STATES.Closed:
+        return ESCALATION_METRICS.Closed;
+      case SCENARIO_STATES.ManualOverride:
+        return ESCALATION_METRICS.ManualOverride;
+      case SCENARIO_STATES.StrategicRisk:
+        return ESCALATION_METRICS.StrategicRisk;
+      case SCENARIO_STATES.StaleEscalation:
+        return ESCALATION_METRICS.StaleEscalation;
+      case SCENARIO_STATES.PriorityRisk:
+        return ESCALATION_METRICS.PriorityRisk;
+      default:
+        return ESCALATION_METRICS.Clean;
     }
   }
 

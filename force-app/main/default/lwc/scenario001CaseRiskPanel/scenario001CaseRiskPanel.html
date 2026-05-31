@@ -88,6 +88,36 @@
         </section>
 
         <section
+          class="escalation-metrics slds-m-top_medium"
+          aria-labelledby="escalation-metrics-heading"
+        >
+          <h3
+            id="escalation-metrics-heading"
+            class="metrics-heading slds-text-heading_small"
+          >
+            Escalation Metrics
+          </h3>
+          <div class="metrics-grid">
+            <div class="metric-item">
+              <p class="metric-label">Active Escalation Signal</p>
+              <p class="metric-value">{escalationMetrics.activeSignal}</p>
+            </div>
+            <div class="metric-item">
+              <p class="metric-label">Escalation Source</p>
+              <p class="metric-value">{escalationMetrics.source}</p>
+            </div>
+            <div class="metric-item">
+              <p class="metric-label">Queue Aging Watch</p>
+              <p class="metric-value">{escalationMetrics.queueAgingWatch}</p>
+            </div>
+            <div class="metric-item">
+              <p class="metric-label">Operational Attention Level</p>
+              <p class="metric-value">{escalationMetrics.attentionLevel}</p>
+            </div>
+          </div>
+        </section>
+
+        <section
           class="delivery-channel slds-m-top_medium"
           aria-labelledby="delivery-team-channel-heading"
         >
