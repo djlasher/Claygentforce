@@ -35,6 +35,29 @@ const FLOW_SIGNALS = {
   Clean: "No active match"
 };
 
+const OUTCOME_AND_RISK = {
+  Closed: {
+    outcome: "Closed Cases are removed from active escalation tracking.",
+    risk: "Historical escalation visibility may be reduced."
+  },
+  ManualOverride: {
+    outcome: "Manager visibility ensured through manual escalation.",
+    risk: "Overuse of manual overrides could reduce signal quality."
+  },
+  StrategicRisk: {
+    outcome: "Strategic customers now receive automatic visibility.",
+    risk: "Escalation volume may increase if customer tiers are overused."
+  },
+  PriorityRisk: {
+    outcome: "High priority Cases receive automatic manager visibility.",
+    risk: "Priority-only escalation may miss important lower-priority Cases."
+  },
+  Clean: {
+    outcome: "No active escalation criteria matched.",
+    risk: "Important Cases may still be missed if criteria are too narrow."
+  }
+};
+
 const GUIDANCE_GROUPS = {
   InitialReview: "Initial Review",
   AutomationImpact: "Automation Impact",
@@ -217,6 +240,21 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return FLOW_SIGNALS.PriorityRisk;
       default:
         return FLOW_SIGNALS.Clean;
+    }
+  }
+
+  get outcomeAndRisk() {
+    switch (this.scenarioState) {
+      case SCENARIO_STATES.Closed:
+        return OUTCOME_AND_RISK.Closed;
+      case SCENARIO_STATES.ManualOverride:
+        return OUTCOME_AND_RISK.ManualOverride;
+      case SCENARIO_STATES.StrategicRisk:
+        return OUTCOME_AND_RISK.StrategicRisk;
+      case SCENARIO_STATES.PriorityRisk:
+        return OUTCOME_AND_RISK.PriorityRisk;
+      default:
+        return OUTCOME_AND_RISK.Clean;
     }
   }
 

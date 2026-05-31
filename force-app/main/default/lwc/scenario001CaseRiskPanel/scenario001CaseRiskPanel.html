@@ -125,6 +125,28 @@
             </template>
           </div>
         </section>
+
+        <section
+          class="outcome-risk slds-m-top_medium"
+          aria-labelledby="outcome-risk-heading"
+        >
+          <h3
+            id="outcome-risk-heading"
+            class="outcome-risk-heading slds-text-heading_small"
+          >
+            Outcome and Risk
+          </h3>
+          <div class="outcome-risk-grid">
+            <div class="outcome-risk-item">
+              <p class="outcome-risk-label">Current Outcome</p>
+              <p class="outcome-risk-text">{outcomeAndRisk.outcome}</p>
+            </div>
+            <div class="outcome-risk-item">
+              <p class="outcome-risk-label">Risk if Shipped As-Is</p>
+              <p class="outcome-risk-text">{outcomeAndRisk.risk}</p>
+            </div>
+          </div>
+        </section>
       </template>
 
       <template if:true={caseRecord.error}>
