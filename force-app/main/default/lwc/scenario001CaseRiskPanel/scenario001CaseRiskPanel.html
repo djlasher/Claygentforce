@@ -63,6 +63,32 @@
         </dl>
 
         <section
+          class="scenario-summary slds-m-top_medium"
+          aria-labelledby="scenario-summary-heading"
+        >
+          <h3
+            id="scenario-summary-heading"
+            class="scenario-summary-heading slds-text-heading_small"
+          >
+            Scenario Summary
+          </h3>
+          <dl class="scenario-summary-grid">
+            <div class="scenario-summary-item">
+              <dt>Scenario Interpretation</dt>
+              <dd>{scenarioSummary.interpretation}</dd>
+            </div>
+            <div class="scenario-summary-item">
+              <dt>Primary Risk Theme</dt>
+              <dd>{scenarioSummary.riskTheme}</dd>
+            </div>
+            <div class="scenario-summary-item">
+              <dt>Recommended Review Lens</dt>
+              <dd>{scenarioSummary.reviewLens}</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section
           class="scenario-signals slds-m-top_medium"
           aria-label="Scenario Signals"
         >

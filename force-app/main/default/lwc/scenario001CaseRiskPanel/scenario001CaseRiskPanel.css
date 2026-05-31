@@ -1,3 +1,40 @@
+.scenario-summary {
+  border: 1px solid #dddbda;
+  border-radius: 0.25rem;
+  background: #ffffff;
+  padding: 0.875rem;
+}
+
+.scenario-summary-heading {
+  color: #181818;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+
+.scenario-summary-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.scenario-summary-item {
+  border-left: 0.25rem solid #dddbda;
+  padding-left: 0.75rem;
+}
+
+.scenario-summary-item dt {
+  color: #747474;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.scenario-summary-item dd {
+  color: #2e2e2e;
+  line-height: 1.5;
+  margin: 0.25rem 0 0;
+}
+
 .scenario-signals {
   border: 1px solid #dddbda;
   border-radius: 0.25rem;

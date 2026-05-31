@@ -39,6 +39,40 @@ const FLOW_SIGNALS = {
   Clean: "No active match"
 };
 
+// Compact top-level interpretation for quick scenario scanning.
+const SCENARIO_SUMMARY = {
+  Closed: {
+    interpretation: "Case lifecycle state suppresses active escalation.",
+    riskTheme: "Historical visibility versus active queue clarity.",
+    reviewLens: "Clearing behavior and reporting impact."
+  },
+  ManualOverride: {
+    interpretation: "Manual escalation is driving manager visibility.",
+    riskTheme: "Human judgment versus automation coverage.",
+    reviewLens: "Override governance and signal quality."
+  },
+  StrategicRisk: {
+    interpretation: "Business context is driving escalation.",
+    riskTheme: "Customer tier accuracy and escalation volume.",
+    reviewLens: "Customer data governance."
+  },
+  StaleEscalation: {
+    interpretation: "Queue aging is driving escalation.",
+    riskTheme: "Operational backlog visibility.",
+    reviewLens: "Threshold tuning and queue health."
+  },
+  PriorityRisk: {
+    interpretation: "Priority criteria are driving escalation.",
+    riskTheme: "Severity-based visibility.",
+    reviewLens: "Criteria quality and noise level."
+  },
+  Clean: {
+    interpretation: "No active escalation criteria matched.",
+    riskTheme: "Missed-risk coverage.",
+    reviewLens: "Negative-path validation."
+  }
+};
+
 // Static outcome/risk teaching model for each scenario state.
 const OUTCOME_AND_RISK = {
   Closed: {
@@ -574,6 +608,23 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return FLOW_SIGNALS.PriorityRisk;
       default:
         return FLOW_SIGNALS.Clean;
+    }
+  }
+
+  get scenarioSummary() {
+    switch (this.scenarioState) {
+      case SCENARIO_STATES.Closed:
+        return SCENARIO_SUMMARY.Closed;
+      case SCENARIO_STATES.ManualOverride:
+        return SCENARIO_SUMMARY.ManualOverride;
+      case SCENARIO_STATES.StrategicRisk:
+        return SCENARIO_SUMMARY.StrategicRisk;
+      case SCENARIO_STATES.StaleEscalation:
+        return SCENARIO_SUMMARY.StaleEscalation;
+      case SCENARIO_STATES.PriorityRisk:
+        return SCENARIO_SUMMARY.PriorityRisk;
+      default:
+        return SCENARIO_SUMMARY.Clean;
     }
   }
 
