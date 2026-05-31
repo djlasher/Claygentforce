@@ -4,6 +4,150 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-05-31 — Scenario 001 Flow v3 and simulation refinement
+
+### Summary
+
+Expanded Scenario 001 from a basic escalation proof-of-concept into a more structured delivery simulation slice with clearer escalation precedence, state-driven UI behavior, grouped delivery review messaging, and consequence-oriented learner framing.
+
+The project direction remains intentionally focused on:
+
+1. real Salesforce implementation first
+2. static delivery simulation second
+3. live agents/orchestration later
+
+### Files Updated
+
+- manifest/scenario-001-package.xml
+- force-app/main/default/flows/Scenario001_Case_High_Risk_Flagging.flow-meta.xml
+- force-app/main/default/objects/Case/fields/High_Risk_Reason__c.field-meta.xml
+- force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.html
+- force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.js
+- force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.css
+- scenarios/001-case-escalation-manager-visibility/SMOKE_TEST_CHECKLIST.md
+- docs/DEVLOG.md
+
+### Flow v3 escalation behavior
+
+Scenario 001 now supports escalation precedence logic instead of simple priority-only flagging.
+
+Current Flow v3 precedence:
+
+1. Closed Case handling
+2. Manual override precedence
+3. Strategic customer escalation
+4. Priority-based escalation
+5. Clean/no-match clearing behavior
+
+Implemented behaviors:
+
+- Closed Cases clear High Risk values.
+- Manual override takes precedence over all automated escalation criteria.
+- Strategic customers automatically escalate through Customer_Tier__c.
+- High priority Cases still escalate automatically.
+- Cases that no longer match criteria clear prior escalation values.
+
+### Deployment notes
+
+Salesforce Flow metadata deployments rejected both:
+
+- `$GlobalConstant.EmptyString`
+- `$GlobalConstant.Null`
+
+inside assignment metadata used for clearing `High_Risk_Reason__c`.
+
+The deployment was stabilized using empty `<stringValue>` assignments instead.
+
+### LWC architecture refinement
+
+The Scenario 001 LWC evolved from simple status rendering into a lightweight delivery simulation surface.
+
+Added centralized constants for:
+
+- scenario states
+- flow signals
+- guidance groups
+
+Current scenario states:
+
+- Closed Case
+- Manual Override
+- Strategic Risk
+- Priority-Based High Risk
+- Not Flagged
+
+Current signal states:
+
+- Closed visibility only
+- Override precedence
+- Customer tier criteria
+- Priority criteria
+- No active match
+
+### Delivery Team Channel enhancement
+
+The Delivery Team Channel was refactored into grouped delivery-review sections.
+
+Added grouped review stages:
+
+- Initial Review
+- Automation Impact
+- QA Watch
+- Next Decision
+
+Guidance is now intentionally grouped and ordered to better simulate real Salesforce delivery conversations across roles.
+
+The implementation intentionally remains:
+
+- metadata-driven
+- lightweight
+- static
+- read-only
+
+No Apex, persistence, orchestration, or AI generation has been added.
+
+### Outcome and Risk framing
+
+Added a lightweight `Outcome and Risk` panel driven from centralized scenario states.
+
+The panel introduces consequence-oriented learning behavior without requiring dynamic simulation infrastructure.
+
+Example concepts now represented:
+
+- escalation signal quality degradation from excessive manual overrides
+- strategic customer escalation volume growth
+- closed-case visibility tradeoffs
+- risk of overly narrow escalation criteria
+
+### Validation Notes
+
+- `npm run lint` completed successfully after each major LWC refactor.
+- Flow v3 deployed successfully after Flow metadata clearing assignments were corrected.
+- Strategic customer escalation behavior is now deployable and source-controlled.
+- Grouped delivery timeline rendering was visually validated in the Salesforce UI.
+- Outcome and Risk rendering was visually validated in the Salesforce UI.
+
+### Current Architectural Direction
+
+Scenario 001 is now functioning simultaneously as:
+
+- a real Salesforce metadata implementation
+- a lightweight delivery simulation
+- an architecture tradeoff teaching tool
+- a future TA/FDE enablement portfolio artifact
+
+The project is intentionally evolving through small vertical slices instead of broad framework work.
+
+### Next Actions
+
+- Add Architecture Decision Records (ADRs) for major implementation choices.
+- Introduce the first scenario run artifact under `runs/`.
+- Normalize remaining state display naming consistency.
+- Continue expanding Scenario 001 through small consequence-oriented increments.
+- Begin preparing reusable patterns before Scenario 002 begins.
+
+---
+
 ## 2026-05-29 — Scenario 001 Salesforce MVP foundation
 
 ### Summary
