@@ -202,6 +202,23 @@
             </template>
           </div>
         </section>
+
+        <section
+          class="learning-checkpoint slds-m-top_medium"
+          aria-labelledby="learning-checkpoint-heading"
+        >
+          <h3
+            id="learning-checkpoint-heading"
+            class="learning-checkpoint-heading slds-text-heading_small"
+          >
+            Learning Checkpoint
+          </h3>
+          <ol class="learning-checkpoint-list">
+            <template for:each={learningCheckpoints} for:item="prompt">
+              <li key={prompt} class="learning-checkpoint-item">{prompt}</li>
+            </template>
+          </ol>
+        </section>
       </template>
 
       <template if:true={caseRecord.error}>

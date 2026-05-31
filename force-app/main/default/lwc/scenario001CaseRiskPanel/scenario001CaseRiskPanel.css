@@ -214,3 +214,29 @@
   line-height: 1.5;
   margin: 0;
 }
+
+.learning-checkpoint {
+  border: 1px solid #dddbda;
+  border-radius: 0.25rem;
+  background: #ffffff;
+  padding: 0.75rem;
+}
+
+.learning-checkpoint-heading {
+  margin-bottom: 0.75rem;
+}
+
+.learning-checkpoint-list {
+  display: grid;
+  gap: 0.5rem;
+  list-style-position: inside;
+  margin: 0;
+  padding: 0;
+}
+
+.learning-checkpoint-item {
+  border-left: 0.25rem solid #dddbda;
+  color: #2e2e2e;
+  line-height: 1.5;
+  padding-left: 0.75rem;
+}

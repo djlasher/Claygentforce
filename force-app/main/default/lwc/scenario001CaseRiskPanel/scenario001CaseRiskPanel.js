@@ -204,6 +204,39 @@ const DECISION_PATHS = {
   ]
 };
 
+const LEARNING_CHECKPOINTS = {
+  Closed: [
+    "What visibility should remain after a Case closes?",
+    "When should closing a Case clear escalation fields?",
+    "What reporting would preserve historical escalation context?"
+  ],
+  ManualOverride: [
+    "What risk does manual override solve?",
+    "What new governance risk does it introduce?",
+    "When should automation replace manual judgment?"
+  ],
+  StrategicRisk: [
+    "Who owns customer tier accuracy?",
+    "Should Strategic customer status always override other criteria?",
+    "How could tier-based escalation create noise?"
+  ],
+  StaleEscalation: [
+    "What makes a Case stale enough to escalate?",
+    "How would you tune the five-day threshold?",
+    "What false positives could this create?"
+  ],
+  PriorityRisk: [
+    "Is priority alone enough to define risk?",
+    "What criteria would you add next?",
+    "How would QA validate this rule?"
+  ],
+  Clean: [
+    "What risky Cases might still be missed?",
+    "What evidence would justify expanding criteria?",
+    "What is the safest next rule to add?"
+  ]
+};
+
 const GUIDANCE_GROUPS = {
   InitialReview: "Initial Review",
   AutomationImpact: "Automation Impact",
@@ -551,6 +584,23 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return DECISION_PATHS.PriorityRisk;
       default:
         return DECISION_PATHS.Clean;
+    }
+  }
+
+  get learningCheckpoints() {
+    switch (this.scenarioState) {
+      case SCENARIO_STATES.Closed:
+        return LEARNING_CHECKPOINTS.Closed;
+      case SCENARIO_STATES.ManualOverride:
+        return LEARNING_CHECKPOINTS.ManualOverride;
+      case SCENARIO_STATES.StrategicRisk:
+        return LEARNING_CHECKPOINTS.StrategicRisk;
+      case SCENARIO_STATES.StaleEscalation:
+        return LEARNING_CHECKPOINTS.StaleEscalation;
+      case SCENARIO_STATES.PriorityRisk:
+        return LEARNING_CHECKPOINTS.PriorityRisk;
+      default:
+        return LEARNING_CHECKPOINTS.Clean;
     }
   }
 
