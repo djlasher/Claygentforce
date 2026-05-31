@@ -170,3 +170,47 @@
   line-height: 1.5;
   margin-top: 0.25rem;
 }
+
+.decision-paths {
+  border: 1px solid #dddbda;
+  border-radius: 0.25rem;
+  background: #ffffff;
+  padding: 0.75rem;
+}
+
+.decision-paths-heading {
+  margin-bottom: 0.75rem;
+}
+
+.decision-path-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.decision-path-item {
+  border-left: 0.25rem solid #dddbda;
+  padding-left: 0.75rem;
+}
+
+.decision-path-title {
+  color: #181818;
+  font-weight: 700;
+}
+
+.decision-path-details {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.decision-path-details dt {
+  color: #747474;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.decision-path-details dd {
+  color: #2e2e2e;
+  line-height: 1.5;
+  margin: 0;
+}

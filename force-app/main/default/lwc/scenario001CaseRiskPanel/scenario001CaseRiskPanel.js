@@ -104,6 +104,106 @@ const ESCALATION_METRICS = {
   }
 };
 
+const DECISION_PATHS = {
+  Closed: [
+    {
+      recommendation: "Confirm closed-case reporting needs",
+      benefit: "Keeps active escalation views clean.",
+      tradeoff: "Historical review may need a separate report."
+    },
+    {
+      recommendation: "Review closure handoff expectations",
+      benefit: "Clarifies when manager visibility should end.",
+      tradeoff: "Extra review steps can slow support closure."
+    }
+  ],
+  ManualOverride: [
+    {
+      recommendation: "Tighten override governance",
+      benefit: "Keeps manual escalation intentional.",
+      tradeoff: "Managers may need clearer usage guidance."
+    },
+    {
+      recommendation: "Add override audit reporting",
+      benefit: "Shows who is using manual escalation and why.",
+      tradeoff: "Adds reporting and review overhead."
+    },
+    {
+      recommendation: "Expand automated escalation criteria",
+      benefit: "Reduces reliance on manual intervention.",
+      tradeoff: "Broader automation may create noisy escalations."
+    }
+  ],
+  StrategicRisk: [
+    {
+      recommendation: "Validate customer tier ownership",
+      benefit: "Improves trust in tier-driven escalation.",
+      tradeoff: "Requires clear ownership of customer data quality."
+    },
+    {
+      recommendation: "Add account-level escalation visibility",
+      benefit: "Helps managers see broader strategic customer patterns.",
+      tradeoff: "May require additional reporting or page design."
+    },
+    {
+      recommendation: "Monitor escalation volume growth",
+      benefit: "Prevents Strategic tier from overwhelming manager review.",
+      tradeoff: "May reveal tier definitions that need cleanup."
+    }
+  ],
+  StaleEscalation: [
+    {
+      recommendation: "Reduce backlog aging thresholds",
+      benefit: "Surfaces delayed responses sooner.",
+      tradeoff: "May increase escalation volume."
+    },
+    {
+      recommendation: "Introduce queue ownership reporting",
+      benefit: "Makes aging patterns easier to act on.",
+      tradeoff: "Requires managers to maintain queue accountability."
+    },
+    {
+      recommendation: "Escalate aging metrics to leadership",
+      benefit: "Connects stale Cases to operational capacity decisions.",
+      tradeoff: "Can create pressure before root causes are understood."
+    }
+  ],
+  PriorityRisk: [
+    {
+      recommendation: "Expand beyond priority-only criteria",
+      benefit: "Catches important Cases that are not marked High.",
+      tradeoff: "Additional criteria can reduce signal quality."
+    },
+    {
+      recommendation: "Add severity scoring",
+      benefit: "Creates a more nuanced escalation model.",
+      tradeoff: "Requires agreement on scoring rules."
+    },
+    {
+      recommendation: "Validate escalation noise levels",
+      benefit: "Protects manager attention.",
+      tradeoff: "May delay adding useful automation."
+    }
+  ],
+  Clean: [
+    {
+      recommendation: "Leave criteria unchanged",
+      benefit: "Keeps the first slice simple and predictable.",
+      tradeoff: "Some important Cases may remain invisible."
+    },
+    {
+      recommendation: "Expand detection coverage",
+      benefit: "Improves chances of catching risky Cases.",
+      tradeoff: "Broader criteria can create false positives."
+    },
+    {
+      recommendation: "Review missed-escalation risks",
+      benefit: "Uses real examples to guide the next rule.",
+      tradeoff: "Requires support team feedback before automation changes."
+    }
+  ]
+};
+
 const GUIDANCE_GROUPS = {
   InitialReview: "Initial Review",
   AutomationImpact: "Automation Impact",
@@ -361,6 +461,23 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return ESCALATION_METRICS.PriorityRisk;
       default:
         return ESCALATION_METRICS.Clean;
+    }
+  }
+
+  get decisionPaths() {
+    switch (this.scenarioState) {
+      case SCENARIO_STATES.Closed:
+        return DECISION_PATHS.Closed;
+      case SCENARIO_STATES.ManualOverride:
+        return DECISION_PATHS.ManualOverride;
+      case SCENARIO_STATES.StrategicRisk:
+        return DECISION_PATHS.StrategicRisk;
+      case SCENARIO_STATES.StaleEscalation:
+        return DECISION_PATHS.StaleEscalation;
+      case SCENARIO_STATES.PriorityRisk:
+        return DECISION_PATHS.PriorityRisk;
+      default:
+        return DECISION_PATHS.Clean;
     }
   }
 

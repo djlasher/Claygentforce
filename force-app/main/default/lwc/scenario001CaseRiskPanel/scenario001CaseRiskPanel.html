@@ -177,6 +177,31 @@
             </div>
           </div>
         </section>
+
+        <section
+          class="decision-paths slds-m-top_medium"
+          aria-labelledby="decision-paths-heading"
+        >
+          <h3
+            id="decision-paths-heading"
+            class="decision-paths-heading slds-text-heading_small"
+          >
+            Simulation Decision Paths
+          </h3>
+          <div class="decision-path-list">
+            <template for:each={decisionPaths} for:item="path">
+              <article key={path.recommendation} class="decision-path-item">
+                <p class="decision-path-title">{path.recommendation}</p>
+                <dl class="decision-path-details">
+                  <dt>Expected Benefit</dt>
+                  <dd>{path.benefit}</dd>
+                  <dt>Possible Tradeoff/Risk</dt>
+                  <dd>{path.tradeoff}</dd>
+                </dl>
+              </article>
+            </template>
+          </div>
+        </section>
       </template>
 
       <template if:true={caseRecord.error}>
