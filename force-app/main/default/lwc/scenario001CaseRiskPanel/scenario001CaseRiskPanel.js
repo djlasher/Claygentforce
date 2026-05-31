@@ -19,6 +19,22 @@ const FIELDS = [
   IS_CLOSED_FIELD
 ];
 
+const SCENARIO_STATES = {
+  Closed: "Closed Case",
+  ManualOverride: "Manual Override",
+  StrategicRisk: "StrategicRisk",
+  PriorityRisk: "Priority-Based High Risk",
+  Clean: "Not Flagged"
+};
+
+const FLOW_SIGNALS = {
+  Closed: "Closed visibility only",
+  ManualOverride: "Override precedence",
+  StrategicRisk: "Customer tier criteria",
+  PriorityRisk: "Priority criteria",
+  Clean: "No active match"
+};
+
 const HIGH_RISK_GUIDANCE = [
   {
     role: "Support Manager",
@@ -144,42 +160,37 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
 
   get scenarioState() {
     if (this.isClosed) {
-      return "Closed Case";
+      return SCENARIO_STATES.Closed;
     }
 
     if (this.isManualOverride) {
-      return "Manual Override";
+      return SCENARIO_STATES.ManualOverride;
     }
 
     if (this.isStrategicCustomer) {
-      return "StrategicRisk";
+      return SCENARIO_STATES.StrategicRisk;
     }
 
     if (this.isHighRisk) {
-      return "Priority-Based High Risk";
+      return SCENARIO_STATES.PriorityRisk;
     }
 
-    return "Not Flagged";
+    return SCENARIO_STATES.Clean;
   }
 
   get flowSignal() {
-    if (this.isClosed) {
-      return "Closed visibility only";
+    switch (this.scenarioState) {
+      case SCENARIO_STATES.Closed:
+        return FLOW_SIGNALS.Closed;
+      case SCENARIO_STATES.ManualOverride:
+        return FLOW_SIGNALS.ManualOverride;
+      case SCENARIO_STATES.StrategicRisk:
+        return FLOW_SIGNALS.StrategicRisk;
+      case SCENARIO_STATES.PriorityRisk:
+        return FLOW_SIGNALS.PriorityRisk;
+      default:
+        return FLOW_SIGNALS.Clean;
     }
-
-    if (this.isManualOverride) {
-      return "Override precedence";
-    }
-
-    if (this.isStrategicCustomer) {
-      return "Customer tier criteria";
-    }
-
-    if (this.isHighRisk) {
-      return "Priority criteria";
-    }
-
-    return "No active match";
   }
 
   get highRiskReason() {
@@ -201,20 +212,23 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
   }
 
   get guidanceMessages() {
-    if (this.isClosed) {
-      return CLOSED_CASE_GUIDANCE;
+    switch (this.scenarioState) {
+      case SCENARIO_STATES.Closed:
+        return CLOSED_CASE_GUIDANCE;
+      case SCENARIO_STATES.ManualOverride:
+        return this.withStrategicCustomerGuidance(MANUAL_OVERRIDE_GUIDANCE);
+      case SCENARIO_STATES.StrategicRisk:
+        return this.withStrategicCustomerGuidance(
+          this.isHighRisk ? HIGH_RISK_GUIDANCE : STANDARD_GUIDANCE
+        );
+      case SCENARIO_STATES.PriorityRisk:
+        return HIGH_RISK_GUIDANCE;
+      default:
+        return STANDARD_GUIDANCE;
     }
+  }
 
-    let selectedGuidance;
-
-    if (this.isManualOverride) {
-      selectedGuidance = MANUAL_OVERRIDE_GUIDANCE;
-    } else {
-      selectedGuidance = this.isHighRisk
-        ? HIGH_RISK_GUIDANCE
-        : STANDARD_GUIDANCE;
-    }
-
+  withStrategicCustomerGuidance(selectedGuidance) {
     if (this.isStrategicCustomer) {
       return [...selectedGuidance, STRATEGIC_CUSTOMER_GUIDANCE];
     }
