@@ -227,6 +227,20 @@ const HIGH_RISK_GUIDANCE = [
     text: "This Case is currently flagged for manager review."
   },
   {
+    group: GUIDANCE_GROUPS.AutomationImpact,
+    role: "Product Owner",
+    focus: "Response urgency",
+    label: "Simulated review note",
+    text: "Fast escalation is useful here, but we should confirm the high-priority rule is not creating avoidable review noise."
+  },
+  {
+    group: GUIDANCE_GROUPS.AutomationImpact,
+    role: "Architect",
+    focus: "Criteria depth",
+    label: "Simulated review note",
+    text: "Priority-only logic is easy to maintain, but it may be too simple if risk depends on customer tier or age."
+  },
+  {
     group: GUIDANCE_GROUPS.QaWatch,
     role: "QA",
     focus: "List view validation",
@@ -275,6 +289,13 @@ const MANUAL_OVERRIDE_GUIDANCE = [
     text: "This Case is manually flagged for manager review."
   },
   {
+    group: GUIDANCE_GROUPS.InitialReview,
+    role: "Product Owner",
+    focus: "Escalation speed",
+    label: "Simulated review note",
+    text: "Manual override helps the team respond quickly, but too much approval friction could slow urgent escalations."
+  },
+  {
     group: GUIDANCE_GROUPS.AutomationImpact,
     role: "Architect",
     focus: "Flow v3 precedence",
@@ -282,11 +303,25 @@ const MANUAL_OVERRIDE_GUIDANCE = [
     text: "Manual override takes precedence over customer tier and priority-based criteria in Flow v3."
   },
   {
+    group: GUIDANCE_GROUPS.AutomationImpact,
+    role: "Architect",
+    focus: "Signal quality",
+    label: "Simulated review note",
+    text: "If manual overrides become common, the automated criteria may not be doing enough work."
+  },
+  {
     group: GUIDANCE_GROUPS.QaWatch,
     role: "QA",
     focus: "Override validation",
     label: "Simulated review note",
     text: "Confirm override behavior works even when Priority is not High."
+  },
+  {
+    group: GUIDANCE_GROUPS.QaWatch,
+    role: "QA",
+    focus: "Override consistency",
+    label: "Simulated review note",
+    text: "Inconsistent override usage could make regression results look correct while business behavior stays unreliable."
   }
 ];
 
@@ -297,6 +332,13 @@ const STALE_ESCALATION_GUIDANCE = [
     focus: "Delayed response visibility",
     label: "Simulated review note",
     text: "This Case is aging and now needs manager visibility before the backlog risk grows."
+  },
+  {
+    group: GUIDANCE_GROUPS.InitialReview,
+    role: "Support Manager",
+    focus: "Queue health",
+    label: "Simulated review note",
+    text: "The stale signal is helpful, but managers still need a way to see whether this is one Case or a wider queue pattern."
   },
   {
     group: GUIDANCE_GROUPS.AutomationImpact,
@@ -311,6 +353,13 @@ const STALE_ESCALATION_GUIDANCE = [
     focus: "Stale criteria validation",
     label: "Simulated review note",
     text: "Confirm only open Medium or High priority Cases older than five days are marked as Stale Escalation."
+  },
+  {
+    group: GUIDANCE_GROUPS.QaWatch,
+    role: "QA",
+    focus: "False-positive noise",
+    label: "Simulated review note",
+    text: "If the threshold is too broad, stale escalation may inflate the manager list with Cases that are aging but not actually risky."
   },
   {
     group: GUIDANCE_GROUPS.NextDecision,
@@ -352,6 +401,30 @@ const STRATEGIC_CUSTOMER_GUIDANCE = {
   label: "Simulated review note",
   text: "Strategic customer context now contributes to Scenario 001 escalation in Flow v3."
 };
+
+const STRATEGIC_TENSION_GUIDANCE = [
+  {
+    group: GUIDANCE_GROUPS.InitialReview,
+    role: "Support Manager",
+    focus: "Customer urgency",
+    label: "Simulated review note",
+    text: "Strategic customer Cases should surface quickly, especially when account impact may outweigh the visible priority."
+  },
+  {
+    group: GUIDANCE_GROUPS.AutomationImpact,
+    role: "Architect",
+    focus: "Tier governance",
+    label: "Simulated review note",
+    text: "Customer-tier escalation is only trustworthy if tier ownership and updates are well governed."
+  },
+  {
+    group: GUIDANCE_GROUPS.NextDecision,
+    role: "Operations",
+    focus: "Volume growth",
+    label: "Simulated review note",
+    text: "If too many customers are marked Strategic, manager review volume could grow faster than the team can absorb."
+  }
+];
 
 export default class Scenario001CaseRiskPanel extends LightningElement {
   @api recordId;
@@ -536,7 +609,11 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
 
   withStrategicCustomerGuidance(selectedGuidance) {
     if (this.isStrategicCustomer) {
-      return [...selectedGuidance, STRATEGIC_CUSTOMER_GUIDANCE];
+      return [
+        ...selectedGuidance,
+        ...STRATEGIC_TENSION_GUIDANCE,
+        STRATEGIC_CUSTOMER_GUIDANCE
+      ];
     }
 
     return selectedGuidance;
