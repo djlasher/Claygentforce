@@ -69,6 +69,45 @@ Unless explicitly requested:
 
 ---
 
+## Default Implementation Constraints
+
+For Scenario 001 implementation prompts, assume these constraints apply unless the prompt explicitly says otherwise:
+
+- keep the LWC static/read-only
+- keep changes state-driven where practical
+- preserve existing Flow precedence behavior
+- do not add Apex
+- do not add persistence
+- do not add orchestration
+- do not add external AI calls
+- do not add chat functionality
+- do not add buttons or click handlers unless explicitly requested
+- do not change Salesforce metadata unless the task is specifically about metadata
+- do not update DEVLOG, ISSUES_LOG, roadmap docs, or ADRs unless explicitly requested
+- avoid reviewer/demo-only framing unless the task specifically asks for demo polish
+- avoid broad refactors when a targeted change is enough
+
+After implementation:
+
+- run lint for LWC changes
+- summarize changed files only
+- mention validation performed
+
+---
+
+## Salesforce Flow Metadata Notes
+
+When editing Flow metadata, do not use either of these references for field-clearing assignments:
+
+- `$GlobalConstant.EmptyString`
+- `$GlobalConstant.Null`
+
+Salesforce metadata deployments rejected both during Scenario 001 Flow work.
+
+When clearing string fields in Flow metadata, use empty `<stringValue></stringValue>` assignments instead.
+
+---
+
 ## LWC Implementation Rules
 
 For Lightning Web Component work:
@@ -161,8 +200,9 @@ The current Scenario 001 MVP includes:
 - Case layout section
 - support manager list view
 - scenario-specific permission set
-- before-save Case Flow v1
+- before-save Case Flow v3 with precedence paths
 - read-only Case LWC risk panel
 - smoke test checklist
+- simulated run artifacts
 
 The LWC is being evolved toward a simulated delivery-team channel experience in small, reviewable increments.
