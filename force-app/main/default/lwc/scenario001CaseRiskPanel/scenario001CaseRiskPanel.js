@@ -39,6 +39,37 @@ const FLOW_SIGNALS = {
   Clean: "No active match"
 };
 
+const SCENARIO_MODE = [
+  {
+    label: "Mode",
+    value: "Static Simulation"
+  },
+  {
+    label: "Implementation",
+    value: "Salesforce Metadata + LWC"
+  },
+  {
+    label: "Orchestration",
+    value: "Not Enabled"
+  }
+];
+
+const DEMONSTRATED_CAPABILITIES = [
+  "Escalation precedence",
+  "Delivery-team interpretation",
+  "Operational risk framing",
+  "Learner reflection",
+  "Future decision-path thinking"
+];
+
+const FUTURE_CAPABILITIES = [
+  "Interactive learner choices",
+  "Persistent scenario runs",
+  "Live role agents",
+  "Agentforce or orchestration",
+  "Analytics/data layer"
+];
+
 // Compact top-level interpretation for quick scenario scanning.
 const SCENARIO_SUMMARY = {
   Closed: {
@@ -550,6 +581,18 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
 
   get isLoading() {
     return !this.hasRecordData && !this.hasRecordError;
+  }
+
+  get scenarioMode() {
+    return SCENARIO_MODE;
+  }
+
+  get demonstratedCapabilities() {
+    return DEMONSTRATED_CAPABILITIES;
+  }
+
+  get futureCapabilities() {
+    return FUTURE_CAPABILITIES;
   }
 
   get isHighRisk() {

@@ -75,6 +75,59 @@
         </dl>
 
         <section
+          class="demo-readiness slds-m-top_medium"
+          aria-labelledby="demo-readiness-heading"
+        >
+          <h3
+            id="demo-readiness-heading"
+            class="demo-readiness-heading slds-text-heading_small"
+          >
+            Scenario Mode
+          </h3>
+          <div class="demo-mode-list">
+            <template for:each={scenarioMode} for:item="item">
+              <span key={item.label} class="demo-mode-pill">
+                <span class="demo-mode-label">{item.label}</span>
+                <span class="demo-mode-value">{item.value}</span>
+              </span>
+            </template>
+          </div>
+
+          <div class="demo-readiness-grid">
+            <section
+              class="demo-readiness-note"
+              aria-labelledby="demonstrates-heading"
+            >
+              <h4 id="demonstrates-heading" class="demo-note-heading">
+                What This Demonstrates
+              </h4>
+              <ul class="demo-note-list">
+                <template
+                  for:each={demonstratedCapabilities}
+                  for:item="capability"
+                >
+                  <li key={capability}>{capability}</li>
+                </template>
+              </ul>
+            </section>
+
+            <section
+              class="demo-readiness-note"
+              aria-labelledby="future-capabilities-heading"
+            >
+              <h4 id="future-capabilities-heading" class="demo-note-heading">
+                Not Yet Implemented
+              </h4>
+              <ul class="demo-note-list">
+                <template for:each={futureCapabilities} for:item="capability">
+                  <li key={capability}>{capability}</li>
+                </template>
+              </ul>
+            </section>
+          </div>
+        </section>
+
+        <section
           class="scenario-summary slds-m-top_medium"
           aria-labelledby="scenario-summary-heading"
         >
