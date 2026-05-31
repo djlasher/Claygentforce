@@ -99,22 +99,29 @@
           </h3>
 
           <div class="thread-list">
-            <template for:each={guidanceMessages} for:item="message">
-              <article
-                key={message.role}
-                class="thread-message slds-theme_default"
-              >
-                <div
-                  class="slds-grid slds-wrap slds-grid_align-spread slds-gutters_x-small"
-                >
-                  <div>
-                    <p class="message-role">{message.role}</p>
-                    <p class="message-focus">{message.focus}</p>
-                  </div>
-                  <span class="message-label slds-badge">{message.label}</span>
-                </div>
-                <p class="message-text">{message.text}</p>
-              </article>
+            <template for:each={groupedGuidanceMessages} for:item="group">
+              <section key={group.group} class="thread-group">
+                <p class="thread-group-label">{group.group}</p>
+                <template for:each={group.messages} for:item="message">
+                  <article
+                    key={message.key}
+                    class="thread-message slds-theme_default"
+                  >
+                    <div
+                      class="slds-grid slds-wrap slds-grid_align-spread slds-gutters_x-small"
+                    >
+                      <div>
+                        <p class="message-role">{message.role}</p>
+                        <p class="message-focus">{message.focus}</p>
+                      </div>
+                      <span class="message-label slds-badge">
+                        {message.label}
+                      </span>
+                    </div>
+                    <p class="message-text">{message.text}</p>
+                  </article>
+                </template>
+              </section>
             </template>
           </div>
         </section>

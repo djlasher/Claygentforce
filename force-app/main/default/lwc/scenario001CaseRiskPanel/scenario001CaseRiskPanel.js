@@ -35,20 +35,37 @@ const FLOW_SIGNALS = {
   Clean: "No active match"
 };
 
+const GUIDANCE_GROUPS = {
+  InitialReview: "Initial Review",
+  AutomationImpact: "Automation Impact",
+  QaWatch: "QA Watch",
+  NextDecision: "Next Decision"
+};
+
+const GUIDANCE_GROUP_ORDER = [
+  GUIDANCE_GROUPS.InitialReview,
+  GUIDANCE_GROUPS.AutomationImpact,
+  GUIDANCE_GROUPS.QaWatch,
+  GUIDANCE_GROUPS.NextDecision
+];
+
 const HIGH_RISK_GUIDANCE = [
   {
+    group: GUIDANCE_GROUPS.InitialReview,
     role: "Support Manager",
     focus: "Manager visibility",
     label: "Simulated review note",
     text: "This Case is currently flagged for manager review."
   },
   {
+    group: GUIDANCE_GROUPS.QaWatch,
     role: "QA",
     focus: "List view validation",
     label: "Simulated review note",
     text: "Confirm the list view shows this Case and excludes closed Cases."
   },
   {
+    group: GUIDANCE_GROUPS.AutomationImpact,
     role: "Security",
     focus: "Access model",
     label: "Simulated review note",
@@ -58,18 +75,21 @@ const HIGH_RISK_GUIDANCE = [
 
 const STANDARD_GUIDANCE = [
   {
+    group: GUIDANCE_GROUPS.InitialReview,
     role: "Support Manager",
     focus: "Triage status",
     label: "Simulated review note",
     text: "This Case is not currently flagged by Scenario 001 criteria."
   },
   {
+    group: GUIDANCE_GROUPS.NextDecision,
     role: "Architect",
     focus: "Automation scope",
     label: "Simulated review note",
     text: "Confirm whether the current criteria are sufficient before adding more automation."
   },
   {
+    group: GUIDANCE_GROUPS.QaWatch,
     role: "QA",
     focus: "Regression watch",
     label: "Simulated review note",
@@ -79,18 +99,21 @@ const STANDARD_GUIDANCE = [
 
 const MANUAL_OVERRIDE_GUIDANCE = [
   {
+    group: GUIDANCE_GROUPS.InitialReview,
     role: "Support Manager",
     focus: "Manual manager review",
     label: "Simulated review note",
     text: "This Case is manually flagged for manager review."
   },
   {
+    group: GUIDANCE_GROUPS.AutomationImpact,
     role: "Architect",
     focus: "Flow v3 precedence",
     label: "Simulated review note",
     text: "Manual override takes precedence over customer tier and priority-based criteria in Flow v3."
   },
   {
+    group: GUIDANCE_GROUPS.QaWatch,
     role: "QA",
     focus: "Override validation",
     label: "Simulated review note",
@@ -100,18 +123,21 @@ const MANUAL_OVERRIDE_GUIDANCE = [
 
 const CLOSED_CASE_GUIDANCE = [
   {
+    group: GUIDANCE_GROUPS.InitialReview,
     role: "Support Manager",
     focus: "Closed-case visibility",
     label: "Simulated review note",
     text: "This Case is closed and should not appear in the open high-risk manager list view."
   },
   {
+    group: GUIDANCE_GROUPS.QaWatch,
     role: "QA",
     focus: "Negative-path validation",
     label: "Simulated review note",
     text: "Confirm closed Cases are excluded from Open High-Risk Cases even if High Risk remains checked."
   },
   {
+    group: GUIDANCE_GROUPS.NextDecision,
     role: "Architect",
     focus: "Future state decision",
     label: "Simulated review note",
@@ -120,6 +146,7 @@ const CLOSED_CASE_GUIDANCE = [
 ];
 
 const STRATEGIC_CUSTOMER_GUIDANCE = {
+  group: GUIDANCE_GROUPS.NextDecision,
   role: "Product Owner",
   focus: "Customer priority",
   label: "Simulated review note",
@@ -226,6 +253,22 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
       default:
         return STANDARD_GUIDANCE;
     }
+  }
+
+  get groupedGuidanceMessages() {
+    return GUIDANCE_GROUP_ORDER.map((group) => {
+      const messages = this.guidanceMessages
+        .filter((message) => message.group === group)
+        .map((message) => ({
+          ...message,
+          key: `${group}-${message.role}`
+        }));
+
+      return {
+        group,
+        messages
+      };
+    }).filter((groupedMessages) => groupedMessages.messages.length > 0);
   }
 
   withStrategicCustomerGuidance(selectedGuidance) {
