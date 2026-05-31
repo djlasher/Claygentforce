@@ -205,6 +205,32 @@ It is the first visual UI foundation for the future simulated delivery-team chan
 
 ---
 
+## Follow-Up Vision Notes
+
+The likely future product experience is a home page or app page Scenario Launcher, not only a Case record page component.
+
+The launcher should eventually let the learner choose a scenario and possibly a learner role, then move into a guided scenario flow that combines:
+
+- decision buttons
+- Case creation or Case loading
+- a live-feeling Delivery Team Channel
+- scenario consequences
+- summary/score/review moments
+
+The user likes the idea of decision buttons when a scenario reaches a choice point. The demo path can intentionally choose a plausible-but-wrong option so the consequence appears later. This should feel like a guided Screen Flow plus live delivery-room commentary, not a generic chatbot.
+
+The eventual chat/channel experience should include delayed messages and typing indicators, such as one role posting a message, another role showing “is typing…,” and then the next message appearing. This can make the simulation feel alive before true multi-agent orchestration exists.
+
+The user wants the LWC JavaScript refactored later. Current JS has many getters and hardcoded strings because features were added incrementally. The preferred direction is not to put all logic inside the wire method. Instead, use the wire/getRecord layer to pull Case fields, then normalize the Case into a context object and use a state/config dictionary to resolve scenario state, flow signal, and messages. Think: wire gets Case → normalized context → state resolver → config/message resolver → template renders.
+
+A future summary/score moment should use Salesforce confetti as a memorable out-of-the-box flourish. The user specifically called out confetti as a small but impressive “Clay knows Salesforce deeply” demo touch. Path was guessed but was not the intended idea.
+
+Data Cloud and Agentforce should eventually appear in a light but credible way, not as heavy implementations. Data Cloud can provide or retrieve/enrich Case/customer context once. Agentforce can be introduced naturally in the delivery conversation when someone suggests asking Agentforce, and it can return or summarize the context. The goal is to show that Data Cloud and Agentforce can be used as part of the delivery workflow without making them the whole product.
+
+The demo can be made playful and memorable. Potential participant framing: Clayton, ChatGPT, Codex, Agentforce, Data Cloud, and Coco as a distracting stakeholder with urgent lap requirements. Keep the humor light while preserving technical credibility.
+
+---
+
 ## Visual / Org Validation Completed
 
 Visual testing in the org confirmed:
@@ -310,7 +336,8 @@ Likely next options:
 2. Decide whether Flow v2 should clear high-risk values when criteria stop matching.
 3. Add customer tier logic to Flow only after the criteria are clarified.
 4. Add stale Case logic only after the age threshold and business meaning are clarified.
-5. Add richer static Delivery Team Channel guidance if it improves the learning experience.
-6. Keep the LWC read-only and avoid Apex/external AI calls until the static UI pattern is proven.
+5. Refactor the LWC JS toward a normalized context object and state/config dictionary when it starts hurting.
+6. Add richer static Delivery Team Channel guidance if it improves the learning experience.
+7. Keep the LWC read-only and avoid Apex/external AI calls until the static UI pattern is proven.
 
 Claygentforce now has enough foundational documentation and Salesforce metadata to keep validating the simulator against real implementation work.
