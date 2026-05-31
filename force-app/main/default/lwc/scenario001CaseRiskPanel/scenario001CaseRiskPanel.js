@@ -342,6 +342,52 @@ const LEARNER_PROGRESSION = {
   }
 };
 
+// First static progression model for future learner-driven branching.
+const SCENARIO_PROGRESSION = {
+  Closed: {
+    status: "Operational",
+    phase: "Lifecycle Resolution",
+    concern: "Clearing and reporting visibility",
+    nextInvestigation: "Historical escalation retention",
+    futureExpansionPath: "Post-resolution analytics"
+  },
+  ManualOverride: {
+    status: "Governance",
+    phase: "Human Escalation Governance",
+    concern: "Override consistency and auditability",
+    nextInvestigation: "Override reporting and ownership",
+    futureExpansionPath: "Escalation approval workflow"
+  },
+  StrategicRisk: {
+    status: "Governance",
+    phase: "Business-Aware Escalation",
+    concern: "Customer-tier governance",
+    nextInvestigation: "Tier ownership validation",
+    futureExpansionPath: "Account-level escalation orchestration"
+  },
+  StaleEscalation: {
+    status: "Operational",
+    phase: "Operational Queue Monitoring",
+    concern: "Aging backlog visibility",
+    nextInvestigation: "Threshold tuning analysis",
+    futureExpansionPath: "Queue health analytics"
+  },
+  PriorityRisk: {
+    status: "Foundation",
+    phase: "Foundational Criteria Automation",
+    concern: "Priority-only escalation simplicity",
+    nextInvestigation: "Multi-factor risk scoring",
+    futureExpansionPath: "Dynamic escalation scoring"
+  },
+  Clean: {
+    status: "Foundation",
+    phase: "Negative Path Validation",
+    concern: "Missed escalation coverage",
+    nextInvestigation: "Detection gap analysis",
+    futureExpansionPath: "Predictive escalation detection"
+  }
+};
+
 // Delivery Team Channel grouping and static role-message content.
 const GUIDANCE_GROUPS = {
   InitialReview: "Initial Review",
@@ -765,6 +811,23 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return LEARNER_PROGRESSION.PriorityRisk;
       default:
         return LEARNER_PROGRESSION.Clean;
+    }
+  }
+
+  get scenarioProgression() {
+    switch (this.scenarioState) {
+      case SCENARIO_STATES.Closed:
+        return SCENARIO_PROGRESSION.Closed;
+      case SCENARIO_STATES.ManualOverride:
+        return SCENARIO_PROGRESSION.ManualOverride;
+      case SCENARIO_STATES.StrategicRisk:
+        return SCENARIO_PROGRESSION.StrategicRisk;
+      case SCENARIO_STATES.StaleEscalation:
+        return SCENARIO_PROGRESSION.StaleEscalation;
+      case SCENARIO_STATES.PriorityRisk:
+        return SCENARIO_PROGRESSION.PriorityRisk;
+      default:
+        return SCENARIO_PROGRESSION.Clean;
     }
   }
 

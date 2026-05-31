@@ -249,7 +249,42 @@
 
         <div class="simulation-stack slds-m-top_large">
           <section
-            class="outcome-risk simulation-section"
+            class="scenario-progression simulation-section progression-panel"
+            aria-labelledby="scenario-progression-heading"
+          >
+            <div class="progression-heading-row">
+              <h3
+                id="scenario-progression-heading"
+                class="scenario-progression-heading simulation-section-heading slds-text-heading_small"
+              >
+                Scenario Progression
+              </h3>
+              <span class="progression-status-pill">
+                {scenarioProgression.status}
+              </span>
+            </div>
+            <dl class="progression-detail-grid">
+              <div class="progression-detail-item">
+                <dt>Current Scenario Phase</dt>
+                <dd>{scenarioProgression.phase}</dd>
+              </div>
+              <div class="progression-detail-item">
+                <dt>Current Delivery Concern</dt>
+                <dd>{scenarioProgression.concern}</dd>
+              </div>
+              <div class="progression-detail-item">
+                <dt>Recommended Next Investigation</dt>
+                <dd>{scenarioProgression.nextInvestigation}</dd>
+              </div>
+              <div class="progression-detail-item">
+                <dt>Potential Future Expansion Path</dt>
+                <dd>{scenarioProgression.futureExpansionPath}</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section
+            class="outcome-risk simulation-section progression-panel"
             aria-labelledby="outcome-risk-heading"
           >
             <h3
@@ -271,7 +306,7 @@
           </section>
 
           <section
-            class="decision-paths simulation-section"
+            class="decision-paths simulation-section progression-panel"
             aria-labelledby="decision-paths-heading"
           >
             <h3
@@ -296,7 +331,7 @@
           </section>
 
           <section
-            class="learning-checkpoint simulation-section"
+            class="learning-checkpoint simulation-section progression-panel"
             aria-labelledby="learning-checkpoint-heading"
           >
             <h3
@@ -313,7 +348,7 @@
           </section>
 
           <section
-            class="learner-progression simulation-section"
+            class="learner-progression simulation-section progression-panel"
             aria-labelledby="learner-progression-heading"
           >
             <h3
