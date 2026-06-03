@@ -2,6 +2,6 @@
 <CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
     <description>Claygentforce scenario launcher home page.</description>
     <flexiPage>Claygentforce_Home</flexiPage>
-    <label>Home</label>
+    <label>Claygentforce Home</label>
     <motif>Custom27: Laptop</motif>
 </CustomTab>

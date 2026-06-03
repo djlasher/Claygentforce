@@ -4,6 +4,7 @@
     <formFactors>Large</formFactors>
     <label>Claygentforce</label>
     <navType>Standard</navType>
+    <tabs>standard-home</tabs>
     <tabs>Claygentforce_Home</tabs>
     <tabs>standard-Case</tabs>
     <uiType>Lightning</uiType>
