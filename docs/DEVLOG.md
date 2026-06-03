@@ -4,37 +4,65 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
-## 2026-06-02 — Scenario 001 stakeholder pressure and learner branch simulation
+## 2026-06-02 — Scenario 001 simulation mechanics and launcher milestone
 
 ### Summary
 
-Added small read-only simulation increments to Scenario 001 that model stakeholder change-request pressure and preview possible learner decision branches inside the existing Case risk panel. These panels keep the simulator moving toward realistic delivery tension and future branching without adding persistence, Apex, orchestration, buttons, chat input, or external AI calls.
+Advanced Scenario 001 from a Case-record simulation panel into a broader static Salesforce learning surface. The work added stakeholder pressure, learner branching, consequence previews, learner challenge prompts, a reusable preview-section child component, smoke-test hardening, validation run capture, and a source-controlled Claygentforce app with a launcher page.
+
+The implementation remains intentionally read-only and static: no Apex, persistence, scoring, chat input, external AI calls, Agentforce, or orchestration were added.
 
 ### Files Updated
 
-- force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.html
-- force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.js
-- force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.css
+- manifest/scenario-001-package.xml
+- force-app/main/default/applications/Claygentforce.app-meta.xml
+- force-app/main/default/flexipages/Claygentforce_Home.flexipage-meta.xml
+- force-app/main/default/tabs/Claygentforce_Home.tab-meta.xml
+- force-app/main/default/lwc/scenario001CaseRiskPanel/*
+- force-app/main/default/lwc/scenarioPreviewSection/*
+- force-app/main/default/lwc/scenarioLauncher/*
+- scenarios/001-case-escalation-manager-visibility/SMOKE_TEST_CHECKLIST.md
+- scenarios/001-case-escalation-manager-visibility/runs/RUN-004-smoke-test-validation.md
+- docs/SCENARIO_LAUNCHER_DESIGN.md
+- docs/CLAYGENTFORCE_APP_SETUP.md
 - docs/DEVLOG.md
 
 ### Notes
 
-- Added a state-driven `Stakeholder Change Pressure` section with stakeholder ask, delivery tension, and review lens content for each Scenario 001 state.
-- Added a read-only `Learner Branch Preview` section with state-specific possible learner paths, choice rationale, and tradeoff/risk framing.
-- Clearly labels learner branches as simulated future paths, not clickable decisions yet.
-- Reused existing panel/grid patterns and plain scoped CSS instead of adding Salesforce styling hooks.
-- This supports the roadmap direction of moving from stakeholder change pressure into lightweight learner branching before persistence, scoring, or live agents.
+- Added state-driven Stakeholder Change Pressure, Learner Branch Preview, Consequence Preview, and Learner Challenge Mode sections to the Scenario 001 Case risk panel.
+- Extracted repeated preview-card rendering into the non-exposed `scenarioPreviewSection` child LWC.
+- Added the exposed `scenarioLauncher` LWC as a static orientation surface for Scenario 001 and future Scenario 002 readiness.
+- Created the `Claygentforce` custom application, `Claygentforce Home` FlexiPage, and `Claygentforce_Home` Lightning page tab.
+- Updated app navigation so the Claygentforce app includes Home, Claygentforce Home, and Cases.
+- Hardened the Scenario 001 smoke test checklist for Flow v3, LWC rendering, child component rendering, launcher rendering, app/tab behavior, and regression watch items.
+- Added `RUN-004-smoke-test-validation.md` as a concise manual validation capture artifact.
+- Added short launcher design/setup notes to support implementation and manual app activation without creating broad documentation sprawl.
 
 ### Validation Notes
 
-- GitHub review confirmed the new HTML sections, JavaScript models, getters, and scoped CSS are present in the Scenario 001 LWC.
-- Local deploy/lint validation was performed before push by the human workflow.
+- LWC changes were linted locally during the implementation workflow.
+- Deployments were performed during the session for deployable metadata updates.
+- The custom app, launcher page, custom tab, and app navigation were verified in the Salesforce org after manual nav adjustment and source retrieval.
+- `sf project deploy validate --manifest manifest/scenario-001-package.xml --target-org Claygentforce` succeeded after the app/tab metadata was source-controlled.
+
+### Current State
+
+Scenario 001 now has:
+
+- real Salesforce metadata for Case escalation and manager visibility
+- Flow v3 precedence and clearing behavior
+- Case record simulation panel
+- reusable preview-section child component
+- static scenario launcher LWC
+- Claygentforce custom app and launcher tab
+- hardened smoke-test checklist
+- validation run capture template
 
 ### Next Actions
 
-- Start connecting learner branches to consequence previews without adding interaction or persistence yet.
-- Keep future increments small, state-driven, and grounded in Scenario 001 delivery behavior.
-- Defer actual clickable branching, scoring, and live agents until the static simulation model is stable.
+- Run and fill out the smoke-test validation artifact when ready.
+- Decide whether the next build increment should focus on Scenario 002 selection, launcher polish, or additional regression hardening.
+- Keep future expansion vertical-slice oriented and avoid adding live agents, persistence, or scoring until the static scenario model is stable.
 
 ---
 
