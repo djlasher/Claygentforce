@@ -533,6 +533,111 @@ const LEARNER_BRANCH_PREVIEWS = {
   ]
 };
 
+const CONSEQUENCE_PREVIEWS = {
+  Closed: [
+    {
+      label: "Active queues stay clean",
+      area: "Support Operations",
+      why: "Closed Cases no longer compete with open escalation work."
+    },
+    {
+      label: "Historical visibility may need reporting",
+      area: "Governance",
+      why: "Managers may still need to review past escalation patterns."
+    },
+    {
+      label: "Closure behavior needs regression validation",
+      area: "QA",
+      why: "Clearing logic should stay reliable as criteria expand."
+    }
+  ],
+  ManualOverride: [
+    {
+      label: "Override overuse creates signal fatigue",
+      area: "Support Operations",
+      why: "Managers may lose trust if too many Cases are manually flagged."
+    },
+    {
+      label: "QA needs override regression cases",
+      area: "QA",
+      why: "Manual override precedence must keep working across criteria changes."
+    },
+    {
+      label: "Support managers need usage guidance",
+      area: "Governance",
+      why: "Clear expectations help prevent inconsistent override behavior."
+    }
+  ],
+  StrategicRisk: [
+    {
+      label: "Bad tier data causes escalation noise",
+      area: "Governance",
+      why: "Strategic escalation depends on accurate customer-tier ownership."
+    },
+    {
+      label: "Product expects strategic visibility",
+      area: "Product",
+      why: "Stakeholders may treat tier-based visibility as a committed behavior."
+    },
+    {
+      label: "Manager review volume must be monitored",
+      area: "Support Operations",
+      why: "Strategic customer rules can increase active escalation load."
+    }
+  ],
+  StaleEscalation: [
+    {
+      label: "Low thresholds increase false positives",
+      area: "QA",
+      why: "Aging criteria can flag Cases that are delayed but not truly risky."
+    },
+    {
+      label: "Queue health trends become visible",
+      area: "Support Operations",
+      why: "Stale escalation can reveal backlog patterns managers need to address."
+    },
+    {
+      label: "Stale volume may signal capacity risk",
+      area: "Leadership",
+      why: "Large stale volumes can be interpreted as staffing or process pressure."
+    }
+  ],
+  PriorityRisk: [
+    {
+      label: "Priority-only rules miss some important Cases",
+      area: "Architecture",
+      why: "Lower-priority Cases may still carry customer or operational risk."
+    },
+    {
+      label: "Regression coverage stays simpler",
+      area: "QA",
+      why: "A narrow rule is easier to test while the scenario is still early."
+    },
+    {
+      label: "Richer risk scoring pressure may grow",
+      area: "Stakeholder Trust",
+      why: "Stakeholders may ask for criteria beyond simple priority."
+    }
+  ],
+  Clean: [
+    {
+      label: "Missed-risk examples may surface later",
+      area: "Support Operations",
+      why: "Cases outside current criteria can still become important."
+    },
+    {
+      label: "Criteria expansion pressure may increase",
+      area: "Product",
+      why: "Stakeholders may ask why similar Cases are not escalated."
+    },
+    {
+      label: "Clear boundaries protect trust",
+      area: "Stakeholder Trust",
+      why: "Explaining what the rule does not cover helps avoid false confidence."
+    }
+  ]
+};
+
 // Delivery Team Channel grouping and static role-message content.
 const GUIDANCE_GROUPS = {
   InitialReview: "Initial Review",
@@ -1007,6 +1112,23 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return LEARNER_BRANCH_PREVIEWS.PriorityRisk;
       default:
         return LEARNER_BRANCH_PREVIEWS.Clean;
+    }
+  }
+
+  get consequencePreviews() {
+    switch (this.scenarioState) {
+      case SCENARIO_STATES.Closed:
+        return CONSEQUENCE_PREVIEWS.Closed;
+      case SCENARIO_STATES.ManualOverride:
+        return CONSEQUENCE_PREVIEWS.ManualOverride;
+      case SCENARIO_STATES.StrategicRisk:
+        return CONSEQUENCE_PREVIEWS.StrategicRisk;
+      case SCENARIO_STATES.StaleEscalation:
+        return CONSEQUENCE_PREVIEWS.StaleEscalation;
+      case SCENARIO_STATES.PriorityRisk:
+        return CONSEQUENCE_PREVIEWS.PriorityRisk;
+      default:
+        return CONSEQUENCE_PREVIEWS.Clean;
     }
   }
 

@@ -339,6 +339,35 @@
           </section>
 
           <section
+            class="consequence-preview simulation-section progression-panel"
+            aria-labelledby="consequence-preview-heading"
+          >
+            <h3
+              id="consequence-preview-heading"
+              class="consequence-preview-heading simulation-section-heading slds-text-heading_small"
+            >
+              Consequence Preview
+            </h3>
+            <p class="branch-preview-note">
+              Simulated downstream consequences only. These are not live
+              analytics or persisted scenario outcomes.
+            </p>
+            <div class="branch-preview-list">
+              <template for:each={consequencePreviews} for:item="consequence">
+                <article key={consequence.label} class="branch-preview-item">
+                  <p class="branch-preview-title">{consequence.label}</p>
+                  <dl class="branch-preview-details">
+                    <dt>Affected role or area</dt>
+                    <dd>{consequence.area}</dd>
+                    <dt>Why it matters</dt>
+                    <dd>{consequence.why}</dd>
+                  </dl>
+                </article>
+              </template>
+            </div>
+          </section>
+
+          <section
             class="outcome-risk simulation-section progression-panel"
             aria-labelledby="outcome-risk-heading"
           >
