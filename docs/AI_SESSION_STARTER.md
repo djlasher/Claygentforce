@@ -96,8 +96,13 @@ The current Salesforce implementation includes:
 - `Case-Case Layout` with the `Claygentforce Scenario 001` section
 - `Claygentforce Support Manager` permission set
 - `Scenario001_Case_High_Risk_Flagging` before-save Case Flow
-- `Case_Record_Page` FlexiPage with the LWC placed on the Case record page
+- `Case_Record_Page` FlexiPage with the Scenario 001 Case risk panel
 - `scenario001CaseRiskPanel` Lightning Web Component
+- `scenarioPreviewSection` non-exposed child Lightning Web Component
+- `scenarioLauncher` exposed Lightning Web Component
+- `Claygentforce` custom application
+- `Claygentforce_Home` FlexiPage
+- `Claygentforce_Home` Lightning page custom tab
 - `SMOKE_TEST_CHECKLIST.md`
 - Scenario 001 run artifacts under `scenarios/001-case-escalation-manager-visibility/runs/`
 - ADRs under `docs/adr/`
@@ -146,11 +151,11 @@ Important Flow metadata lesson:
 
 ## Current LWC Behavior
 
-LWC folder:
+Scenario 001 Case risk panel folder:
 
 `force-app/main/default/lwc/scenario001CaseRiskPanel/`
 
-The LWC is read-only and uses `lightning/uiRecordApi` / `getRecord`.
+The Case risk panel is read-only and uses `lightning/uiRecordApi` / `getRecord`.
 
 It reads:
 
@@ -165,17 +170,20 @@ It reads:
 It currently displays a layered simulation surface including:
 
 - raw Case risk fields
+- Scenario Mode / implementation context
 - Scenario Summary
 - Scenario Signals
-- Scenario Mode / implementation context
-- compact demonstration/context notes added during the latest UI pass
 - Escalation Metrics
 - grouped Delivery Team Channel
+- Scenario Progression
+- Stakeholder Change Pressure
+- Learner Branch Preview
+- Consequence Preview
+- Learner Challenge Mode
 - Outcome and Risk
 - Simulation Decision Paths
 - Learning Checkpoint
 - Learner Progression
-- Scenario Progression
 - loading state
 - record load error state
 
@@ -197,16 +205,16 @@ Current Flow Signal set includes:
 - `Priority criteria`
 - `No active match`
 
-The Delivery Team Channel now uses grouped guidance sections:
+The Delivery Team Channel uses grouped guidance sections:
 
 - Initial Review
 - Automation Impact
 - QA Watch
 - Next Decision
 
-The LWC includes cross-role tension in the guidance layer. Examples include QA caution, Product urgency, Architect scalability/criteria concerns, Support queue health concerns, and escalation fatigue concerns.
+`scenarioPreviewSection` is a non-exposed child LWC used by the Case risk panel to render repeated preview-card sections for learner branches, consequences, and challenge prompts.
 
-The LWC intentionally avoids:
+The LWC layer intentionally avoids:
 
 - Apex
 - persistence
@@ -215,7 +223,40 @@ The LWC intentionally avoids:
 - live agent orchestration
 - interactive branching
 
-It is currently a static/read-only simulation surface. The near-term goal is to evolve simulation mechanics and learner progression before adding live agents or persistence.
+It is currently a static/read-only simulation surface. The near-term goal is to validate the static model and then expand by vertical slices.
+
+---
+
+## Current Launcher / App State
+
+Launcher LWC folder:
+
+`force-app/main/default/lwc/scenarioLauncher/`
+
+The launcher is exposed for:
+
+- `lightning__AppPage`
+- `lightning__HomePage`
+
+The launcher displays:
+
+- `Claygentforce Scenario Launcher`
+- product framing
+- guiding principles
+- Scenario 001 card with `Implemented MVP`
+- Scenario 002 placeholder with `Planned`
+- static/read-only simulation note
+
+The Salesforce app path is now source-controlled:
+
+`Claygentforce` app → `Claygentforce Home` tab → `Claygentforce_Home` FlexiPage → `scenarioLauncher` LWC
+
+Important app/navigation lesson:
+
+- Creating a FlexiPage does not automatically replace the standard Salesforce Home tab.
+- The launcher required a Lightning Page custom tab plus app navigation wiring.
+- The user manually added the tab through the app navigation UI, retrieved source, and the app metadata now includes `Claygentforce_Home` between `standard-home` and `standard-Case`.
+- `sf project deploy validate --manifest manifest/scenario-001-package.xml --target-org Claygentforce` succeeded after this was source-controlled.
 
 ---
 
@@ -227,6 +268,7 @@ Current run artifacts include:
 - `RUN-001-summary.md`
 - `RUN-002-stale-escalation.md`
 - `RUN-003-strategic-customer.md`
+- `RUN-004-smoke-test-validation.md`
 
 Current ADRs include:
 
@@ -234,7 +276,7 @@ Current ADRs include:
 - `ADR-002-read-only-lwc.md`
 - `ADR-003-static-simulation-first.md`
 
-Do not create run artifacts for every tiny UI refinement. Prefer one artifact per materially distinct scenario path or implementation lesson.
+Do not create run artifacts for every tiny UI refinement. Prefer one artifact per materially distinct scenario path, validation run, or implementation lesson.
 
 ---
 
@@ -258,6 +300,7 @@ Documentation ownership:
 - Codex should focus on implementation work.
 - ChatGPT should update `DEVLOG.md`, `ISSUES_LOG.md`, `AI_SESSION_STARTER.md`, and roadmap-style docs when needed.
 - Avoid asking Codex to maintain documentation unless the task is explicitly documentation-only.
+- Avoid adding documentation sprawl. Update existing docs when practical.
 
 ---
 
@@ -273,6 +316,7 @@ For Codex prompts:
 - point Codex to `docs/AI_COMMANDS_AND_WORKFLOWS.md`
 - include only the specific task details
 - rely on the workflow doc for repeated constraints
+- include manifest/package updates whenever new Salesforce metadata files are created
 - do not repeat long setup, path, warning, or command sections unless necessary
 
 Codex must confirm it is modifying:
@@ -299,6 +343,7 @@ Documented in `docs/ISSUES_LOG.md`:
 - AI-facing documentation briefly duplicated context across multiple files and was corrected.
 - A previous LWC CSS attempt failed because a styling hook compiled to an internal Salesforce token inaccessible from namespace `c`.
 - Flow metadata clearing assignments should use empty `<stringValue></stringValue>`, not `$GlobalConstant.EmptyString` or `$GlobalConstant.Null`.
+- Lightning App Page launcher visibility required a FlexiPage, CustomTab, app navigation entry, profile visibility, and source retrieval after manual nav adjustment.
 
 ---
 
@@ -314,7 +359,15 @@ Visual testing in the org confirmed earlier Scenario 001 behavior including:
 - Scenario State displays `Manual Override`
 - Scenario Signals displays State, Tier, Priority, and Flow context
 
-Later UI layers were visually reviewed during development, but full smoke/regression testing is intentionally deferred until the current scenario mechanics stabilize.
+Latest org/app validation confirmed:
+
+- the `Claygentforce` app exists
+- the `Claygentforce Home` custom tab exists
+- the `Claygentforce Home` tab points to the `Claygentforce_Home` FlexiPage
+- the `scenarioLauncher` LWC renders through the app tab after manual nav adjustment and source retrieval
+- the app navigation metadata now includes Home, Claygentforce Home, and Cases
+
+Full smoke/regression testing is still pending and should be captured in `RUN-004-smoke-test-validation.md` when completed.
 
 Case creation in this org requires:
 
@@ -347,15 +400,15 @@ Do not expand large documentation just for its own sake.
 
 Do not continue adding reviewer/demo-only UI framing unless the user explicitly asks for portfolio polish.
 
-The next useful work is to continue Scenario 001 in small but meaningful simulation-mechanics increments.
+The current best next step is to run the hardened Scenario 001 smoke-test checklist and fill in `RUN-004-smoke-test-validation.md`.
 
-Likely next options:
+After that, likely next options are:
 
-1. Complete the latest Scenario Progression implementation review after the user pushes.
-2. Add lightweight learner-driven branching concepts without persistence.
-3. Add a minimal scenario choice scaffold only when the interaction model is clear.
-4. Expand smoke/regression testing after the current UI and Flow patterns stabilize.
-5. Refactor the LWC JS toward clearer config/state modules only when it starts hurting.
-6. Prepare reusable patterns before Scenario 002 begins.
+1. Choose Scenario 002.
+2. Create Scenario 002 planning artifacts from the template.
+3. Reuse the Scenario 001 vertical-slice pattern for Scenario 002.
+4. Add role-specific Scenario 001 prompt files or static role-run transcripts.
+5. Create generalized delivery-room views outside Case context.
+6. Add CI validation later.
 
-Claygentforce now has enough foundational documentation, Salesforce metadata, and static simulation behavior to keep validating the simulator against real implementation work.
+Claygentforce now has enough foundational documentation, Salesforce metadata, static simulation behavior, and a source-controlled app/launcher path to keep validating the simulator against real implementation work.
