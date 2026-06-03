@@ -1,0 +1,53 @@
+<template>
+  <lightning-card
+    title="Claygentforce Scenario Launcher"
+    icon-name="standard:work_plan"
+  >
+    <div class="launcher-shell slds-p-horizontal_medium slds-p-bottom_medium">
+      <section class="launcher-intro" aria-labelledby="launcher-intro-heading">
+        <h2 id="launcher-intro-heading" class="launcher-heading">
+          Salesforce delivery simulation home
+        </h2>
+        <p class="launcher-copy">
+          Orient learners to implemented scenarios, the Salesforce surfaces they
+          use, and the delivery judgment each scenario is designed to practice.
+        </p>
+        <ol class="principle-list">
+          <template for:each={guidingPrinciples} for:item="principle">
+            <li key={principle}>{principle}</li>
+          </template>
+        </ol>
+      </section>
+
+      <section class="scenario-grid" aria-label="Scenario cards">
+        <template for:each={scenarios} for:item="scenario">
+          <article key={scenario.name} class="scenario-card">
+            <div class="scenario-card-header">
+              <p class="scenario-name">{scenario.name}</p>
+              <span class="scenario-status">{scenario.status}</span>
+            </div>
+            <dl class="scenario-detail-list">
+              <template for:each={scenario.details} for:item="detail">
+                <div key={detail.label} class="scenario-detail-item">
+                  <dt>{detail.label}</dt>
+                  <dd>{detail.value}</dd>
+                </div>
+              </template>
+            </dl>
+          </article>
+        </template>
+      </section>
+
+      <section class="static-note" aria-labelledby="static-note-heading">
+        <h3 id="static-note-heading" class="static-note-heading">
+          Current Simulation Mode
+        </h3>
+        <p class="launcher-copy">
+          Current simulations are static and read-only. This launcher does not
+          navigate, score learners, persist progress, call Apex, invoke external
+          AI, or use orchestration.
+        </p>
+      </section>
+    </div>
+  </lightning-card>
+</template>

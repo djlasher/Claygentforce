@@ -1,0 +1,99 @@
+.launcher-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.launcher-intro,
+.static-note {
+  border: 1px solid #dddbda;
+  border-radius: 0.25rem;
+  background: #ffffff;
+  padding: 0.875rem;
+}
+
+.launcher-heading,
+.static-note-heading {
+  color: #181818;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 0.5rem;
+}
+
+.launcher-copy {
+  color: #2e2e2e;
+  line-height: 1.5;
+}
+
+.principle-list {
+  color: #2e2e2e;
+  display: grid;
+  gap: 0.25rem;
+  line-height: 1.5;
+  list-style-position: inside;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.scenario-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+}
+
+.scenario-card {
+  border: 1px solid #dddbda;
+  border-left: 0.25rem solid #dddbda;
+  border-radius: 0.25rem;
+  background: #ffffff;
+  padding: 0.875rem;
+}
+
+.scenario-card-header {
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+  margin-bottom: 0.875rem;
+}
+
+.scenario-name {
+  color: #181818;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.scenario-status {
+  background: #f3f3f3;
+  border: 1px solid #dddbda;
+  border-radius: 999px;
+  color: #181818;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.3;
+  padding: 0.25rem 0.65rem;
+}
+
+.scenario-detail-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.scenario-detail-item {
+  border-left: 0.25rem solid #dddbda;
+  padding-left: 0.75rem;
+}
+
+.scenario-detail-item dt {
+  color: #747474;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.scenario-detail-item dd {
+  color: #2e2e2e;
+  line-height: 1.5;
+  margin: 0.25rem 0 0;
+}

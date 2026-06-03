@@ -26,6 +26,7 @@
     <types>
         <members>scenario001CaseRiskPanel</members>
         <members>scenarioPreviewSection</members>
+        <members>scenarioLauncher</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>
