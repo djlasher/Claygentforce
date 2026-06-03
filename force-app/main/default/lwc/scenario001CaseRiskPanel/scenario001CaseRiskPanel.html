@@ -368,6 +368,35 @@
           </section>
 
           <section
+            class="learner-challenge-mode simulation-section progression-panel"
+            aria-labelledby="learner-challenge-mode-heading"
+          >
+            <h3
+              id="learner-challenge-mode-heading"
+              class="learner-challenge-mode-heading simulation-section-heading slds-text-heading_small"
+            >
+              Learner Challenge Mode
+            </h3>
+            <p class="branch-preview-note">
+              Guided static challenge prompts only. This is not an interactive
+              quiz or persisted learner assessment.
+            </p>
+            <div class="branch-preview-list">
+              <template for:each={learnerChallenges} for:item="challenge">
+                <article key={challenge.prompt} class="branch-preview-item">
+                  <p class="branch-preview-title">{challenge.prompt}</p>
+                  <dl class="branch-preview-details">
+                    <dt>Consider</dt>
+                    <dd>{challenge.consider}</dd>
+                    <dt>Expected evidence or artifact</dt>
+                    <dd>{challenge.evidence}</dd>
+                  </dl>
+                </article>
+              </template>
+            </div>
+          </section>
+
+          <section
             class="outcome-risk simulation-section progression-panel"
             aria-labelledby="outcome-risk-heading"
           >

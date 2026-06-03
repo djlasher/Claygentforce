@@ -638,6 +638,81 @@ const CONSEQUENCE_PREVIEWS = {
   ]
 };
 
+const LEARNER_CHALLENGES = {
+  Closed: [
+    {
+      prompt: "Should closed Cases retain historical escalation context?",
+      consider: "Active queue clarity versus reporting history.",
+      evidence: "Reporting note or clearing regression test."
+    },
+    {
+      prompt: "When should high-risk values be cleared?",
+      consider: "Lifecycle state, list view visibility, and audit needs.",
+      evidence: "Closure behavior test case."
+    }
+  ],
+  ManualOverride: [
+    {
+      prompt: "Should manual override take precedence over automated criteria?",
+      consider: "Governance, auditability, and urgent exceptions.",
+      evidence: "Override usage rule or QA test case."
+    },
+    {
+      prompt: "When should automation replace manual judgment?",
+      consider: "Repeated override patterns and signal quality.",
+      evidence: "Override reporting note or future criteria proposal."
+    }
+  ],
+  StrategicRisk: [
+    {
+      prompt: "Should Strategic tier always escalate?",
+      consider: "Tier ownership, escalation volume, and client expectations.",
+      evidence: "Tier governance note or regression case."
+    },
+    {
+      prompt: "Who should own customer-tier accuracy?",
+      consider: "Sales, support, and operations accountability.",
+      evidence: "Tier ownership decision note."
+    }
+  ],
+  StaleEscalation: [
+    {
+      prompt: "Is five days the right stale threshold?",
+      consider: "Support SLAs, queue volume, and false positives.",
+      evidence: "Threshold rationale or queue-health review."
+    },
+    {
+      prompt: "What should happen when stale volume grows?",
+      consider: "Capacity risk, manager attention, and escalation fatigue.",
+      evidence: "Queue trend review or reporting requirement."
+    }
+  ],
+  PriorityRisk: [
+    {
+      prompt: "Is Priority enough to define high risk?",
+      consider: "Customer value, aging, severity, and simplicity.",
+      evidence: "Criteria decision or test matrix row."
+    },
+    {
+      prompt: "Which risk factor should be added next?",
+      consider: "Customer tier, queue age, and regression complexity.",
+      evidence: "Future rule proposal."
+    }
+  ],
+  Clean: [
+    {
+      prompt: "What risky Cases might current criteria miss?",
+      consider: "Hidden customer impact, stale work, and incorrect priority.",
+      evidence: "Missed-risk example or proposed future rule."
+    },
+    {
+      prompt: "How should the team explain non-escalated Cases?",
+      consider: "Criteria boundaries and stakeholder expectations.",
+      evidence: "Scenario explanation note."
+    }
+  ]
+};
+
 // Delivery Team Channel grouping and static role-message content.
 const GUIDANCE_GROUPS = {
   InitialReview: "Initial Review",
@@ -1129,6 +1204,23 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return CONSEQUENCE_PREVIEWS.PriorityRisk;
       default:
         return CONSEQUENCE_PREVIEWS.Clean;
+    }
+  }
+
+  get learnerChallenges() {
+    switch (this.scenarioState) {
+      case SCENARIO_STATES.Closed:
+        return LEARNER_CHALLENGES.Closed;
+      case SCENARIO_STATES.ManualOverride:
+        return LEARNER_CHALLENGES.ManualOverride;
+      case SCENARIO_STATES.StrategicRisk:
+        return LEARNER_CHALLENGES.StrategicRisk;
+      case SCENARIO_STATES.StaleEscalation:
+        return LEARNER_CHALLENGES.StaleEscalation;
+      case SCENARIO_STATES.PriorityRisk:
+        return LEARNER_CHALLENGES.PriorityRisk;
+      default:
+        return LEARNER_CHALLENGES.Clean;
     }
   }
 
