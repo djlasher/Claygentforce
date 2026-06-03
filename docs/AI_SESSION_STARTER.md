@@ -12,7 +12,7 @@ Claygentforce is a Salesforce delivery team simulation and enablement project.
 
 It is not primarily a game, toy chatbot, generic AI demo, or normal chatbot.
 
-The goal is to build a realistic, AI-assisted Salesforce delivery simulator that helps learners practice:
+The goal is to build a realistic Salesforce delivery simulator that helps learners practice:
 
 - requirements discovery
 - architecture decisions
@@ -26,7 +26,7 @@ The goal is to build a realistic, AI-assisted Salesforce delivery simulator that
 - incident response
 - retrospective learning
 
-The product direction is a simulated Salesforce delivery-team channel experience, similar to a Teams or Slack room, where different delivery roles chime in with contextual guidance, concerns, tradeoffs, and review notes.
+The product direction is a simulated Salesforce delivery-team channel experience, similar to a Teams or Slack room, where different delivery roles provide contextual guidance, concerns, tradeoffs, and review notes.
 
 The project should help learners practice Salesforce delivery judgment, not just memorize Salesforce syntax.
 
@@ -46,11 +46,19 @@ The Multi-Agent Volume 1 RPG repo was an earlier Godot/roguelite learning sandbo
 
 Claygentforce is the active strategic project focused on Salesforce delivery simulation, AI-assisted enablement, and cross-role Salesforce project execution.
 
+The local repo path used by the user is:
+
+`D:\Github Repos\Claygentforce`
+
+The org alias used during development is:
+
+`Claygentforce`
+
 ---
 
 ## Current Repository Type
 
-Claygentforce is a Salesforce DX project with a documentation-first simulation framework and an active Scenario 001 Salesforce MVP slice.
+Claygentforce is a Salesforce DX project with a documentation-first simulation framework and an active Scenario 001 Salesforce implementation slice.
 
 The repository includes:
 
@@ -74,11 +82,11 @@ Scenario 001 is:
 
 `Case Escalation and Manager Visibility`
 
-The current Scenario 001 MVP is source-controlled and deployable through:
+The current Scenario 001 implementation is source-controlled and deployable through:
 
 `manifest/scenario-001-package.xml`
 
-The MVP includes:
+The current Salesforce implementation includes:
 
 - `Case.High_Risk__c`
 - `Case.High_Risk_Reason__c`
@@ -91,14 +99,8 @@ The MVP includes:
 - `Case_Record_Page` FlexiPage with the LWC placed on the Case record page
 - `scenario001CaseRiskPanel` Lightning Web Component
 - `SMOKE_TEST_CHECKLIST.md`
-
-The org was authenticated under the alias:
-
-`Claygentforce`
-
-The local repo path used by the user is:
-
-`D:\Github Repos\Claygentforce`
+- Scenario 001 run artifacts under `scenarios/001-case-escalation-manager-visibility/runs/`
+- ADRs under `docs/adr/`
 
 ---
 
@@ -108,29 +110,37 @@ Flow file:
 
 `force-app/main/default/flows/Scenario001_Case_High_Risk_Flagging.flow-meta.xml`
 
-Flow v2 behavior:
+Current Flow v3 behavior:
 
 1. Runs before-save on Case create/update.
-2. Entry condition: open Cases only, `IsClosed = false`.
-3. Manual override is evaluated before priority.
-4. If `High_Risk_Override__c = true`:
-   - `High_Risk__c = true`
-   - `High_Risk_Reason__c = Manual Review`
-5. Else if `Priority = High`:
-   - `High_Risk__c = true`
-   - `High_Risk_Reason__c = Critical Severity`
-6. Otherwise Flow does not clear existing high-risk values yet.
+2. Closed Cases clear active high-risk values.
+3. Manual override is evaluated before automated escalation criteria.
+4. Strategic customer escalation is evaluated after manual override.
+5. Stale escalation is evaluated after Strategic customer escalation and before priority-only escalation.
+6. Priority-based escalation is evaluated after stale escalation.
+7. Cases that no longer match active criteria clear prior high-risk values.
 
-Flow v2 intentionally avoids:
+Current Flow v3 precedence:
 
-- customer tier logic
-- stale Case logic
-- notifications
-- assignment changes
-- clearing behavior
-- custom code
+1. Closed Case handling
+2. Manual override precedence
+3. Strategic customer escalation
+4. Stale escalation
+5. Priority-based escalation
+6. Clean/no-match clearing behavior
 
-Customer Tier exists as future escalation context but Flow v2 does not use it yet.
+Current high-risk reason values include:
+
+- `Manual Review`
+- `Strategic Customer`
+- `Stale Escalation`
+- `Critical Severity`
+
+Important Flow metadata lesson:
+
+- Do not use `$GlobalConstant.EmptyString` or `$GlobalConstant.Null` for clearing string fields in Flow metadata.
+- Salesforce metadata deployments rejected both during Scenario 001 work.
+- Use empty `<stringValue></stringValue>` assignments instead.
 
 ---
 
@@ -152,102 +162,79 @@ It reads:
 - `Case.Status`
 - `Case.IsClosed`
 
-It displays:
+It currently displays a layered simulation surface including:
 
-- Scenario State
-- High Risk
-- High Risk Override
-- High Risk Reason
-- Customer Tier
-- Priority
-- Status
-- Scenario Signals strip
-- Delivery Team Channel
+- raw Case risk fields
+- Scenario Summary
+- Scenario Signals
+- Scenario Mode / implementation context
+- compact demonstration/context notes added during the latest UI pass
+- Escalation Metrics
+- grouped Delivery Team Channel
+- Outcome and Risk
+- Simulation Decision Paths
+- Learning Checkpoint
+- Learner Progression
+- Scenario Progression
+- loading state
+- record load error state
 
-Scenario State values:
+Current scenario state set includes:
 
 - `Closed Case`
 - `Manual Override`
+- `Strategic Customer Risk`
+- `Stale Escalation`
 - `Priority-Based High Risk`
 - `Not Flagged`
 
-Scenario Signals display compact pills for:
-
-- State
-- Tier
-- Priority
-- Flow
-
-Flow Signal values:
+Current Flow Signal set includes:
 
 - `Closed visibility only`
 - `Override precedence`
+- `Customer tier criteria`
+- `Stale escalation criteria`
 - `Priority criteria`
 - `No active match`
 
-Delivery Team Channel guidance priority:
+The Delivery Team Channel now uses grouped guidance sections:
 
-1. Closed Case guidance
-2. Manual Override guidance
-3. Open high-risk guidance
-4. Open not-flagged guidance
+- Initial Review
+- Automation Impact
+- QA Watch
+- Next Decision
 
-If Customer Tier is `Strategic` and the Case is not closed, the LWC appends a Product Owner message explaining that Strategic customer context may affect future escalation criteria, but Flow v2 does not use customer tier yet.
+The LWC includes cross-role tension in the guidance layer. Examples include QA caution, Product urgency, Architect scalability/criteria concerns, Support queue health concerns, and escalation fatigue concerns.
 
 The LWC intentionally avoids:
 
 - Apex
+- persistence
 - external AI calls
 - chat input
 - live agent orchestration
+- interactive branching
 
-It is the first visual UI foundation for the future simulated delivery-team channel experience.
-
----
-
-## Follow-Up Vision Notes
-
-The likely future product experience is a home page or app page Scenario Launcher, not only a Case record page component.
-
-The launcher should eventually let the learner choose a scenario and possibly a learner role, then move into a guided scenario flow that combines:
-
-- decision buttons
-- Case creation or Case loading
-- a live-feeling Delivery Team Channel
-- scenario consequences
-- summary/score/review moments
-
-The user likes the idea of decision buttons when a scenario reaches a choice point. The demo path can intentionally choose a plausible-but-wrong option so the consequence appears later. This should feel like a guided Screen Flow plus live delivery-room commentary, not a generic chatbot.
-
-The eventual chat/channel experience should include delayed messages and typing indicators, such as one role posting a message, another role showing “is typing…,” and then the next message appearing. This can make the simulation feel alive before true multi-agent orchestration exists.
-
-The user wants the LWC JavaScript refactored later. Current JS has many getters and hardcoded strings because features were added incrementally. The preferred direction is not to put all logic inside the wire method. Instead, use the wire/getRecord layer to pull Case fields, then normalize the Case into a context object and use a state/config dictionary to resolve scenario state, flow signal, and messages. Think: wire gets Case → normalized context → state resolver → config/message resolver → template renders.
-
-A future summary/score moment should use Salesforce confetti as a memorable out-of-the-box flourish. The user specifically called out confetti as a small but impressive “Clay knows Salesforce deeply” demo touch. Path was guessed but was not the intended idea.
-
-Data Cloud and Agentforce should eventually appear in a light but credible way, not as heavy implementations. Data Cloud can provide or retrieve/enrich Case/customer context once. Agentforce can be introduced naturally in the delivery conversation when someone suggests asking Agentforce, and it can return or summarize the context. The goal is to show that Data Cloud and Agentforce can be used as part of the delivery workflow without making them the whole product.
-
-The demo can be made playful and memorable. Potential participant framing: Clayton, ChatGPT, Codex, Agentforce, Data Cloud, and Coco as a distracting stakeholder with urgent lap requirements. Keep the humor light while preserving technical credibility.
+It is currently a static/read-only simulation surface. The near-term goal is to evolve simulation mechanics and learner progression before adding live agents or persistence.
 
 ---
 
-## Visual / Org Validation Completed
+## Current Scenario Artifacts
 
-Visual testing in the org confirmed:
+Current run artifacts include:
 
-- the LWC is visible on the Case record page
-- High priority open Cases are flagged
-- manual override works on a Medium priority open Case
-- manual override sets High Risk Reason to `Manual Review`
-- the Delivery Team Channel shows manual override messages
-- Scenario State displays `Manual Override`
-- Scenario Signals displays State, Tier, Priority, and Flow context
+- `RUN-001-manager-override.md`
+- `RUN-001-summary.md`
+- `RUN-002-stale-escalation.md`
+- `RUN-003-strategic-customer.md`
 
-Case creation in this org requires:
+Current ADRs include:
 
-`Case Origin = Phone`
+- `ADR-001-before-save-flow.md`
+- `ADR-002-read-only-lwc.md`
+- `ADR-003-static-simulation-first.md`
 
-Remember this for smoke testing.
+Do not create run artifacts for every tiny UI refinement. Prefer one artifact per materially distinct scenario path or implementation lesson.
 
 ---
 
@@ -266,6 +253,12 @@ When the user sends `k`:
 5. Do not create a devlog entry for every tiny file change.
 6. Prefer milestone-oriented devlog entries that summarize related work from the same session or implementation phase.
 
+Documentation ownership:
+
+- Codex should focus on implementation work.
+- ChatGPT should update `DEVLOG.md`, `ISSUES_LOG.md`, `AI_SESSION_STARTER.md`, and roadmap-style docs when needed.
+- Avoid asking Codex to maintain documentation unless the task is explicitly documentation-only.
+
 ---
 
 ## Codex Guidance
@@ -278,7 +271,8 @@ For Codex prompts:
 
 - keep prompts short
 - point Codex to `docs/AI_COMMANDS_AND_WORKFLOWS.md`
-- include only the specific files relevant to the task
+- include only the specific task details
+- rely on the workflow doc for repeated constraints
 - do not repeat long setup, path, warning, or command sections unless necessary
 
 Codex must confirm it is modifying:
@@ -304,6 +298,29 @@ Documented in `docs/ISSUES_LOG.md`:
 - Codex repeatedly created or edited files in a separate workspace before the workflow was tightened.
 - AI-facing documentation briefly duplicated context across multiple files and was corrected.
 - A previous LWC CSS attempt failed because a styling hook compiled to an internal Salesforce token inaccessible from namespace `c`.
+- Flow metadata clearing assignments should use empty `<stringValue></stringValue>`, not `$GlobalConstant.EmptyString` or `$GlobalConstant.Null`.
+
+---
+
+## Visual / Org Validation Completed
+
+Visual testing in the org confirmed earlier Scenario 001 behavior including:
+
+- the LWC is visible on the Case record page
+- High priority open Cases are flagged
+- manual override works on a Medium priority open Case
+- manual override sets High Risk Reason to `Manual Review`
+- the Delivery Team Channel shows manual override messages
+- Scenario State displays `Manual Override`
+- Scenario Signals displays State, Tier, Priority, and Flow context
+
+Later UI layers were visually reviewed during development, but full smoke/regression testing is intentionally deferred until the current scenario mechanics stabilize.
+
+Case creation in this org requires:
+
+`Case Origin = Phone`
+
+Remember this for smoke testing.
 
 ---
 
@@ -328,16 +345,17 @@ Do not restart setup work.
 
 Do not expand large documentation just for its own sake.
 
-The next useful work is to continue Scenario 001 in small, scenario-driven increments.
+Do not continue adding reviewer/demo-only UI framing unless the user explicitly asks for portfolio polish.
+
+The next useful work is to continue Scenario 001 in small but meaningful simulation-mechanics increments.
 
 Likely next options:
 
-1. Execute the smoke test checklist and record final findings.
-2. Decide whether Flow v2 should clear high-risk values when criteria stop matching.
-3. Add customer tier logic to Flow only after the criteria are clarified.
-4. Add stale Case logic only after the age threshold and business meaning are clarified.
-5. Refactor the LWC JS toward a normalized context object and state/config dictionary when it starts hurting.
-6. Add richer static Delivery Team Channel guidance if it improves the learning experience.
-7. Keep the LWC read-only and avoid Apex/external AI calls until the static UI pattern is proven.
+1. Complete the latest Scenario Progression implementation review after the user pushes.
+2. Add lightweight learner-driven branching concepts without persistence.
+3. Add a minimal scenario choice scaffold only when the interaction model is clear.
+4. Expand smoke/regression testing after the current UI and Flow patterns stabilize.
+5. Refactor the LWC JS toward clearer config/state modules only when it starts hurting.
+6. Prepare reusable patterns before Scenario 002 begins.
 
-Claygentforce now has enough foundational documentation and Salesforce metadata to keep validating the simulator against real implementation work.
+Claygentforce now has enough foundational documentation, Salesforce metadata, and static simulation behavior to keep validating the simulator against real implementation work.
