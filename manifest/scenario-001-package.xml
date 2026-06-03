@@ -16,6 +16,10 @@
         <name>Layout</name>
     </types>
     <types>
+        <members>Claygentforce</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
         <members>Claygentforce_Support_Manager</members>
         <name>PermissionSet</name>
     </types>
@@ -31,6 +35,7 @@
     </types>
     <types>
         <members>Case_Record_Page</members>
+        <members>Claygentforce_Home</members>
         <name>FlexiPage</name>
     </types>
     <version>66.0</version>
