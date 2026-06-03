@@ -388,6 +388,46 @@ const SCENARIO_PROGRESSION = {
   }
 };
 
+const STAKEHOLDER_CHANGE_PRESSURE = {
+  Closed: {
+    ask: "Managers may want historical escalation visibility after closure.",
+    tension:
+      "Automation should not keep closed Cases in active escalation tracking.",
+    reviewLens: "Separate active queue clarity from historical reporting needs."
+  },
+  ManualOverride: {
+    ask: "Support managers want human judgment preserved for edge cases.",
+    tension:
+      "QA and Security need override usage to stay consistent and governable.",
+    reviewLens: "Define override ownership, audit expectations, and limits."
+  },
+  StrategicRisk: {
+    ask: "Product and client stakeholders want Strategic accounts always visible.",
+    tension:
+      "Architects and support leads need to prevent alert fatigue and tier misuse.",
+    reviewLens: "Validate tier governance before expanding escalation volume."
+  },
+  StaleEscalation: {
+    ask: "Support wants aging work surfaced before backlog risk grows.",
+    tension:
+      "Product and support operations need stale criteria to avoid noisy escalation.",
+    reviewLens: "Tune aging thresholds against real queue health patterns."
+  },
+  PriorityRisk: {
+    ask: "Stakeholders want simple urgent-case visibility.",
+    tension:
+      "Architects and QA need to show where priority-only criteria are too shallow.",
+    reviewLens: "Use the simple rule as a baseline before adding risk factors."
+  },
+  Clean: {
+    ask: "Stakeholders may ask why this Case is not visible to managers.",
+    tension:
+      "The team needs to explain criteria boundaries without over-expanding automation.",
+    reviewLens:
+      "Use missed-risk examples to decide whether criteria should change."
+  }
+};
+
 // Delivery Team Channel grouping and static role-message content.
 const GUIDANCE_GROUPS = {
   InitialReview: "Initial Review",
@@ -828,6 +868,23 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return SCENARIO_PROGRESSION.PriorityRisk;
       default:
         return SCENARIO_PROGRESSION.Clean;
+    }
+  }
+
+  get stakeholderChangePressure() {
+    switch (this.scenarioState) {
+      case SCENARIO_STATES.Closed:
+        return STAKEHOLDER_CHANGE_PRESSURE.Closed;
+      case SCENARIO_STATES.ManualOverride:
+        return STAKEHOLDER_CHANGE_PRESSURE.ManualOverride;
+      case SCENARIO_STATES.StrategicRisk:
+        return STAKEHOLDER_CHANGE_PRESSURE.StrategicRisk;
+      case SCENARIO_STATES.StaleEscalation:
+        return STAKEHOLDER_CHANGE_PRESSURE.StaleEscalation;
+      case SCENARIO_STATES.PriorityRisk:
+        return STAKEHOLDER_CHANGE_PRESSURE.PriorityRisk;
+      default:
+        return STAKEHOLDER_CHANGE_PRESSURE.Clean;
     }
   }
 
