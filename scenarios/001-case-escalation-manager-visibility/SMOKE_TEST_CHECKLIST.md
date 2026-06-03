@@ -21,6 +21,7 @@ This checklist confirms that the Case fields, Flow v3, Open High-Risk Cases list
 - `Claygentforce Support Manager`
 - `scenario001CaseRiskPanel`
 - `scenarioPreviewSection`
+- `scenarioLauncher`
 
 ---
 
@@ -30,6 +31,7 @@ This checklist confirms that the Case fields, Flow v3, Open High-Risk Cases list
 2. Confirm the manifest includes both Lightning Web Components:
    - `scenario001CaseRiskPanel`
    - `scenarioPreviewSection`
+   - `scenarioLauncher`
 3. Confirm the Scenario 001 panel is visible on the Case Lightning Record Page.
 4. Confirm the testing user has access through either System Administrator permissions or the `Claygentforce Support Manager` permission set.
 5. For new Cases in this checklist, set `Case Origin` to `Phone`.
@@ -282,6 +284,28 @@ This checklist confirms that the Case fields, Flow v3, Open High-Risk Cases list
 
 ---
 
+## Test Case 10: Scenario Launcher Renders On App Or Home Page
+
+### Steps
+
+1. Add `scenarioLauncher` to a Lightning App Page or Home Page.
+2. Open the page.
+3. Review the launcher content.
+
+### Expected Result
+
+- The component renders with the title `Claygentforce Scenario Launcher`.
+- The guiding principles render:
+  - Real Salesforce implementation first
+  - Simulated delivery-team intelligence second
+  - Live agents third
+- The Scenario 001 card renders with `Implemented MVP` status.
+- The Scenario 002 placeholder card renders with `Planned` status.
+- The static/read-only note renders.
+- No buttons, navigation behavior, Apex behavior, persistence, orchestration, external AI behavior, or chat input are present.
+
+---
+
 ## Regression Watch
 
 - Flow v3 precedence should remain:
@@ -296,6 +320,7 @@ This checklist confirms that the Case fields, Flow v3, Open High-Risk Cases list
 - `Open High-Risk Cases` should include only open high-risk Cases.
 - The LWC should remain read-only and static.
 - `scenarioPreviewSection` should keep rendering only through the parent `scenario001CaseRiskPanel`.
+- `scenarioLauncher` should remain a static, read-only orientation surface.
 - Future LWC sections should not add buttons, click handlers, persistence, Apex, orchestration, external AI calls, or chat input unless explicitly planned.
 
 ---
@@ -315,3 +340,4 @@ Use this section during manual testing.
 | Clearing Behavior When Criteria Stop Matching     |           |       |
 | LWC Record Page And Child Preview Rendering       |           |       |
 | Permission Set Supports Scenario Access           |           |       |
+| Scenario Launcher Renders                         |           |       |
