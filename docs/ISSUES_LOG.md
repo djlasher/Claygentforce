@@ -4,6 +4,48 @@ This file tracks setup problems, tool friction, confusing errors, and the fixes/
 
 ---
 
+# 2026-06-02 — Lightning App Page tab did not appear in custom app navigation
+
+## Symptoms
+
+After adding the `scenarioLauncher` LWC, `Claygentforce_Home` FlexiPage, and `Claygentforce` custom application, the Claygentforce app opened successfully but still showed the default Salesforce Home page instead of the custom launcher page.
+
+The custom Lightning Page tab existed and pointed to the correct `Claygentforce_Home` page, but it did not initially appear as a visible navigation item in the Claygentforce app. Profile tab visibility also needed adjustment before the custom tab could be used normally.
+
+## Cause
+
+Creating or deploying a FlexiPage does not automatically replace the standard Salesforce Home tab for a Lightning app.
+
+The launcher needed an explicit Lightning Page custom tab and the app navigation needed to include that tab. Some of the required app navigation state was easiest to establish through the Salesforce UI, then retrieve back into source control.
+
+## Fix
+
+The custom launcher page was stabilized by:
+
+- creating/source-controlling `Claygentforce_Home.tab-meta.xml`
+- confirming the tab points to the `Claygentforce_Home` FlexiPage
+- setting the tab visible for the System Administrator profile
+- adding the `Claygentforce Home` tab through the app navigation UI
+- retrieving the updated app metadata back into source control
+- confirming `Claygentforce.app-meta.xml` includes `Claygentforce_Home` between `standard-home` and `standard-Case`
+- adding `Claygentforce_Home` as a `CustomTab` member in `manifest/scenario-001-package.xml`
+
+After the retrieve, the deploy validation succeeded with:
+
+`sf project deploy validate --manifest manifest/scenario-001-package.xml --target-org Claygentforce`
+
+## Lesson Learned
+
+For Lightning App Page launcher surfaces, source control should include all three pieces when possible:
+
+- the FlexiPage
+- the Lightning Page custom tab
+- the custom application navigation entry
+
+If an app page is created but not visible in the app, check tab visibility and app navigation before assuming the LWC or FlexiPage failed.
+
+---
+
 # 2026-05-31 - Flow metadata clearing values failed deployment
 
 ## Symptoms
