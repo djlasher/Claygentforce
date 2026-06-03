@@ -95,6 +95,57 @@ After implementation:
 
 ---
 
+## Metadata and Manifest Rules
+
+When creating, deleting, or renaming Salesforce metadata, update `manifest/scenario-001-package.xml` in the same task.
+
+Examples:
+
+- New LWC bundle: add `LightningComponentBundle`
+- New FlexiPage: add `FlexiPage`
+- New custom app: add `CustomApplication`
+- New Lightning page tab: add `CustomTab`
+- New field: add `CustomField`
+- New permission set: add `PermissionSet`
+
+Preserve existing manifest members unless the task explicitly removes metadata.
+
+Markdown files, scenario notes, run artifacts, and docs do not require manifest updates.
+
+For deployable metadata tasks, summarize:
+
+- changed files
+- metadata members added or changed
+- manifest update performed
+- validation performed
+
+If no manifest update is needed, say so explicitly.
+
+---
+
+## Launcher / App Page Notes
+
+A Lightning App Page FlexiPage does not automatically replace the standard Salesforce Home tab.
+
+For launcher-style app work, the source-controlled path usually needs:
+
+- `CustomApplication`
+- `FlexiPage`
+- `CustomTab`
+- app navigation entry referencing the custom tab
+- profile or permission visibility handled in the org when needed
+
+For the current launcher:
+
+- app: `Claygentforce`
+- tab: `Claygentforce_Home`
+- FlexiPage: `Claygentforce_Home`
+- LWC: `scenarioLauncher`
+
+If the page exists but does not appear in the app, check CustomTab metadata, app navigation, profile tab visibility, and whether manual org navigation changes need to be retrieved back into source.
+
+---
+
 ## Salesforce Flow Metadata Notes
 
 When editing Flow metadata, do not use either of these references for field-clearing assignments:
@@ -202,7 +253,11 @@ The current Scenario 001 MVP includes:
 - scenario-specific permission set
 - before-save Case Flow v3 with precedence paths
 - read-only Case LWC risk panel
+- `scenarioPreviewSection` child LWC for repeated preview sections
+- `scenarioLauncher` LWC
+- `Claygentforce` custom app
+- `Claygentforce_Home` FlexiPage and custom tab
 - smoke test checklist
 - simulated run artifacts
 
-The LWC is being evolved toward a simulated delivery-team channel experience in small, reviewable increments.
+The LWC and launcher are being evolved toward a simulated delivery-team enablement experience in small, reviewable increments.
