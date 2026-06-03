@@ -428,6 +428,111 @@ const STAKEHOLDER_CHANGE_PRESSURE = {
   }
 };
 
+const LEARNER_BRANCH_PREVIEWS = {
+  Closed: [
+    {
+      label: "Clear active escalation",
+      reason: "Keeps closed Cases out of active manager queues.",
+      tradeoff: "Historical escalation context may need separate reporting."
+    },
+    {
+      label: "Preserve historical reporting",
+      reason: "Helps managers review past escalation patterns.",
+      tradeoff: "Reporting design must avoid implying active risk."
+    },
+    {
+      label: "Review closure handoff",
+      reason: "Clarifies when escalation ownership should end.",
+      tradeoff: "Extra review steps can slow Case closure."
+    }
+  ],
+  ManualOverride: [
+    {
+      label: "Tighten override governance",
+      reason: "Keeps human escalation intentional and auditable.",
+      tradeoff: "Managers may need clearer rules before using override."
+    },
+    {
+      label: "Expand automated criteria",
+      reason: "Reduces reliance on manual judgment for repeat patterns.",
+      tradeoff: "Broader automation may create noisy escalations."
+    },
+    {
+      label: "Add override reporting",
+      reason: "Shows where manual escalation is being used most.",
+      tradeoff: "Adds reporting overhead before the process is mature."
+    }
+  ],
+  StrategicRisk: [
+    {
+      label: "Accept tier-based escalation",
+      reason: "Makes Strategic customer context visible immediately.",
+      tradeoff: "Escalation volume may rise if tier data is overused."
+    },
+    {
+      label: "Require tier governance review",
+      reason: "Improves trust in customer-tier driven escalation.",
+      tradeoff: "May slow rollout while ownership is clarified."
+    },
+    {
+      label: "Monitor Strategic volume",
+      reason: "Helps confirm managers can absorb the review load.",
+      tradeoff: "Requires operational reporting discipline."
+    }
+  ],
+  StaleEscalation: [
+    {
+      label: "Keep current aging threshold",
+      reason: "Preserves a simple five-day operational signal.",
+      tradeoff: "May miss work that needs attention sooner."
+    },
+    {
+      label: "Tune stale threshold",
+      reason: "Aligns escalation timing with real queue expectations.",
+      tradeoff: "Lower thresholds can create false positives."
+    },
+    {
+      label: "Add queue-health reporting",
+      reason: "Shows whether stale Cases are isolated or systemic.",
+      tradeoff: "Requires managers to act on queue patterns."
+    }
+  ],
+  PriorityRisk: [
+    {
+      label: "Keep priority-only rule",
+      reason: "Maintains a simple and predictable first automation slice.",
+      tradeoff: "Important lower-priority Cases may remain invisible."
+    },
+    {
+      label: "Add customer tier",
+      reason: "Brings business context into escalation decisions.",
+      tradeoff: "Depends on reliable customer tier ownership."
+    },
+    {
+      label: "Add aging criteria",
+      reason: "Surfaces operational risk when Cases sit too long.",
+      tradeoff: "Thresholds must be tuned to avoid escalation noise."
+    }
+  ],
+  Clean: [
+    {
+      label: "Leave criteria unchanged",
+      reason: "Protects the current rule set from unnecessary expansion.",
+      tradeoff: "Some risky Cases may still be missed."
+    },
+    {
+      label: "Investigate missed-risk examples",
+      reason: "Uses real evidence before changing automation.",
+      tradeoff: "Requires support feedback and case review time."
+    },
+    {
+      label: "Expand detection coverage",
+      reason: "Improves chances of catching hidden risk patterns.",
+      tradeoff: "Broader rules can reduce signal quality."
+    }
+  ]
+};
+
 // Delivery Team Channel grouping and static role-message content.
 const GUIDANCE_GROUPS = {
   InitialReview: "Initial Review",
@@ -885,6 +990,23 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
         return STAKEHOLDER_CHANGE_PRESSURE.PriorityRisk;
       default:
         return STAKEHOLDER_CHANGE_PRESSURE.Clean;
+    }
+  }
+
+  get learnerBranchPreviews() {
+    switch (this.scenarioState) {
+      case SCENARIO_STATES.Closed:
+        return LEARNER_BRANCH_PREVIEWS.Closed;
+      case SCENARIO_STATES.ManualOverride:
+        return LEARNER_BRANCH_PREVIEWS.ManualOverride;
+      case SCENARIO_STATES.StrategicRisk:
+        return LEARNER_BRANCH_PREVIEWS.StrategicRisk;
+      case SCENARIO_STATES.StaleEscalation:
+        return LEARNER_BRANCH_PREVIEWS.StaleEscalation;
+      case SCENARIO_STATES.PriorityRisk:
+        return LEARNER_BRANCH_PREVIEWS.PriorityRisk;
+      default:
+        return LEARNER_BRANCH_PREVIEWS.Clean;
     }
   }
 

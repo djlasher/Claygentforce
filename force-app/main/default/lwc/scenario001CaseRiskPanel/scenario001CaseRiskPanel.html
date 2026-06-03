@@ -310,6 +310,35 @@
           </section>
 
           <section
+            class="learner-branch-preview simulation-section progression-panel"
+            aria-labelledby="learner-branch-preview-heading"
+          >
+            <h3
+              id="learner-branch-preview-heading"
+              class="learner-branch-preview-heading simulation-section-heading slds-text-heading_small"
+            >
+              Learner Branch Preview
+            </h3>
+            <p class="branch-preview-note">
+              Simulated future learner paths only. These are not clickable
+              decisions yet.
+            </p>
+            <div class="branch-preview-list">
+              <template for:each={learnerBranchPreviews} for:item="branch">
+                <article key={branch.label} class="branch-preview-item">
+                  <p class="branch-preview-title">{branch.label}</p>
+                  <dl class="branch-preview-details">
+                    <dt>Why choose it</dt>
+                    <dd>{branch.reason}</dd>
+                    <dt>Tradeoff or risk</dt>
+                    <dd>{branch.tradeoff}</dd>
+                  </dl>
+                </article>
+              </template>
+            </div>
+          </section>
+
+          <section
             class="outcome-risk simulation-section progression-panel"
             aria-labelledby="outcome-risk-heading"
           >
