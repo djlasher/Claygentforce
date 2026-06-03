@@ -1,0 +1,29 @@
+<template>
+  <section
+    class="preview-section simulation-section progression-panel"
+    aria-labelledby="preview-section-heading"
+  >
+    <h3
+      id="preview-section-heading"
+      class="preview-section-heading simulation-section-heading slds-text-heading_small"
+    >
+      {heading}
+    </h3>
+    <template if:true={noteText}>
+      <p class="preview-section-note">{noteText}</p>
+    </template>
+    <div class="preview-section-list">
+      <template for:each={items} for:item="item">
+        <article key={item.title} class="preview-section-item">
+          <p class="preview-section-title">{item.title}</p>
+          <dl class="preview-section-details">
+            <dt>{firstDetailLabel}</dt>
+            <dd>{item.detailOne}</dd>
+            <dt>{secondDetailLabel}</dt>
+            <dd>{item.detailTwo}</dd>
+          </dl>
+        </article>
+      </template>
+    </div>
+  </section>
+</template>

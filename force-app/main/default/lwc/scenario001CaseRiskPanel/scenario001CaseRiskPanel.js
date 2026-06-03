@@ -1190,6 +1190,15 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
     }
   }
 
+  get learnerBranchPreviewItems() {
+    return this.previewItemsFor(
+      this.learnerBranchPreviews,
+      "label",
+      "reason",
+      "tradeoff"
+    );
+  }
+
   get consequencePreviews() {
     switch (this.scenarioState) {
       case SCENARIO_STATES.Closed:
@@ -1207,6 +1216,15 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
     }
   }
 
+  get consequencePreviewItems() {
+    return this.previewItemsFor(
+      this.consequencePreviews,
+      "label",
+      "area",
+      "why"
+    );
+  }
+
   get learnerChallenges() {
     switch (this.scenarioState) {
       case SCENARIO_STATES.Closed:
@@ -1222,6 +1240,15 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
       default:
         return LEARNER_CHALLENGES.Clean;
     }
+  }
+
+  get learnerChallengeItems() {
+    return this.previewItemsFor(
+      this.learnerChallenges,
+      "prompt",
+      "consider",
+      "evidence"
+    );
   }
 
   get highRiskReason() {
@@ -1287,5 +1314,13 @@ export default class Scenario001CaseRiskPanel extends LightningElement {
     }
 
     return selectedGuidance;
+  }
+
+  previewItemsFor(items, titleKey, detailOneKey, detailTwoKey) {
+    return items.map((item) => ({
+      title: item[titleKey],
+      detailOne: item[detailOneKey],
+      detailTwo: item[detailTwoKey]
+    }));
   }
 }

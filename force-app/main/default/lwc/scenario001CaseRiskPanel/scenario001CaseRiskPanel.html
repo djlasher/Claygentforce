@@ -309,92 +309,29 @@
             </dl>
           </section>
 
-          <section
-            class="learner-branch-preview simulation-section progression-panel"
-            aria-labelledby="learner-branch-preview-heading"
-          >
-            <h3
-              id="learner-branch-preview-heading"
-              class="learner-branch-preview-heading simulation-section-heading slds-text-heading_small"
-            >
-              Learner Branch Preview
-            </h3>
-            <p class="branch-preview-note">
-              Simulated future learner paths only. These are not clickable
-              decisions yet.
-            </p>
-            <div class="branch-preview-list">
-              <template for:each={learnerBranchPreviews} for:item="branch">
-                <article key={branch.label} class="branch-preview-item">
-                  <p class="branch-preview-title">{branch.label}</p>
-                  <dl class="branch-preview-details">
-                    <dt>Why choose it</dt>
-                    <dd>{branch.reason}</dd>
-                    <dt>Tradeoff or risk</dt>
-                    <dd>{branch.tradeoff}</dd>
-                  </dl>
-                </article>
-              </template>
-            </div>
-          </section>
+          <c-scenario-preview-section
+            heading="Learner Branch Preview"
+            note-text="Simulated future learner paths only. These are not clickable decisions yet."
+            items={learnerBranchPreviewItems}
+            first-detail-label="Why choose it"
+            second-detail-label="Tradeoff or risk"
+          ></c-scenario-preview-section>
 
-          <section
-            class="consequence-preview simulation-section progression-panel"
-            aria-labelledby="consequence-preview-heading"
-          >
-            <h3
-              id="consequence-preview-heading"
-              class="consequence-preview-heading simulation-section-heading slds-text-heading_small"
-            >
-              Consequence Preview
-            </h3>
-            <p class="branch-preview-note">
-              Simulated downstream consequences only. These are not live
-              analytics or persisted scenario outcomes.
-            </p>
-            <div class="branch-preview-list">
-              <template for:each={consequencePreviews} for:item="consequence">
-                <article key={consequence.label} class="branch-preview-item">
-                  <p class="branch-preview-title">{consequence.label}</p>
-                  <dl class="branch-preview-details">
-                    <dt>Affected role or area</dt>
-                    <dd>{consequence.area}</dd>
-                    <dt>Why it matters</dt>
-                    <dd>{consequence.why}</dd>
-                  </dl>
-                </article>
-              </template>
-            </div>
-          </section>
+          <c-scenario-preview-section
+            heading="Consequence Preview"
+            note-text="Simulated downstream consequences only. These are not live analytics or persisted scenario outcomes."
+            items={consequencePreviewItems}
+            first-detail-label="Affected role or area"
+            second-detail-label="Why it matters"
+          ></c-scenario-preview-section>
 
-          <section
-            class="learner-challenge-mode simulation-section progression-panel"
-            aria-labelledby="learner-challenge-mode-heading"
-          >
-            <h3
-              id="learner-challenge-mode-heading"
-              class="learner-challenge-mode-heading simulation-section-heading slds-text-heading_small"
-            >
-              Learner Challenge Mode
-            </h3>
-            <p class="branch-preview-note">
-              Guided static challenge prompts only. This is not an interactive
-              quiz or persisted learner assessment.
-            </p>
-            <div class="branch-preview-list">
-              <template for:each={learnerChallenges} for:item="challenge">
-                <article key={challenge.prompt} class="branch-preview-item">
-                  <p class="branch-preview-title">{challenge.prompt}</p>
-                  <dl class="branch-preview-details">
-                    <dt>Consider</dt>
-                    <dd>{challenge.consider}</dd>
-                    <dt>Expected evidence or artifact</dt>
-                    <dd>{challenge.evidence}</dd>
-                  </dl>
-                </article>
-              </template>
-            </div>
-          </section>
+          <c-scenario-preview-section
+            heading="Learner Challenge Mode"
+            note-text="Guided static challenge prompts only. This is not an interactive quiz or persisted learner assessment."
+            items={learnerChallengeItems}
+            first-detail-label="Consider"
+            second-detail-label="Expected evidence or artifact"
+          ></c-scenario-preview-section>
 
           <section
             class="outcome-risk simulation-section progression-panel"
