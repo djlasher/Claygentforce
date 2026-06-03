@@ -4,6 +4,38 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-06-02 — Scenario 001 stakeholder pressure simulation
+
+### Summary
+
+Added a small read-only simulation increment to Scenario 001 that models stakeholder change-request pressure inside the existing Case risk panel. The new panel keeps the simulator moving toward realistic delivery tension without adding persistence, Apex, orchestration, buttons, chat input, or external AI calls.
+
+### Files Updated
+
+- force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.html
+- force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.js
+- docs/DEVLOG.md
+
+### Notes
+
+- Added a state-driven `Stakeholder Change Pressure` section inside the existing simulation stack.
+- Added state-specific stakeholder ask, delivery tension, and review lens content for Closed Case, Manual Override, Strategic Customer Risk, Stale Escalation, Priority-Based High Risk, and Not Flagged states.
+- Reused the existing progression panel and detail-grid styling patterns instead of adding new Salesforce styling hooks.
+- This supports the roadmap direction of introducing realistic stakeholder change requests before adding learner branching or live agents.
+
+### Validation Notes
+
+- GitHub review confirmed the new HTML section, JavaScript model, and getter are present in the Scenario 001 LWC.
+- Local deploy/lint validation was performed before push by the human workflow.
+
+### Next Actions
+
+- Continue toward lightweight learner branching concepts without persistence.
+- Use stakeholder pressure as the setup for later consequence modeling.
+- Keep future increments small, state-driven, and grounded in Scenario 001 delivery behavior.
+
+---
+
 ## 2026-05-31 — Scenario 001 Flow v3 and simulation refinement
 
 ### Summary
