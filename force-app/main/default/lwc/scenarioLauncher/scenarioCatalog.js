@@ -52,6 +52,8 @@ export const DELIVERY_ROOM_CATALOG = {
       "The learner arc for Scenario 001 from intake through tradeoff reflection.",
     transcript:
       "Static role notes that preview the future delivery-room conversation.",
+    chatPreview:
+      "A compact static preview of the future chat-style delivery room.",
     deferred: "Capabilities intentionally held for later milestones.",
     constraints:
       "Current boundaries that keep this app source-driven and reviewable."
@@ -221,6 +223,56 @@ export const DELIVERY_ROOM_CATALOG = {
       focus: "Operational review",
       label: "Simulated review note",
       text: "The Open High-Risk Cases list needs to stay focused enough that managers can act on it during queue review."
+    }
+  ],
+
+  chatPreviewMessages: [
+    {
+      key: "ba-intake",
+      speaker: "BA",
+      role: "Business Analyst",
+      type: "agent",
+      text: "Before we validate the build, what exactly counts as high-risk for manager visibility?"
+    },
+    {
+      key: "architect-precedence",
+      speaker: "AR",
+      role: "Architect",
+      type: "agent",
+      text: "The current precedence is intentional: closed Cases clear first, then override, Strategic customer, stale escalation, and priority."
+    },
+    {
+      key: "qa-clearing",
+      speaker: "QA",
+      role: "QA",
+      type: "agent",
+      text: "Regression testing should prove prior high-risk values clear when criteria stop matching."
+    },
+    {
+      key: "security-visibility",
+      speaker: "SE",
+      role: "Security",
+      type: "agent",
+      text: "Manager visibility should come from normal Case sharing and the scenario permission set, not a hidden bypass."
+    },
+    {
+      key: "support-list",
+      speaker: "SM",
+      role: "Support Manager",
+      type: "agent",
+      text: "The Open High-Risk Cases list is useful only if it stays focused on Cases managers can actually review."
+    },
+    {
+      key: "learner-prompt",
+      speaker: "You",
+      role: "Learner prompt",
+      type: "learnerPrompt",
+      text: "What should you validate next?",
+      choices: [
+        "Flow precedence",
+        "Permission visibility",
+        "List view accuracy"
+      ]
     }
   ],
 

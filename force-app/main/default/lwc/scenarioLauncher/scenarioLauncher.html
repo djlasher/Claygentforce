@@ -37,6 +37,56 @@
       </section>
 
       <section
+        class="chat-preview-panel"
+        aria-labelledby="chat-preview-heading"
+      >
+        <div class="section-header section-header-row">
+          <div>
+            <p class="eyebrow">Future direction</p>
+            <h3 id="chat-preview-heading" class="section-heading">
+              Delivery Room Conversation Preview
+            </h3>
+            <p class="section-subtitle">{sectionSubtitles.chatPreview}</p>
+          </div>
+          <span class="section-badge">Static Preview</span>
+        </div>
+
+        <div
+          class="chat-window"
+          aria-label="Static delivery room conversation preview"
+        >
+          <template for:each={chatPreviewMessages} for:item="message">
+            <article
+              key={message.key}
+              class="chat-message"
+              data-type={message.type}
+            >
+              <div class="chat-avatar" aria-hidden="true">
+                {message.speaker}
+              </div>
+              <div class="chat-bubble">
+                <div class="chat-meta">
+                  <span class="chat-role">{message.role}</span>
+                  <span class="chat-label">Preview-only</span>
+                </div>
+                <p>{message.text}</p>
+                <template if:true={message.choices}>
+                  <div
+                    class="choice-preview"
+                    aria-label="Display-only learner choices"
+                  >
+                    <template for:each={message.choices} for:item="choice">
+                      <span key={choice}>{choice}</span>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </article>
+          </template>
+        </div>
+      </section>
+
+      <section
         class="section-panel section-panel-emphasis"
         aria-labelledby="snapshot-heading"
       >

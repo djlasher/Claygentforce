@@ -38,6 +38,10 @@ export default class ScenarioLauncher extends LightningElement {
     return DELIVERY_ROOM_CATALOG.scenario001TranscriptPreview;
   }
 
+  get chatPreviewMessages() {
+    return DELIVERY_ROOM_CATALOG.chatPreviewMessages;
+  }
+
   get deferredCapabilities() {
     return DELIVERY_ROOM_CATALOG.deferredCapabilities;
   }
