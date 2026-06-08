@@ -1,26 +1,49 @@
-.launcher-shell {
+.delivery-room {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
-.launcher-intro,
+.hero-panel,
+.section-panel,
 .static-note {
   border: 1px solid #dddbda;
   border-radius: 0.25rem;
   background: #ffffff;
-  padding: 0.875rem;
+  padding: 1rem;
 }
 
-.launcher-heading,
-.static-note-heading {
+.hero-panel {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.eyebrow {
+  color: #747474;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.3;
+  margin: 0 0 0.25rem;
+  text-transform: uppercase;
+}
+
+.section-header {
+  margin-bottom: 0.875rem;
+}
+
+.hero-heading,
+.section-heading {
   color: #181818;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   line-height: 1.3;
-  margin-bottom: 0.5rem;
+  margin: 0;
 }
 
-.launcher-copy {
+.hero-copy,
+.static-note,
+.message-copy {
   color: #2e2e2e;
   line-height: 1.5;
 }
@@ -33,6 +56,56 @@
   list-style-position: inside;
   margin: 0.75rem 0 0;
   padding: 0;
+}
+
+.snapshot-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  margin: 0;
+}
+
+.snapshot-item {
+  background: #f3f3f3;
+  border: 1px solid #dddbda;
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+}
+
+.snapshot-item dt {
+  color: #747474;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.snapshot-item dd {
+  color: #181818;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0.25rem 0 0;
+}
+
+.role-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+}
+
+.role-card {
+  border-left: 0.25rem solid #dddbda;
+  padding: 0.25rem 0 0.25rem 0.75rem;
+}
+
+.role-name {
+  color: #181818;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.role-focus {
+  color: #2e2e2e;
+  line-height: 1.5;
+  margin-top: 0.25rem;
 }
 
 .scenario-grid {
@@ -96,4 +169,51 @@
   color: #2e2e2e;
   line-height: 1.5;
   margin: 0.25rem 0 0;
+}
+
+.path-list,
+.compact-list {
+  color: #2e2e2e;
+  display: grid;
+  gap: 0.5rem;
+  line-height: 1.5;
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.transcript-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.transcript-message {
+  border: 1px solid #dddbda;
+  border-left: 0.25rem solid #dddbda;
+  border-radius: 0.25rem;
+  padding: 0.875rem;
+}
+
+.message-meta {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.message-role {
+  color: #181818;
+  font-weight: 700;
+}
+
+.message-focus {
+  color: #747474;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.two-column-stack {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
 }

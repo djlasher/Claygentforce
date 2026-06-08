@@ -3,49 +3,157 @@
     title="Claygentforce Scenario Launcher"
     icon-name="standard:work_plan"
   >
-    <div class="launcher-shell slds-p-horizontal_medium slds-p-bottom_medium">
-      <section class="launcher-intro" aria-labelledby="launcher-intro-heading">
-        <h2 id="launcher-intro-heading" class="launcher-heading">
-          Salesforce delivery simulation home
-        </h2>
-        <p class="launcher-copy">
-          Orient learners to implemented scenarios, the Salesforce surfaces they
-          use, and the delivery judgment each scenario is designed to practice.
-        </p>
-        <ol class="principle-list">
+    <div class="delivery-room slds-p-horizontal_medium slds-p-bottom_medium">
+      <section class="hero-panel" aria-labelledby="product-orientation-heading">
+        <div>
+          <p class="eyebrow">Static Salesforce delivery simulator</p>
+          <h2 id="product-orientation-heading" class="hero-heading">
+            Claygentforce Delivery Room
+          </h2>
+          <p class="hero-copy">
+            Claygentforce helps learners practice Salesforce delivery judgment
+            through real metadata, scenario context, and simulated delivery-team
+            interpretation. The current experience is a static/read-only
+            delivery room, not a chatbot.
+          </p>
+        </div>
+        <ol class="principle-list" aria-label="Guiding principles">
           <template for:each={guidingPrinciples} for:item="principle">
             <li key={principle}>{principle}</li>
           </template>
         </ol>
       </section>
 
-      <section class="scenario-grid" aria-label="Scenario cards">
-        <template for:each={scenarios} for:item="scenario">
-          <article key={scenario.name} class="scenario-card">
-            <div class="scenario-card-header">
-              <p class="scenario-name">{scenario.name}</p>
-              <span class="scenario-status">{scenario.status}</span>
+      <section class="section-panel" aria-labelledby="snapshot-heading">
+        <div class="section-header">
+          <p class="eyebrow">Current workspace</p>
+          <h3 id="snapshot-heading" class="section-heading">
+            Delivery Room Snapshot
+          </h3>
+        </div>
+        <dl class="snapshot-grid">
+          <template for:each={deliverySnapshot} for:item="item">
+            <div key={item.label} class="snapshot-item">
+              <dt>{item.label}</dt>
+              <dd>{item.value}</dd>
             </div>
-            <dl class="scenario-detail-list">
-              <template for:each={scenario.details} for:item="detail">
-                <div key={detail.label} class="scenario-detail-item">
-                  <dt>{detail.label}</dt>
-                  <dd>{detail.value}</dd>
-                </div>
-              </template>
-            </dl>
-          </article>
-        </template>
+          </template>
+        </dl>
       </section>
 
-      <section class="static-note" aria-labelledby="static-note-heading">
-        <h3 id="static-note-heading" class="static-note-heading">
-          Current Simulation Mode
-        </h3>
-        <p class="launcher-copy">
-          Current simulations are static and read-only. This launcher does not
-          navigate, score learners, persist progress, call Apex, invoke external
-          AI, or use orchestration.
+      <section class="section-panel" aria-labelledby="roles-heading">
+        <div class="section-header">
+          <p class="eyebrow">Simulated team</p>
+          <h3 id="roles-heading" class="section-heading">
+            Delivery Team Roles
+          </h3>
+        </div>
+        <div class="role-grid">
+          <template for:each={deliveryRoles} for:item="role">
+            <article key={role.name} class="role-card">
+              <p class="role-name">{role.name}</p>
+              <p class="role-focus">{role.focus}</p>
+            </article>
+          </template>
+        </div>
+      </section>
+
+      <section class="section-panel" aria-labelledby="board-heading">
+        <div class="section-header">
+          <p class="eyebrow">Scenario portfolio</p>
+          <h3 id="board-heading" class="section-heading">
+            Current Scenario Board
+          </h3>
+        </div>
+        <div class="scenario-grid">
+          <template for:each={scenarios} for:item="scenario">
+            <article key={scenario.name} class="scenario-card">
+              <div class="scenario-card-header">
+                <p class="scenario-name">{scenario.name}</p>
+                <span class="scenario-status">{scenario.status}</span>
+              </div>
+              <dl class="scenario-detail-list">
+                <template for:each={scenario.details} for:item="detail">
+                  <div key={detail.label} class="scenario-detail-item">
+                    <dt>{detail.label}</dt>
+                    <dd>{detail.value}</dd>
+                  </div>
+                </template>
+              </dl>
+            </article>
+          </template>
+        </div>
+      </section>
+
+      <section class="section-panel" aria-labelledby="learning-path-heading">
+        <div class="section-header">
+          <p class="eyebrow">Scenario 001</p>
+          <h3 id="learning-path-heading" class="section-heading">
+            Learning Path
+          </h3>
+        </div>
+        <ol class="path-list">
+          <template for:each={learningPath} for:item="step">
+            <li key={step}>{step}</li>
+          </template>
+        </ol>
+      </section>
+
+      <section class="section-panel" aria-labelledby="transcript-heading">
+        <div class="section-header">
+          <p class="eyebrow">Preview</p>
+          <h3 id="transcript-heading" class="section-heading">
+            Static Delivery Room Transcript
+          </h3>
+        </div>
+        <div class="transcript-list">
+          <template for:each={transcriptPreview} for:item="message">
+            <article key={message.role} class="transcript-message">
+              <div class="message-meta">
+                <p class="message-role">{message.role}</p>
+                <span class="message-focus">{message.focus}</span>
+              </div>
+              <p class="message-copy">{message.text}</p>
+            </article>
+          </template>
+        </div>
+      </section>
+
+      <div class="two-column-stack">
+        <section class="section-panel" aria-labelledby="deferred-heading">
+          <div class="section-header">
+            <p class="eyebrow">Later phases</p>
+            <h3 id="deferred-heading" class="section-heading">
+              Deferred Capabilities
+            </h3>
+          </div>
+          <ul class="compact-list">
+            <template for:each={deferredCapabilities} for:item="capability">
+              <li key={capability}>{capability}</li>
+            </template>
+          </ul>
+        </section>
+
+        <section class="section-panel" aria-labelledby="constraints-heading">
+          <div class="section-header">
+            <p class="eyebrow">Current mode</p>
+            <h3 id="constraints-heading" class="section-heading">
+              Current Constraints
+            </h3>
+          </div>
+          <ul class="compact-list">
+            <template for:each={currentConstraints} for:item="constraint">
+              <li key={constraint}>{constraint}</li>
+            </template>
+          </ul>
+        </section>
+      </div>
+
+      <section class="static-note" aria-label="Static simulation note">
+        <p>
+          This delivery room is intentionally static and read-only. It uses
+          Scenario 001 as the first implemented example while Scenario 002 stays
+          a placeholder for a future vertical slice.
         </p>
       </section>
     </div>
