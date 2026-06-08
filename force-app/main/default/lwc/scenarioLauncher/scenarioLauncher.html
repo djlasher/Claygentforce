@@ -67,7 +67,7 @@
         </div>
         <div class="scenario-grid">
           <template for:each={scenarios} for:item="scenario">
-            <article key={scenario.name} class="scenario-card">
+            <article key={scenario.key} class="scenario-card">
               <div class="scenario-card-header">
                 <p class="scenario-name">{scenario.name}</p>
                 <span class="scenario-status">{scenario.status}</span>
