@@ -50,6 +50,29 @@
           <span class="section-badge">Static Preview</span>
         </div>
 
+        <div class="session-shell" aria-label="Current simulation session">
+          <dl class="session-summary">
+            <template for:each={simulationSessionSummary} for:item="item">
+              <div key={item.label} class="session-summary-item">
+                <dt>{item.label}</dt>
+                <dd>{item.value}</dd>
+              </div>
+            </template>
+          </dl>
+
+          <ol class="phase-strip" aria-label="Simulation progress">
+            <template for:each={simulationPhases} for:item="phase">
+              <li
+                key={phase.id}
+                class={phase.cssClass}
+                aria-current={phase.ariaCurrent}
+              >
+                {phase.label}
+              </li>
+            </template>
+          </ol>
+        </div>
+
         <div
           class="chat-window"
           aria-label="Static delivery room conversation preview"
@@ -127,7 +150,60 @@
               </div>
             </article>
           </template>
+          <template if:true={hasSelectedSimulationNote}>
+            <article class="chat-message" data-type="simulationNote">
+              <div class="chat-avatar" aria-hidden="true">
+                {selectedSimulationNote.speaker}
+              </div>
+              <div class="chat-bubble">
+                <div class="chat-meta">
+                  <span class="chat-role">{selectedSimulationNote.role}</span>
+                  <span class="chat-label">Static guidance</span>
+                </div>
+                <p>{selectedSimulationNote.text}</p>
+              </div>
+            </article>
+          </template>
         </div>
+
+        <template if:true={hasSelectedEvidence}>
+          <section
+            class="evidence-panel"
+            aria-labelledby="evidence-panel-heading"
+          >
+            <div class="evidence-header">
+              <div>
+                <p class="eyebrow">Recommended validation evidence</p>
+                <h4 id="evidence-panel-heading" class="evidence-heading">
+                  {selectedChoiceLabel}
+                </h4>
+              </div>
+              <button
+                class="reset-preview-button"
+                type="button"
+                onclick={handleResetPreview}
+              >
+                Reset preview
+              </button>
+            </div>
+
+            <dl class="evidence-grid">
+              <div>
+                <dt>Recommended evidence</dt>
+                <dd>{selectedEvidence.recommendedEvidence}</dd>
+              </div>
+              <div>
+                <dt>Why it matters</dt>
+                <dd>{selectedEvidence.whyItMatters}</dd>
+              </div>
+              <div>
+                <dt>What not to claim yet</dt>
+                <dd>{selectedEvidence.whatNotToClaimYet}</dd>
+              </div>
+            </dl>
+          </section>
+        </template>
+
         <p class="chat-preview-note">{sectionSubtitles.chatPreviewNote}</p>
       </section>
 

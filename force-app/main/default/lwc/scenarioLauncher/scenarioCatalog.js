@@ -23,6 +23,33 @@ export const DELIVERY_ROOM_CATALOG = {
     }
   ],
 
+  simulationSession: {
+    scenario: "Case Escalation and Manager Visibility",
+    mode: "Local Static Simulation",
+    decisionPhase: "Learner Decision",
+    followUpPhase: "Follow-up Review",
+    defaultFocus: "Not selected yet"
+  },
+
+  simulationPhases: [
+    {
+      id: "intake",
+      label: "Intake"
+    },
+    {
+      id: "team-review",
+      label: "Team Review"
+    },
+    {
+      id: "learner-decision",
+      label: "Learner Decision"
+    },
+    {
+      id: "follow-up",
+      label: "Follow-up"
+    }
+  ],
+
   deliverySnapshot: [
     {
       label: "Current scenario",
@@ -311,6 +338,51 @@ export const DELIVERY_ROOM_CATALOG = {
       text: "Confirm the Open High-Risk Cases list stays actionable by including active high-risk Cases and excluding closed Cases.",
       learningNote:
         "Evidence: list view screenshots or notes for open flagged, closed flagged, and clean-path Cases."
+    }
+  },
+
+  simulationNotesByChoice: {
+    "flow-precedence": {
+      speaker: "SIM",
+      role: "Simulation note",
+      text: "Capture evidence that each Flow branch wins in the expected order before claiming the automation is release-ready."
+    },
+    "permission-visibility": {
+      speaker: "SIM",
+      role: "Simulation note",
+      text: "Capture access evidence with the intended support manager user before claiming visibility is correctly governed."
+    },
+    "list-view-accuracy": {
+      speaker: "SIM",
+      role: "Simulation note",
+      text: "Capture list view evidence across open flagged, closed flagged, and clean-path Cases before claiming the queue view is accurate."
+    }
+  },
+
+  validationEvidenceByChoice: {
+    "flow-precedence": {
+      recommendedEvidence:
+        "A compact test matrix covering closed clearing, manual override, Strategic customer, stale escalation, priority, and clean paths.",
+      whyItMatters:
+        "Precedence bugs can make the right Case visible for the wrong reason or leave stale high-risk values behind.",
+      whatNotToClaimYet:
+        "Do not claim full smoke-test completion until the paths are manually verified in the org."
+    },
+    "permission-visibility": {
+      recommendedEvidence:
+        "Permission set, field visibility, and list view access checked with the intended reviewer access model.",
+      whyItMatters:
+        "The scenario should teach normal Salesforce visibility, not hidden access shortcuts.",
+      whatNotToClaimYet:
+        "Do not claim production-ready access governance until profile and sharing assumptions are reviewed."
+    },
+    "list-view-accuracy": {
+      recommendedEvidence:
+        "List view results for open high-risk Cases, closed Cases, and Cases where criteria no longer match.",
+      whyItMatters:
+        "Managers need a focused queue view they can trust during operational review.",
+      whatNotToClaimYet:
+        "Do not claim queue accuracy until closed and clean-path records are checked in the target org."
     }
   },
 

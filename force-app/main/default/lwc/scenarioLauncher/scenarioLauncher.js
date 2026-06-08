@@ -60,6 +60,55 @@ export default class ScenarioLauncher extends LightningElement {
     });
   }
 
+  get simulationSessionSummary() {
+    const session = DELIVERY_ROOM_CATALOG.simulationSession;
+
+    return [
+      {
+        label: "Scenario",
+        value: session.scenario
+      },
+      {
+        label: "Mode",
+        value: session.mode
+      },
+      {
+        label: "Phase",
+        value: this.currentSimulationPhase
+      },
+      {
+        label: "Current focus",
+        value: this.selectedChoiceLabel
+      }
+    ];
+  }
+
+  get simulationPhases() {
+    const activePhase = this.selectedChoice ? "follow-up" : "learner-decision";
+    const completedPhases = this.selectedChoice
+      ? ["intake", "team-review", "learner-decision"]
+      : ["intake", "team-review"];
+
+    return DELIVERY_ROOM_CATALOG.simulationPhases.map((phase) => {
+      const isActive = phase.id === activePhase;
+      const isComplete = completedPhases.includes(phase.id);
+
+      return {
+        ...phase,
+        ariaCurrent: isActive ? "step" : null,
+        cssClass: `phase-step${isActive ? " phase-step-active" : ""}${
+          isComplete ? " phase-step-complete" : ""
+        }`
+      };
+    });
+  }
+
+  get currentSimulationPhase() {
+    const session = DELIVERY_ROOM_CATALOG.simulationSession;
+
+    return this.selectedChoice ? session.followUpPhase : session.decisionPhase;
+  }
+
   get selectedChoiceResponse() {
     return DELIVERY_ROOM_CATALOG.learnerChoiceResponses[this.selectedChoice];
   }
@@ -74,12 +123,37 @@ export default class ScenarioLauncher extends LightningElement {
     return this.selectedChoiceConfig?.learnerMessage;
   }
 
+  get selectedChoiceLabel() {
+    return (
+      this.selectedChoiceConfig?.label ||
+      DELIVERY_ROOM_CATALOG.simulationSession.defaultFocus
+    );
+  }
+
   get hasSelectedLearnerMessage() {
     return Boolean(this.selectedLearnerMessage);
   }
 
   get hasSelectedChoiceResponse() {
     return Boolean(this.selectedChoiceResponse);
+  }
+
+  get selectedSimulationNote() {
+    return DELIVERY_ROOM_CATALOG.simulationNotesByChoice[this.selectedChoice];
+  }
+
+  get hasSelectedSimulationNote() {
+    return Boolean(this.selectedSimulationNote);
+  }
+
+  get selectedEvidence() {
+    return DELIVERY_ROOM_CATALOG.validationEvidenceByChoice[
+      this.selectedChoice
+    ];
+  }
+
+  get hasSelectedEvidence() {
+    return Boolean(this.selectedEvidence);
   }
 
   get deferredCapabilities() {
@@ -92,5 +166,9 @@ export default class ScenarioLauncher extends LightningElement {
 
   handleChoiceSelect(event) {
     this.selectedChoice = event.currentTarget.dataset.choiceId;
+  }
+
+  handleResetPreview() {
+    this.selectedChoice = undefined;
   }
 }
