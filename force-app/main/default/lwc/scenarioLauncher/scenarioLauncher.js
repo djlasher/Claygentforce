@@ -2,6 +2,8 @@ import { LightningElement } from "lwc";
 import { DELIVERY_ROOM_CATALOG } from "./scenarioCatalog";
 
 export default class ScenarioLauncher extends LightningElement {
+  selectedChoice;
+
   get productSummary() {
     return DELIVERY_ROOM_CATALOG.productSummary;
   }
@@ -39,7 +41,31 @@ export default class ScenarioLauncher extends LightningElement {
   }
 
   get chatPreviewMessages() {
-    return DELIVERY_ROOM_CATALOG.chatPreviewMessages;
+    return DELIVERY_ROOM_CATALOG.chatPreviewMessages.map((message) => {
+      if (!message.choices) {
+        return message;
+      }
+
+      return {
+        ...message,
+        choices: message.choices.map((choice) => ({
+          ...choice,
+          ariaPressed: choice.id === this.selectedChoice ? "true" : "false",
+          cssClass:
+            choice.id === this.selectedChoice
+              ? "choice-button choice-button-selected"
+              : "choice-button"
+        }))
+      };
+    });
+  }
+
+  get selectedChoiceResponse() {
+    return DELIVERY_ROOM_CATALOG.learnerChoiceResponses[this.selectedChoice];
+  }
+
+  get hasSelectedChoiceResponse() {
+    return Boolean(this.selectedChoiceResponse);
   }
 
   get deferredCapabilities() {
@@ -48,5 +74,9 @@ export default class ScenarioLauncher extends LightningElement {
 
   get currentConstraints() {
     return DELIVERY_ROOM_CATALOG.currentConstraints;
+  }
+
+  handleChoiceSelect(event) {
+    this.selectedChoice = event.currentTarget.dataset.choiceId;
   }
 }

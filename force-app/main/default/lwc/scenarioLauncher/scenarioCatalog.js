@@ -271,12 +271,45 @@ export const DELIVERY_ROOM_CATALOG = {
       type: "learnerPrompt",
       text: "What should you validate next?",
       choices: [
-        "Flow precedence",
-        "Permission visibility",
-        "List view accuracy"
+        {
+          id: "flow-precedence",
+          label: "Flow precedence"
+        },
+        {
+          id: "permission-visibility",
+          label: "Permission visibility"
+        },
+        {
+          id: "list-view-accuracy",
+          label: "List view accuracy"
+        }
       ]
     }
   ],
+
+  learnerChoiceResponses: {
+    "flow-precedence": {
+      speaker: "QA",
+      role: "QA",
+      text: "Start by proving each precedence path in order: closed clearing, manual override, Strategic customer, stale escalation, then priority.",
+      learningNote:
+        "Evidence: a focused test matrix showing expected High Risk and High Risk Reason outcomes for each path."
+    },
+    "permission-visibility": {
+      speaker: "SE",
+      role: "Security",
+      text: "Validate that manager visibility comes from standard Case sharing plus the scenario permission set, not from hidden automation shortcuts.",
+      learningNote:
+        "Evidence: permission set access, field visibility, and list view access checked with the intended reviewer profile."
+    },
+    "list-view-accuracy": {
+      speaker: "SM",
+      role: "Support Manager",
+      text: "Confirm the Open High-Risk Cases list stays actionable by including active high-risk Cases and excluding closed Cases.",
+      learningNote:
+        "Evidence: list view screenshots or notes for open flagged, closed flagged, and clean-path Cases."
+    }
+  },
 
   deferredCapabilities: [
     {

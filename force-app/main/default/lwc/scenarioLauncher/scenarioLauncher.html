@@ -66,19 +66,48 @@
               <div class="chat-bubble">
                 <div class="chat-meta">
                   <span class="chat-role">{message.role}</span>
-                  <span class="chat-label">Preview-only</span>
+                  <span class="chat-label">Local static simulation</span>
                 </div>
                 <p>{message.text}</p>
                 <template if:true={message.choices}>
                   <div
                     class="choice-preview"
-                    aria-label="Display-only learner choices"
+                    aria-label="Bounded learner choices"
                   >
                     <template for:each={message.choices} for:item="choice">
-                      <span key={choice}>{choice}</span>
+                      <button
+                        key={choice.id}
+                        class={choice.cssClass}
+                        type="button"
+                        data-choice-id={choice.id}
+                        aria-pressed={choice.ariaPressed}
+                        onclick={handleChoiceSelect}
+                      >
+                        {choice.label}
+                      </button>
                     </template>
                   </div>
                 </template>
+              </div>
+            </article>
+          </template>
+          <template if:true={hasSelectedChoiceResponse}>
+            <article
+              class="chat-message chat-message-response"
+              data-type="agentFollowUp"
+            >
+              <div class="chat-avatar" aria-hidden="true">
+                {selectedChoiceResponse.speaker}
+              </div>
+              <div class="chat-bubble">
+                <div class="chat-meta">
+                  <span class="chat-role">{selectedChoiceResponse.role}</span>
+                  <span class="chat-label">Predefined response</span>
+                </div>
+                <p>{selectedChoiceResponse.text}</p>
+                <p class="learning-note">
+                  {selectedChoiceResponse.learningNote}
+                </p>
               </div>
             </article>
           </template>
