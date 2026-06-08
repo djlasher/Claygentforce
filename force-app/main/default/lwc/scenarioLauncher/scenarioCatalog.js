@@ -1,6 +1,6 @@
 export const DELIVERY_ROOM_CATALOG = {
   productSummary:
-    "A static Salesforce delivery-room dashboard for practicing implementation judgment before live agents, scoring, or orchestration are introduced.",
+    "A static Salesforce delivery-room preview for practicing implementation judgment before live agents, scoring, or orchestration are introduced.",
 
   guidingPrinciples: [
     "Real Salesforce implementation first",
@@ -54,6 +54,8 @@ export const DELIVERY_ROOM_CATALOG = {
       "Static role notes that preview the future delivery-room conversation.",
     chatPreview:
       "A compact static preview of the future chat-style delivery room.",
+    chatPreviewNote:
+      "Future versions will stream role messages and prompt learner choices one at a time. This preview is display-only.",
     deferred: "Capabilities intentionally held for later milestones.",
     constraints:
       "Current boundaries that keep this app source-driven and reviewable."

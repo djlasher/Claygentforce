@@ -11,10 +11,9 @@
             Claygentforce Delivery Room
           </h2>
           <p class="hero-copy">
-            Claygentforce helps learners practice Salesforce delivery judgment
-            through real metadata, scenario context, and simulated delivery-team
-            interpretation. The current experience is a static/read-only
-            delivery room, not a chatbot.
+            A compact delivery-team simulation surface for practicing Salesforce
+            implementation judgment with real metadata and static role-based
+            context.
           </p>
           <p class="hero-summary">{productSummary}</p>
         </div>
@@ -84,190 +83,199 @@
             </article>
           </template>
         </div>
+        <p class="chat-preview-note">{sectionSubtitles.chatPreviewNote}</p>
       </section>
 
-      <section
-        class="section-panel section-panel-emphasis"
-        aria-labelledby="snapshot-heading"
+      <div
+        class="supporting-dashboard"
+        aria-label="Supporting dashboard context"
       >
-        <div class="section-header section-header-row">
-          <div>
-            <p class="eyebrow">Current workspace</p>
-            <h3 id="snapshot-heading" class="section-heading">
-              Delivery Room Snapshot
-            </h3>
-            <p class="section-subtitle">{sectionSubtitles.snapshot}</p>
-          </div>
-          <span class="section-badge">Now Reviewing</span>
-        </div>
-        <dl class="snapshot-grid">
-          <template for:each={deliverySnapshot} for:item="item">
-            <div key={item.label} class="snapshot-item">
-              <dt>{item.label}</dt>
-              <dd>{item.value}</dd>
+        <section
+          class="section-panel section-panel-emphasis"
+          aria-labelledby="snapshot-heading"
+        >
+          <div class="section-header section-header-row">
+            <div>
+              <p class="eyebrow">Current workspace</p>
+              <h3 id="snapshot-heading" class="section-heading">
+                Delivery Room Snapshot
+              </h3>
+              <p class="section-subtitle">{sectionSubtitles.snapshot}</p>
             </div>
-          </template>
-        </dl>
-      </section>
-
-      <section class="section-panel" aria-labelledby="roles-heading">
-        <div class="section-header">
-          <p class="eyebrow">Simulated team</p>
-          <h3 id="roles-heading" class="section-heading">
-            Delivery Team Roles
-          </h3>
-          <p class="section-subtitle">{sectionSubtitles.roles}</p>
-        </div>
-        <div class="role-grid">
-          <template for:each={deliveryRoles} for:item="role">
-            <article key={role.name} class="role-card">
-              <p class="role-name">{role.name}</p>
-              <p class="role-focus">{role.focus}</p>
-            </article>
-          </template>
-        </div>
-      </section>
-
-      <section class="section-panel" aria-labelledby="board-heading">
-        <div class="section-header">
-          <p class="eyebrow">Scenario portfolio</p>
-          <h3 id="board-heading" class="section-heading">
-            Current Scenario Board
-          </h3>
-          <p class="section-subtitle">{sectionSubtitles.board}</p>
-        </div>
-        <div class="scenario-grid">
-          <template for:each={scenarios} for:item="scenario">
-            <article
-              key={scenario.key}
-              class="scenario-card"
-              data-status={scenario.statusTone}
-            >
-              <div class="scenario-card-header">
-                <div>
-                  <p class="scenario-name">{scenario.name}</p>
-                  <p class="scenario-summary">{scenario.summary}</p>
-                </div>
-                <span class="scenario-status" data-status={scenario.statusTone}>
-                  {scenario.status}
-                </span>
-              </div>
-
-              <div class="scenario-meta-grid">
-                <div>
-                  <span>Surface</span>
-                  <strong>{scenario.surface}</strong>
-                </div>
-                <div>
-                  <span>Phase</span>
-                  <strong>{scenario.phase}</strong>
-                </div>
-                <div>
-                  <span>Status</span>
-                  <strong>{scenario.implementationStatus}</strong>
-                </div>
-              </div>
-
-              <dl class="scenario-detail-list">
-                <template for:each={scenario.details} for:item="detail">
-                  <div key={detail.label} class="scenario-detail-item">
-                    <dt>{detail.label}</dt>
-                    <dd>{detail.value}</dd>
-                  </div>
-                </template>
-              </dl>
-            </article>
-          </template>
-        </div>
-      </section>
-
-      <section class="section-panel" aria-labelledby="learning-path-heading">
-        <div class="section-header">
-          <p class="eyebrow">Scenario 001</p>
-          <h3 id="learning-path-heading" class="section-heading">
-            Learning Path
-          </h3>
-          <p class="section-subtitle">{sectionSubtitles.learningPath}</p>
-        </div>
-        <ol class="path-list">
-          <template for:each={learningPath} for:item="step">
-            <li key={step}>{step}</li>
-          </template>
-        </ol>
-      </section>
-
-      <section class="section-panel" aria-labelledby="transcript-heading">
-        <div class="section-header">
-          <p class="eyebrow">Preview</p>
-          <h3 id="transcript-heading" class="section-heading">
-            Static Delivery Room Transcript
-          </h3>
-          <p class="section-subtitle">{sectionSubtitles.transcript}</p>
-        </div>
-        <div class="transcript-list">
-          <template for:each={transcriptPreview} for:item="message">
-            <article key={message.role} class="transcript-message">
-              <div class="message-meta">
-                <div>
-                  <p class="message-role">{message.role}</p>
-                  <span class="message-focus">{message.focus}</span>
-                </div>
-                <span class="message-label">{message.label}</span>
-              </div>
-              <p class="message-copy">{message.text}</p>
-            </article>
-          </template>
-        </div>
-      </section>
-
-      <div class="two-column-stack">
-        <section class="section-panel" aria-labelledby="deferred-heading">
-          <div class="section-header">
-            <p class="eyebrow">Later phases</p>
-            <h3 id="deferred-heading" class="section-heading">
-              Deferred Capabilities
-            </h3>
-            <p class="section-subtitle">{sectionSubtitles.deferred}</p>
+            <span class="section-badge">Now Reviewing</span>
           </div>
-          <ul class="milestone-list">
-            <template for:each={deferredCapabilities} for:item="capability">
-              <li key={capability.label}>
-                <span>{capability.label}</span>
-                <strong>{capability.milestone}</strong>
-              </li>
+          <dl class="snapshot-grid">
+            <template for:each={deliverySnapshot} for:item="item">
+              <div key={item.label} class="snapshot-item">
+                <dt>{item.label}</dt>
+                <dd>{item.value}</dd>
+              </div>
             </template>
-          </ul>
+          </dl>
         </section>
 
-        <section
-          class="section-panel current-mode-panel"
-          aria-labelledby="constraints-heading"
-        >
+        <section class="section-panel" aria-labelledby="roles-heading">
           <div class="section-header">
-            <p class="eyebrow">Current mode</p>
-            <h3 id="constraints-heading" class="section-heading">
-              Current Constraints
+            <p class="eyebrow">Simulated team</p>
+            <h3 id="roles-heading" class="section-heading">
+              Delivery Team Roles
             </h3>
-            <p class="section-subtitle">{sectionSubtitles.constraints}</p>
+            <p class="section-subtitle">{sectionSubtitles.roles}</p>
           </div>
-          <ul class="constraint-list">
-            <template for:each={currentConstraints} for:item="constraint">
-              <li key={constraint.label}>
-                <span>{constraint.label}</span>
-                <strong>{constraint.reason}</strong>
-              </li>
+          <div class="role-grid">
+            <template for:each={deliveryRoles} for:item="role">
+              <article key={role.name} class="role-card">
+                <p class="role-name">{role.name}</p>
+                <p class="role-focus">{role.focus}</p>
+              </article>
             </template>
-          </ul>
+          </div>
+        </section>
+
+        <section class="section-panel" aria-labelledby="board-heading">
+          <div class="section-header">
+            <p class="eyebrow">Scenario portfolio</p>
+            <h3 id="board-heading" class="section-heading">
+              Current Scenario Board
+            </h3>
+            <p class="section-subtitle">{sectionSubtitles.board}</p>
+          </div>
+          <div class="scenario-grid">
+            <template for:each={scenarios} for:item="scenario">
+              <article
+                key={scenario.key}
+                class="scenario-card"
+                data-status={scenario.statusTone}
+              >
+                <div class="scenario-card-header">
+                  <div>
+                    <p class="scenario-name">{scenario.name}</p>
+                    <p class="scenario-summary">{scenario.summary}</p>
+                  </div>
+                  <span
+                    class="scenario-status"
+                    data-status={scenario.statusTone}
+                  >
+                    {scenario.status}
+                  </span>
+                </div>
+
+                <div class="scenario-meta-grid">
+                  <div>
+                    <span>Surface</span>
+                    <strong>{scenario.surface}</strong>
+                  </div>
+                  <div>
+                    <span>Phase</span>
+                    <strong>{scenario.phase}</strong>
+                  </div>
+                  <div>
+                    <span>Status</span>
+                    <strong>{scenario.implementationStatus}</strong>
+                  </div>
+                </div>
+
+                <dl class="scenario-detail-list">
+                  <template for:each={scenario.details} for:item="detail">
+                    <div key={detail.label} class="scenario-detail-item">
+                      <dt>{detail.label}</dt>
+                      <dd>{detail.value}</dd>
+                    </div>
+                  </template>
+                </dl>
+              </article>
+            </template>
+          </div>
+        </section>
+
+        <section class="section-panel" aria-labelledby="learning-path-heading">
+          <div class="section-header">
+            <p class="eyebrow">Scenario 001</p>
+            <h3 id="learning-path-heading" class="section-heading">
+              Learning Path
+            </h3>
+            <p class="section-subtitle">{sectionSubtitles.learningPath}</p>
+          </div>
+          <ol class="path-list">
+            <template for:each={learningPath} for:item="step">
+              <li key={step}>{step}</li>
+            </template>
+          </ol>
+        </section>
+
+        <section class="section-panel" aria-labelledby="transcript-heading">
+          <div class="section-header">
+            <p class="eyebrow">Preview</p>
+            <h3 id="transcript-heading" class="section-heading">
+              Static Delivery Room Transcript
+            </h3>
+            <p class="section-subtitle">{sectionSubtitles.transcript}</p>
+          </div>
+          <div class="transcript-list">
+            <template for:each={transcriptPreview} for:item="message">
+              <article key={message.role} class="transcript-message">
+                <div class="message-meta">
+                  <div>
+                    <p class="message-role">{message.role}</p>
+                    <span class="message-focus">{message.focus}</span>
+                  </div>
+                  <span class="message-label">{message.label}</span>
+                </div>
+                <p class="message-copy">{message.text}</p>
+              </article>
+            </template>
+          </div>
+        </section>
+
+        <div class="two-column-stack">
+          <section class="section-panel" aria-labelledby="deferred-heading">
+            <div class="section-header">
+              <p class="eyebrow">Later phases</p>
+              <h3 id="deferred-heading" class="section-heading">
+                Deferred Capabilities
+              </h3>
+              <p class="section-subtitle">{sectionSubtitles.deferred}</p>
+            </div>
+            <ul class="milestone-list">
+              <template for:each={deferredCapabilities} for:item="capability">
+                <li key={capability.label}>
+                  <span>{capability.label}</span>
+                  <strong>{capability.milestone}</strong>
+                </li>
+              </template>
+            </ul>
+          </section>
+
+          <section
+            class="section-panel current-mode-panel"
+            aria-labelledby="constraints-heading"
+          >
+            <div class="section-header">
+              <p class="eyebrow">Current mode</p>
+              <h3 id="constraints-heading" class="section-heading">
+                Current Constraints
+              </h3>
+              <p class="section-subtitle">{sectionSubtitles.constraints}</p>
+            </div>
+            <ul class="constraint-list">
+              <template for:each={currentConstraints} for:item="constraint">
+                <li key={constraint.label}>
+                  <span>{constraint.label}</span>
+                  <strong>{constraint.reason}</strong>
+                </li>
+              </template>
+            </ul>
+          </section>
+        </div>
+
+        <section class="static-note" aria-label="Static simulation note">
+          <p>
+            This delivery room is intentionally static and read-only. It uses
+            Scenario 001 as the first implemented example while Scenario 002
+            stays a placeholder for a future vertical slice.
+          </p>
         </section>
       </div>
-
-      <section class="static-note" aria-label="Static simulation note">
-        <p>
-          This delivery room is intentionally static and read-only. It uses
-          Scenario 001 as the first implemented example while Scenario 002 stays
-          a placeholder for a future vertical slice.
-        </p>
-      </section>
     </div>
   </lightning-card>
 </template>
