@@ -45,6 +45,7 @@ Each scenario should include:
 - `SECURITY_REVIEW.md`
 - `DEPLOYMENT_REVIEW.md`
 - `RETROSPECTIVE.md`
+- `SIMULATION_EXECUTION_PROMPT.md`
 
 These files represent the lifecycle of a realistic Salesforce delivery simulation.
 
@@ -66,6 +67,8 @@ At minimum, each scenario should make it possible to summarize:
 - deferred capabilities or future live-agent opportunities
 
 Scenario 001 is the implemented MVP reference. Scenario 002 and later scenarios should stay placeholders until their business problem and learning purpose are clear.
+
+Use `SIMULATION_EXECUTION_PROMPT.md` when manually or AI-assisting a static scenario run. It should produce a Delivery Room-style transcript and run artifact summary from existing scenario files without claiming live org validation.
 
 ---
 

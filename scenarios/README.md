@@ -12,21 +12,23 @@ Each scenario should live in its own numbered folder.
 
 Example:
 
+```text
 Claygentforce/
-scenarios/
-001-case-escalation-manager-visibility/
-SCENARIO_BRIEF.md
-STAKEHOLDER_INTAKE.md
-ACCEPTANCE_CRITERIA.md
-ARCHITECTURE_DECISION.md
-QA_REVIEW.md
-SECURITY_REVIEW.md
-DEPLOYMENT_REVIEW.md
-RETROSPECTIVE.md
-IMPLEMENTATION_PLAN.md
-METADATA_BUILD_NOTES.md
-FLOW_DESIGN.md
-SMOKE_TEST_CHECKLIST.md
+  scenarios/
+    001-case-escalation-manager-visibility/
+      SCENARIO_BRIEF.md
+      STAKEHOLDER_INTAKE.md
+      ACCEPTANCE_CRITERIA.md
+      ARCHITECTURE_DECISION.md
+      QA_REVIEW.md
+      SECURITY_REVIEW.md
+      DEPLOYMENT_REVIEW.md
+      RETROSPECTIVE.md
+      IMPLEMENTATION_PLAN.md
+      METADATA_BUILD_NOTES.md
+      FLOW_DESIGN.md
+      SMOKE_TEST_CHECKLIST.md
+```
 
 ---
 
@@ -113,6 +115,12 @@ This file should define the metadata covered, preconditions, manual smoke test s
 
 It is especially useful once a scenario has real Salesforce metadata, UI, permissions, automation, or LWC behavior that must work together.
 
+### SIMULATION_EXECUTION_PROMPT.md
+
+Defines a reusable prompt for running static, artifact-based scenario simulations.
+
+This file should tell an AI assistant what scenario files to read, which delivery roles to simulate, how to produce a Delivery Room transcript, and how to avoid inventing org validation or test results.
+
 ---
 
 ## Scenario Run Logs
@@ -123,10 +131,12 @@ Run logs capture specific manual, guided, or simulated executions of a scenario 
 
 Example structure:
 
+```text
 scenarios/
-001-case-escalation-manager-visibility/
-runs/
-2026-05-23-agent-smoke-test001.md
+  001-case-escalation-manager-visibility/
+    runs/
+      2026-05-23-agent-smoke-test001.md
+```
 
 Run logs are useful for:
 
