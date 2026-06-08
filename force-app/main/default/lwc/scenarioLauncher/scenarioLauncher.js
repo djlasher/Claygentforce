@@ -64,6 +64,20 @@ export default class ScenarioLauncher extends LightningElement {
     return DELIVERY_ROOM_CATALOG.learnerChoiceResponses[this.selectedChoice];
   }
 
+  get selectedChoiceConfig() {
+    return DELIVERY_ROOM_CATALOG.chatPreviewMessages
+      .find((message) => message.choices)
+      ?.choices.find((choice) => choice.id === this.selectedChoice);
+  }
+
+  get selectedLearnerMessage() {
+    return this.selectedChoiceConfig?.learnerMessage;
+  }
+
+  get hasSelectedLearnerMessage() {
+    return Boolean(this.selectedLearnerMessage);
+  }
+
   get hasSelectedChoiceResponse() {
     return Boolean(this.selectedChoiceResponse);
   }

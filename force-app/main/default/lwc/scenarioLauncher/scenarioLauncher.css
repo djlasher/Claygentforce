@@ -191,6 +191,10 @@
   margin-top: 0.25rem;
 }
 
+.chat-message-learner {
+  margin-top: 0.125rem;
+}
+
 .chat-message-response {
   margin-top: 0.125rem;
 }
@@ -216,6 +220,12 @@
   color: #181818;
 }
 
+.chat-message[data-type="learnerChoice"] .chat-avatar {
+  background: #f3f3f3;
+  border-color: #706e6b;
+  color: #181818;
+}
+
 .chat-message[data-type="agentFollowUp"] .chat-avatar {
   background: #e3fcef;
   border-color: #91db8b;
@@ -236,6 +246,12 @@
   background: #ffffff;
   border-color: #1b5297;
   border-left: 0.25rem solid #1b5297;
+}
+
+.chat-message[data-type="learnerChoice"] .chat-bubble {
+  background: #fdfdfd;
+  border-color: #706e6b;
+  border-left: 0.25rem solid #706e6b;
 }
 
 .chat-message[data-type="agentFollowUp"] .chat-bubble {

@@ -273,15 +273,18 @@ export const DELIVERY_ROOM_CATALOG = {
       choices: [
         {
           id: "flow-precedence",
-          label: "Flow precedence"
+          label: "Flow precedence",
+          learnerMessage: "I would validate Flow precedence next."
         },
         {
           id: "permission-visibility",
-          label: "Permission visibility"
+          label: "Permission visibility",
+          learnerMessage: "I would validate permission visibility next."
         },
         {
           id: "list-view-accuracy",
-          label: "List view accuracy"
+          label: "List view accuracy",
+          learnerMessage: "I would validate list view accuracy next."
         }
       ]
     }

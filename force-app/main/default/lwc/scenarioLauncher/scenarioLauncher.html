@@ -91,6 +91,22 @@
               </div>
             </article>
           </template>
+          <template if:true={hasSelectedLearnerMessage}>
+            <article
+              class="chat-message chat-message-learner"
+              data-type="learnerChoice"
+              aria-label="Selected learner choice"
+            >
+              <div class="chat-avatar" aria-hidden="true">You</div>
+              <div class="chat-bubble">
+                <div class="chat-meta">
+                  <span class="chat-role">Learner</span>
+                  <span class="chat-label">Selected choice</span>
+                </div>
+                <p>{selectedLearnerMessage}</p>
+              </div>
+            </article>
+          </template>
           <template if:true={hasSelectedChoiceResponse}>
             <article
               class="chat-message chat-message-response"
