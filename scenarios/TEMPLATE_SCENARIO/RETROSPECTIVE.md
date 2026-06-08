@@ -151,6 +151,18 @@ Future versions could introduce:
 
 ---
 
+## Delivery Room Follow-Up
+
+Capture reusable outputs that may feed the generalized Delivery Room or later role-agent integrations.
+
+- Catalog summary update: [what should change in the scenario catalog]
+- Static transcript candidates: [role messages worth preserving]
+- Learner path updates: [steps to add, remove, or clarify]
+- Future branching ideas: [non-persistent decisions or later interactive paths]
+- Live-agent opportunities: [roles that would benefit from dynamic responses later]
+
+---
+
 ## Simulation Outcome Examples
 
 Possible successful outcomes:

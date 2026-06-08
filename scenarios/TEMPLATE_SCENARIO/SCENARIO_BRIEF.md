@@ -108,6 +108,18 @@ By the end of the scenario, the learner should be able to explain:
 
 ---
 
+## Delivery Room Summary
+
+Use this section to support static scenario catalog and Delivery Room views.
+
+- Scenario status: [Planned / Draft / Implemented MVP / Deferred]
+- Salesforce surface: [record page / app page / Flow / report / integration / TBD]
+- Skill focus: [primary delivery skill]
+- Implementation status: [not started / source planned / metadata implemented / validation pending]
+- Learner role: [admin / developer / architect / delivery lead / mixed]
+
+---
+
 ## Scenario Boundaries
 
 Define what is in scope and out of scope.
@@ -145,6 +157,23 @@ Recommended sequence:
 11. Learner completes retrospective.
 
 Adjust only if the scenario has a clear reason to use a different flow.
+
+---
+
+## Static Transcript Preview Candidates
+
+Capture short role-style notes that could later appear in the Delivery Room.
+
+- BA: [requirements or ambiguity note]
+- Architect: [design tradeoff note]
+- Admin/Developer: [implementation note]
+- QA: [test or regression note]
+- Security: [access or visibility note]
+- DevOps: [release or validation note]
+- Support Manager: [operational impact note]
+- Product Owner / Stakeholder: [scope or business value note]
+
+Keep these static, scenario-driven, and concise. Live role agents can expand on them later.
 
 ---
 

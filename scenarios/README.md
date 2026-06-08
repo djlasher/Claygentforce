@@ -13,20 +13,20 @@ Each scenario should live in its own numbered folder.
 Example:
 
 Claygentforce/
-  scenarios/
-    001-case-escalation-manager-visibility/
-      SCENARIO_BRIEF.md
-      STAKEHOLDER_INTAKE.md
-      ACCEPTANCE_CRITERIA.md
-      ARCHITECTURE_DECISION.md
-      QA_REVIEW.md
-      SECURITY_REVIEW.md
-      DEPLOYMENT_REVIEW.md
-      RETROSPECTIVE.md
-      IMPLEMENTATION_PLAN.md
-      METADATA_BUILD_NOTES.md
-      FLOW_DESIGN.md
-      SMOKE_TEST_CHECKLIST.md
+scenarios/
+001-case-escalation-manager-visibility/
+SCENARIO_BRIEF.md
+STAKEHOLDER_INTAKE.md
+ACCEPTANCE_CRITERIA.md
+ARCHITECTURE_DECISION.md
+QA_REVIEW.md
+SECURITY_REVIEW.md
+DEPLOYMENT_REVIEW.md
+RETROSPECTIVE.md
+IMPLEMENTATION_PLAN.md
+METADATA_BUILD_NOTES.md
+FLOW_DESIGN.md
+SMOKE_TEST_CHECKLIST.md
 
 ---
 
@@ -124,9 +124,9 @@ Run logs capture specific manual, guided, or simulated executions of a scenario 
 Example structure:
 
 scenarios/
-  001-case-escalation-manager-visibility/
-    runs/
-      2026-05-23-agent-smoke-test001.md
+001-case-escalation-manager-visibility/
+runs/
+2026-05-23-agent-smoke-test001.md
 
 Run logs are useful for:
 
@@ -155,7 +155,23 @@ Recommended run log contents:
 - missing artifacts
 - recommended follow-up changes
 - whether core scenario files should be updated
-  
+
+---
+
+## Delivery Room Alignment
+
+Scenario artifacts should be reusable by the static Delivery Room experience.
+
+Each scenario should provide enough structured context to support:
+
+- scenario catalog cards
+- delivery role summaries
+- learner path steps
+- static transcript previews
+- future role-agent prompts or run transcripts
+
+Scenario 001 is the implemented MVP example. Scenario 002 should remain a placeholder until its business problem, Salesforce surface, and learning goals are intentionally selected.
+
 ---
 
 ## Scenario Design Principles

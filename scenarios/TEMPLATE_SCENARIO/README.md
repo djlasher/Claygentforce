@@ -50,6 +50,25 @@ These files represent the lifecycle of a realistic Salesforce delivery simulatio
 
 ---
 
+## Delivery Room Readiness
+
+When a scenario is created from this template, capture enough reusable structure to support the static Delivery Room home surface and future scenario catalog entries.
+
+At minimum, each scenario should make it possible to summarize:
+
+- scenario name and status
+- Salesforce surface
+- skill focus
+- implementation status
+- learner path
+- delivery-team roles involved
+- static transcript preview candidates
+- deferred capabilities or future live-agent opportunities
+
+Scenario 001 is the implemented MVP reference. Scenario 002 and later scenarios should stay placeholders until their business problem and learning purpose are clear.
+
+---
+
 ## Template Usage Rules
 
 When using this template:
@@ -61,6 +80,7 @@ When using this template:
 - include tradeoffs and risks
 - include QA, security, and deployment considerations
 - preserve retrospective learning
+- preserve enough role-specific context to power static Delivery Room summaries and later live-agent prompts
 
 Do not create scenarios that are only quizzes or feature demos.
 
@@ -80,6 +100,7 @@ Before committing a new scenario, confirm:
 - security review includes access and visibility concerns
 - deployment review includes dependencies and validation
 - retrospective captures lessons and possible consequences
+- scenario has enough summary context for the Delivery Room catalog
 
 ---
 
