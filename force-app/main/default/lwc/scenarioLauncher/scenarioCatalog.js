@@ -1,8 +1,26 @@
 export const DELIVERY_ROOM_CATALOG = {
+  productSummary:
+    "A static Salesforce delivery-room dashboard for practicing implementation judgment before live agents, scoring, or orchestration are introduced.",
+
   guidingPrinciples: [
     "Real Salesforce implementation first",
     "Simulated delivery-team intelligence second",
     "Live agents third"
+  ],
+
+  modeHighlights: [
+    {
+      label: "Mode",
+      value: "Static Simulation"
+    },
+    {
+      label: "Implementation",
+      value: "Salesforce Metadata + LWC"
+    },
+    {
+      label: "Orchestration",
+      value: "Not Enabled"
+    }
   ],
 
   deliverySnapshot: [
@@ -23,6 +41,21 @@ export const DELIVERY_ROOM_CATALOG = {
       value: "Static delivery room with real Salesforce metadata"
     }
   ],
+
+  sectionSubtitles: {
+    snapshot: "A quick read on what the learner is reviewing right now.",
+    roles:
+      "The reusable delivery-team perspectives that shape scenario review.",
+    board:
+      "Implemented and planned scenario surfaces for the simulator roadmap.",
+    learningPath:
+      "The learner arc for Scenario 001 from intake through tradeoff reflection.",
+    transcript:
+      "Static role notes that preview the future delivery-room conversation.",
+    deferred: "Capabilities intentionally held for later milestones.",
+    constraints:
+      "Current boundaries that keep this app source-driven and reviewable."
+  },
 
   deliveryRoles: [
     {
@@ -64,9 +97,13 @@ export const DELIVERY_ROOM_CATALOG = {
       key: "scenario-001",
       name: "Scenario 001: Case Escalation and Manager Visibility",
       status: "Implemented MVP",
+      statusTone: "implemented",
       surface: "Case record page",
       skillFocus: "Escalation criteria, manager visibility, delivery tradeoffs",
       implementationStatus: "Real Salesforce metadata and static simulation",
+      phase: "Validation hardening",
+      summary:
+        "A real Case automation slice with static delivery-team interpretation.",
       details: [
         {
           label: "Salesforce surface",
@@ -96,9 +133,12 @@ export const DELIVERY_ROOM_CATALOG = {
       key: "scenario-002",
       name: "Scenario 002: To Be Defined",
       status: "Placeholder / Planned",
+      statusTone: "planned",
       surface: "TBD",
       skillFocus: "TBD",
       implementationStatus: "Not yet implemented",
+      phase: "Not selected",
+      summary: "Reserved for the next Salesforce delivery problem.",
       details: [
         {
           label: "Skill focus",
@@ -118,9 +158,13 @@ export const DELIVERY_ROOM_CATALOG = {
       key: "future-scenario",
       name: "Future Scenario",
       status: "Placeholder / Planned",
+      statusTone: "deferred",
       surface: "TBD",
       skillFocus: "TBD",
       implementationStatus: "Reserved for a later vertical slice",
+      phase: "Future milestone",
+      summary:
+        "Space for additional vertical slices once the pattern stabilizes.",
       details: [
         {
           label: "Skill focus",
@@ -151,45 +195,86 @@ export const DELIVERY_ROOM_CATALOG = {
     {
       role: "BA",
       focus: "Intake clarity",
+      label: "Simulated review note",
       text: "Confirm whether manager visibility is only for high-risk open Cases or if stakeholder exceptions should be captured too."
     },
     {
       role: "Architect",
       focus: "Automation precedence",
+      label: "Simulated review note",
       text: "The Flow should keep manual override, Strategic customer, stale escalation, and priority criteria in a predictable order."
     },
     {
       role: "QA",
       focus: "Regression watch",
+      label: "Simulated review note",
       text: "Test clearing behavior when criteria stop matching, especially after override, customer tier, and priority changes."
     },
     {
       role: "Security",
       focus: "Access model",
+      label: "Simulated review note",
       text: "Visibility should come from normal Case sharing plus the scenario permission set, not hidden bypass logic."
     },
     {
       role: "Support Manager",
       focus: "Operational review",
+      label: "Simulated review note",
       text: "The Open High-Risk Cases list needs to stay focused enough that managers can act on it during queue review."
     }
   ],
 
   deferredCapabilities: [
-    "Live role agents",
-    "Scoring",
-    "Persistence",
-    "Dynamic branching",
-    "Agentforce integration",
-    "Data Cloud enrichment"
+    {
+      label: "Live role agents",
+      milestone: "Future delivery-room intelligence"
+    },
+    {
+      label: "Scoring",
+      milestone: "Learner assessment layer"
+    },
+    {
+      label: "Persistence",
+      milestone: "Saved scenario runs"
+    },
+    {
+      label: "Dynamic branching",
+      milestone: "Interactive learner choices"
+    },
+    {
+      label: "Agentforce integration",
+      milestone: "Bounded live-agent responses"
+    },
+    {
+      label: "Data Cloud enrichment",
+      milestone: "Customer context expansion"
+    }
   ],
 
   currentConstraints: [
-    "Static/read-only",
-    "No Apex",
-    "No external AI",
-    "No persistence",
-    "No chat input",
-    "No runtime orchestration"
+    {
+      label: "Static/read-only",
+      reason: "Keeps the MVP reviewable"
+    },
+    {
+      label: "No Apex",
+      reason: "Metadata-first implementation"
+    },
+    {
+      label: "No external AI",
+      reason: "No runtime service dependency"
+    },
+    {
+      label: "No persistence",
+      reason: "No stored learner state yet"
+    },
+    {
+      label: "No chat input",
+      reason: "Not a generic chatbot"
+    },
+    {
+      label: "No runtime orchestration",
+      reason: "Live agents come later"
+    }
   ]
 };
