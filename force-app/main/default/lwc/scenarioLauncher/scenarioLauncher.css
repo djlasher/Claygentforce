@@ -595,6 +595,7 @@
 .session-result-section,
 .outcome-summary-section,
 .team-review-section,
+.team-challenge-section,
 .manual-validation-section {
   border-left: 0.25rem solid #1b5297;
   padding-left: 0.75rem;
@@ -607,6 +608,10 @@
 
 .team-review-section {
   border-left-color: #706e6b;
+}
+
+.team-challenge-section {
+  border-left-color: #ba7700;
 }
 
 .session-result-heading {
@@ -660,7 +665,8 @@
 }
 
 .outcome-summary-copy strong + span,
-.team-review-card strong + span {
+.team-review-card strong + span,
+.team-challenge-card strong + span {
   margin-left: 0.25rem;
 }
 
@@ -682,6 +688,28 @@
 .team-review-role {
   color: #181818;
   font-weight: 700;
+}
+
+.team-challenge-card {
+  background: #fffaf1;
+  border: 1px solid #e4c46d;
+  border-radius: 0.25rem;
+  color: #2e2e2e;
+  display: grid;
+  gap: 0.4rem;
+  line-height: 1.45;
+  padding: 0.625rem;
+}
+
+.team-challenge-card p {
+  margin: 0;
+}
+
+.team-challenge-role {
+  align-items: center;
+  color: #181818;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .manual-validation-list {

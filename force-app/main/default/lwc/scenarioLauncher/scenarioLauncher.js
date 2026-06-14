@@ -324,6 +324,14 @@ export default class ScenarioLauncher extends LightningElement {
     return Boolean(this.selectedTeamReview);
   }
 
+  get selectedRolePushback() {
+    return this.activeFollowUpAction?.rolePushback;
+  }
+
+  get hasSelectedRolePushback() {
+    return Boolean(this.selectedRolePushback);
+  }
+
   get deferredCapabilities() {
     return DELIVERY_ROOM_CATALOG.deferredCapabilities;
   }

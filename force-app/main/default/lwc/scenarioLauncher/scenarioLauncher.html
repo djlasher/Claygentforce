@@ -284,6 +284,38 @@
               </div>
             </template>
 
+            <template if:true={hasSelectedRolePushback}>
+              <div
+                class="team-challenge-section"
+                aria-labelledby="team-challenge-heading"
+              >
+                <p class="eyebrow">Delivery challenge</p>
+                <h4 id="team-challenge-heading" class="session-result-heading">
+                  Team Challenge
+                </h4>
+                <div class="team-challenge-card">
+                  <div class="team-challenge-role">
+                    <span class="chat-avatar" aria-hidden="true">
+                      {selectedRolePushback.speaker}
+                    </span>
+                    <strong>{selectedRolePushback.role}</strong>
+                  </div>
+                  <p>
+                    <strong>Challenge:</strong>
+                    <span>{selectedRolePushback.challenge}</span>
+                  </p>
+                  <p>
+                    <strong>Risk if ignored:</strong>
+                    <span>{selectedRolePushback.riskIfIgnored}</span>
+                  </p>
+                  <p>
+                    <strong>Suggested response:</strong>
+                    <span>{selectedRolePushback.suggestedResponse}</span>
+                  </p>
+                </div>
+              </div>
+            </template>
+
             <template if:true={hasSelectedValidationChecklist}>
               <div
                 class="manual-validation-section"

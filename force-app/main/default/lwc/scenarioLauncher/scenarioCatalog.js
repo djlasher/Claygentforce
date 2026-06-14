@@ -61,6 +61,16 @@ const LEARNER_CHOICE_DETAILS = [
             "Do not let the matrix replace manual checks in the Salesforce org.",
           futureEvaluationType: "precedence-coverage"
         },
+        rolePushback: {
+          role: "QA",
+          speaker: "QA",
+          challenge:
+            "The matrix is useful, but how do we know update transitions behave correctly after a Case has already been flagged?",
+          riskIfIgnored:
+            "The Flow may look correct on create while stale High Risk values or reasons remain after later changes.",
+          suggestedResponse:
+            "Pair the precedence matrix with transition tests for override, Customer Tier, Priority, stale conditions, and closed Case clearing."
+        },
         evaluationPlaceholder:
           "Future evaluation can compare whether the learner chose broad precedence coverage before release claims."
       },
@@ -101,6 +111,16 @@ const LEARNER_CHOICE_DETAILS = [
           watchOut:
             "The team would still ask for transition coverage across override, tier, stale, priority, and closure changes.",
           futureEvaluationType: "clearing-coverage"
+        },
+        rolePushback: {
+          role: "Support Manager",
+          speaker: "SM",
+          challenge:
+            "Clearing is important, but will managers still have enough visibility into Cases that were previously escalated?",
+          riskIfIgnored:
+            "Active queues stay clean, but historical escalation context may be hard to explain later.",
+          suggestedResponse:
+            "Validate active clearing now and capture historical reporting as a future review question."
         },
         evaluationPlaceholder:
           "Future evaluation can reward learners who test records leaving escalation, not only records entering escalation."
@@ -168,6 +188,16 @@ const LEARNER_CHOICE_DETAILS = [
             "Do not rely on administrator access as proof that support managers can review the work.",
           futureEvaluationType: "access-governance"
         },
+        rolePushback: {
+          role: "Security",
+          speaker: "SE",
+          challenge:
+            "Is the reviewer user actually representative of the support manager audience?",
+          riskIfIgnored:
+            "Access may pass for the test user while real managers still cannot see fields, records, or the list view.",
+          suggestedResponse:
+            "Validate with the intended manager access model and separate permission set evidence from administrator access."
+        },
         evaluationPlaceholder:
           "Future evaluation can push back when learners validate only as System Administrator."
       },
@@ -207,6 +237,16 @@ const LEARNER_CHOICE_DETAILS = [
           watchOut:
             "The team would still ask whether sharing assumptions match the real support organization.",
           futureEvaluationType: "manager-visibility"
+        },
+        rolePushback: {
+          role: "Security",
+          speaker: "SE",
+          challenge:
+            "Manager access looks useful, but which access path is actually granting visibility?",
+          riskIfIgnored:
+            "The release may depend on broad or accidental access instead of normal Case sharing and the scenario permission set.",
+          suggestedResponse:
+            "Document the sharing and permission assumptions while validating the list view and Case fields."
         },
         evaluationPlaceholder:
           "Future evaluation can distinguish implementation validation from persona-based visibility validation."
@@ -276,6 +316,16 @@ const LEARNER_CHOICE_DETAILS = [
             "The team would still ask whether historical reporting needs separate treatment later.",
           futureEvaluationType: "lifecycle-clearing"
         },
+        rolePushback: {
+          role: "Support Manager",
+          speaker: "SM",
+          challenge:
+            "Closed Case exclusion keeps the active list clean, but where will managers review prior escalations if needed?",
+          riskIfIgnored:
+            "The team may solve active queue noise while losing sight of historical review context.",
+          suggestedResponse:
+            "Keep closed Cases out of active escalation and capture historical reporting as a later enhancement."
+        },
         evaluationPlaceholder:
           "Future evaluation can favor lifecycle validation before list-view confidence claims."
       },
@@ -314,6 +364,16 @@ const LEARNER_CHOICE_DETAILS = [
           watchOut:
             "Watch for escalation noise if too many active Cases appear without clear review priority.",
           futureEvaluationType: "operational-usefulness"
+        },
+        rolePushback: {
+          role: "Product Owner",
+          speaker: "PO",
+          challenge:
+            "If stale escalation adds too many Cases, will managers still trust the list?",
+          riskIfIgnored:
+            "The list may be technically accurate but too noisy to drive daily review behavior.",
+          suggestedResponse:
+            "Validate representative active Cases and note whether stale, Strategic, override, and priority paths keep the list actionable."
         },
         evaluationPlaceholder:
           "Future evaluation can assess whether the learner considered operational usefulness, not just filter correctness."
@@ -382,6 +442,16 @@ const LEARNER_CHOICE_DETAILS = [
             "The team would still ask how deferred edge cases will be revisited after validation.",
           futureEvaluationType: "scope-control"
         },
+        rolePushback: {
+          role: "QA",
+          speaker: "QA",
+          challenge:
+            "Narrowing scope helps the MVP, but do we still have regression coverage for the criteria that remain?",
+          riskIfIgnored:
+            "The team may avoid noisy criteria while still releasing untested Flow paths.",
+          suggestedResponse:
+            "Pair scope decisions with smoke and regression rows for every included escalation path."
+        },
         evaluationPlaceholder:
           "Future evaluation can weigh scope control against missed-risk pressure."
       },
@@ -421,6 +491,16 @@ const LEARNER_CHOICE_DETAILS = [
           watchOut:
             "Watch for stakeholder pressure if deferred Cases later look important.",
           futureEvaluationType: "signal-quality"
+        },
+        rolePushback: {
+          role: "Product Owner",
+          speaker: "PO",
+          challenge:
+            "If we defer edge cases, how will stakeholders know what is intentionally out of scope?",
+          riskIfIgnored:
+            "Later missed escalations may look like defects instead of agreed MVP boundaries.",
+          suggestedResponse:
+            "Record the accepted risk and revisit deferred edge cases after manager-list validation."
         },
         evaluationPlaceholder:
           "Future evaluation can introduce stakeholder pushback when deferral hides important risk."
@@ -489,6 +569,16 @@ const LEARNER_CHOICE_DETAILS = [
             "The team would still ask for evidence, not just an intention to run the checklist.",
           futureEvaluationType: "release-validation"
         },
+        rolePushback: {
+          role: "DevOps",
+          speaker: "DO",
+          challenge:
+            "Running the checklist is the right direction, but what evidence will prove the org behavior actually passed?",
+          riskIfIgnored:
+            "The release may be described as validated without durable proof of Flow, LWC, access, and list view behavior.",
+          suggestedResponse:
+            "Capture checklist results, org observations, and deferred items in the smoke-test run artifact."
+        },
         evaluationPlaceholder:
           "Future evaluation can separate source readiness from completed org smoke testing."
       },
@@ -528,6 +618,16 @@ const LEARNER_CHOICE_DETAILS = [
           watchOut:
             "Do not present deploy validation as proof that managers can use the scenario in the org.",
           futureEvaluationType: "deploy-evidence"
+        },
+        rolePushback: {
+          role: "Support Manager",
+          speaker: "SM",
+          challenge:
+            "Deploy validation is useful, but how do we know managers can actually use the list view after the Flow flags the Case?",
+          riskIfIgnored:
+            "The release may look deployable while failing the operational visibility goal.",
+          suggestedResponse:
+            "Follow deploy evidence with manual org smoke tests for manager access, list view filtering, and Case field visibility."
         },
         evaluationPlaceholder:
           "Future evaluation can push back when learners overstate deploy validation as user validation."
@@ -597,6 +697,16 @@ const LEARNER_CHOICE_DETAILS = [
             "The team would still ask for negative paths so clean Cases do not over-escalate.",
           futureEvaluationType: "state-transition-regression"
         },
+        rolePushback: {
+          role: "QA",
+          speaker: "QA",
+          challenge:
+            "State transitions are strong coverage, but where are the clean negative paths?",
+          riskIfIgnored:
+            "The Flow may correctly move risky Cases while still over-escalating Cases that should remain clean.",
+          suggestedResponse:
+            "Add negative-path rows for non-Strategic, non-stale, non-High priority Cases and closed Cases."
+        },
         evaluationPlaceholder:
           "Future evaluation can reward transition coverage over create-only testing."
       },
@@ -635,6 +745,16 @@ const LEARNER_CHOICE_DETAILS = [
           watchOut:
             "The team would still ask for paired positive paths so each escalation route is also proven.",
           futureEvaluationType: "negative-path-coverage"
+        },
+        rolePushback: {
+          role: "Architect",
+          speaker: "AR",
+          challenge:
+            "Negative paths reduce noise, but have we proven each intended escalation route still works?",
+          riskIfIgnored:
+            "The team may prevent false positives while missing failures in override, Strategic customer, stale, or priority paths.",
+          suggestedResponse:
+            "Pair each negative-path row with a positive path for the matching escalation criteria."
         },
         evaluationPlaceholder:
           "Future evaluation can flag missing negative-path evidence as an overconfidence risk."
