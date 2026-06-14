@@ -73,6 +73,81 @@ const LEARNER_CHOICE_DETAILS = [
       whatNotToClaimYet:
         "Do not claim queue accuracy until closed and clean-path records are checked in the target org."
     }
+  },
+  {
+    id: "stakeholder-tradeoff",
+    label: "Stakeholder tradeoff",
+    learnerMessage: "I would review the stakeholder tradeoff next.",
+    followUp: {
+      speaker: "PO",
+      role: "Product Owner",
+      text: "Frame the tradeoff between fast manager visibility and escalation noise, especially for manual override, Strategic customers, and stale Cases.",
+      learningNote:
+        "Evidence: a short decision note showing which escalation criteria are in scope now and which should wait."
+    },
+    simulationNote: {
+      speaker: "SIM",
+      role: "Simulation note",
+      text: "Capture the stakeholder decision before expanding criteria so future changes do not dilute the high-risk signal."
+    },
+    validationEvidence: {
+      recommendedEvidence:
+        "A concise tradeoff note covering manager visibility, alert fatigue, override governance, and future customer-tier changes.",
+      whyItMatters:
+        "Scenario 001 is not only automation; it teaches when to say yes, wait, or narrow criteria.",
+      whatNotToClaimYet:
+        "Do not claim stakeholder alignment until the tradeoff and open follow-up questions are recorded."
+    }
+  },
+  {
+    id: "release-readiness",
+    label: "Release readiness",
+    learnerMessage: "I would check release readiness next.",
+    followUp: {
+      speaker: "DO",
+      role: "DevOps",
+      text: "Review deployability, manifest coverage, permission set access, and the smoke-test path before treating the Scenario 001 slice as release-ready.",
+      learningNote:
+        "Evidence: successful lint, package validation, and a manual smoke-test plan using Case Origin = Phone when records are created."
+    },
+    simulationNote: {
+      speaker: "SIM",
+      role: "Simulation note",
+      text: "Capture validation evidence separately from source review; a clean deploy does not prove the org behavior was manually smoke-tested."
+    },
+    validationEvidence: {
+      recommendedEvidence:
+        "Lint result, deploy validation result, package member review, permission set check, and deferred manual smoke-test notes.",
+      whyItMatters:
+        "Release readiness depends on both deployable metadata and observable Case behavior in the org.",
+      whatNotToClaimYet:
+        "Do not claim full release readiness until the Scenario 001 smoke checklist is executed end to end."
+    }
+  },
+  {
+    id: "regression-risk",
+    label: "Regression risk",
+    learnerMessage: "I would assess regression risk next.",
+    followUp: {
+      speaker: "QA",
+      role: "QA",
+      text: "Focus regression coverage on clearing behavior, High Risk Reason changes, closed Cases, stale escalation, manual override, and Strategic customer precedence.",
+      learningNote:
+        "Evidence: regression rows for changing Priority, disabling override, closing a Case, changing Customer Tier, and aging queue records."
+    },
+    simulationNote: {
+      speaker: "SIM",
+      role: "Simulation note",
+      text: "Capture negative-path evidence too; the simulator should show when a Case should not remain visible to managers."
+    },
+    validationEvidence: {
+      recommendedEvidence:
+        "A regression matrix with expected High Risk, High Risk Reason, and Open High-Risk Cases visibility for each state transition.",
+      whyItMatters:
+        "Flow precedence can look correct on create but fail when records move out of escalation criteria.",
+      whatNotToClaimYet:
+        "Do not claim regression coverage if only new high-risk Case creation was tested."
+    }
   }
 ];
 

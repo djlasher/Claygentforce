@@ -456,6 +456,7 @@
 .evidence-grid div {
   background: #f3f3f3;
   border: 1px solid #dddbda;
+  border-left: 0.25rem solid #1b5297;
   border-radius: 0.25rem;
   padding: 0.625rem;
 }
