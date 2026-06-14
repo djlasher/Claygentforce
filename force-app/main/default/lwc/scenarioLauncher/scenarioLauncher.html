@@ -132,6 +132,28 @@
                 <template if:true={selectedMessage.learningNote}>
                   <p class="learning-note">{selectedMessage.learningNote}</p>
                 </template>
+                <template if:true={selectedMessage.followUpActions}>
+                  <div
+                    class="follow-up-action-list"
+                    aria-label="Bounded follow-up actions"
+                  >
+                    <template
+                      for:each={selectedMessage.followUpActions}
+                      for:item="action"
+                    >
+                      <button
+                        key={action.id}
+                        class={action.cssClass}
+                        type="button"
+                        data-action-id={action.id}
+                        aria-pressed={action.ariaPressed}
+                        onclick={handleFollowUpActionSelect}
+                      >
+                        {action.label}
+                      </button>
+                    </template>
+                  </div>
+                </template>
               </div>
             </article>
           </template>
@@ -170,6 +192,34 @@
               <div>
                 <dt>What not to claim yet</dt>
                 <dd>{selectedEvidence.whatNotToClaimYet}</dd>
+              </div>
+            </dl>
+          </section>
+        </template>
+
+        <template if:true={hasSelectedOutcome}>
+          <section
+            class="outcome-panel"
+            aria-labelledby="outcome-panel-heading"
+          >
+            <div class="outcome-header">
+              <p class="eyebrow">Final consequence and outcome</p>
+              <h4 id="outcome-panel-heading" class="outcome-heading">
+                {selectedOutcome.label}
+              </h4>
+            </div>
+            <dl class="outcome-grid">
+              <div>
+                <dt>Outcome</dt>
+                <dd>{selectedOutcome.summary}</dd>
+              </div>
+              <div>
+                <dt>Consequence</dt>
+                <dd>{selectedOutcome.consequence}</dd>
+              </div>
+              <div>
+                <dt>Recommended next step</dt>
+                <dd>{selectedOutcome.recommendedNextStep}</dd>
               </div>
             </dl>
           </section>

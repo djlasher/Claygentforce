@@ -3,6 +3,7 @@ import { DELIVERY_ROOM_CATALOG } from "./scenarioCatalog";
 
 export default class ScenarioLauncher extends LightningElement {
   selectedChoiceId;
+  selectedFollowUpActionId;
   isSupportingContextExpanded = false;
 
   get productSummary() {
@@ -85,13 +86,8 @@ export default class ScenarioLauncher extends LightningElement {
   }
 
   get simulationPhases() {
-    const session = DELIVERY_ROOM_CATALOG.simulationSession;
-    const activePhase = this.hasSelectedChoice
-      ? session.activePhaseAfterChoice
-      : session.activePhaseBeforeChoice;
-    const completedPhases = this.hasSelectedChoice
-      ? session.completedAfterChoice
-      : session.completedBeforeChoice;
+    const activePhase = this.activePhaseId;
+    const completedPhases = this.completedPhaseIds;
 
     return DELIVERY_ROOM_CATALOG.simulationPhases.map((phase) => {
       const isActive = phase.id === activePhase;
@@ -110,13 +106,47 @@ export default class ScenarioLauncher extends LightningElement {
   get currentSimulationPhase() {
     const session = DELIVERY_ROOM_CATALOG.simulationSession;
 
+    if (this.hasSelectedFollowUpAction) {
+      return session.reviewCompletePhase;
+    }
+
+    if (this.hasSelectedChoice) {
+      return session.followUpActionPhase;
+    }
+
+    return session.decisionPhase;
+  }
+
+  get activePhaseId() {
+    const session = DELIVERY_ROOM_CATALOG.simulationSession;
+
+    if (this.hasSelectedFollowUpAction) {
+      return session.activePhaseAfterFollowUp;
+    }
+
     return this.hasSelectedChoice
-      ? session.followUpPhase
-      : session.decisionPhase;
+      ? session.activePhaseAfterChoice
+      : session.activePhaseBeforeChoice;
+  }
+
+  get completedPhaseIds() {
+    const session = DELIVERY_ROOM_CATALOG.simulationSession;
+
+    if (this.hasSelectedFollowUpAction) {
+      return session.completedAfterFollowUp;
+    }
+
+    return this.hasSelectedChoice
+      ? session.completedAfterChoice
+      : session.completedBeforeChoice;
   }
 
   get hasSelectedChoice() {
     return Boolean(this.selectedChoiceId);
+  }
+
+  get hasSelectedFollowUpAction() {
+    return Boolean(this.selectedFollowUpActionId);
   }
 
   get activeChoiceDetail() {
@@ -129,6 +159,28 @@ export default class ScenarioLauncher extends LightningElement {
     return (
       this.activeChoiceDetail?.label ||
       DELIVERY_ROOM_CATALOG.simulationSession.defaultFocus
+    );
+  }
+
+  get activeFollowUpActions() {
+    if (!this.activeChoiceDetail) {
+      return [];
+    }
+
+    return this.activeChoiceDetail.followUpActions.map((action) => ({
+      ...action,
+      ariaPressed:
+        action.id === this.selectedFollowUpActionId ? "true" : "false",
+      cssClass:
+        action.id === this.selectedFollowUpActionId
+          ? "follow-up-button follow-up-button-selected"
+          : "follow-up-button"
+    }));
+  }
+
+  get activeFollowUpAction() {
+    return this.activeChoiceDetail?.followUpActions.find(
+      (action) => action.id === this.selectedFollowUpActionId
     );
   }
 
@@ -160,6 +212,41 @@ export default class ScenarioLauncher extends LightningElement {
         label: "Static guidance",
         type: "simulationNote",
         cssClass: "chat-message"
+      },
+      {
+        key: "follow-up-action-prompt",
+        speaker: "SIM",
+        role: "Follow-up prompt",
+        label: "Local static simulation",
+        type: "followUpPrompt",
+        cssClass: "chat-message",
+        text: "Which follow-up action would you take?",
+        followUpActions: this.activeFollowUpActions
+      }
+    ].concat(this.selectedFollowUpChatMessages);
+  }
+
+  get selectedFollowUpChatMessages() {
+    if (!this.activeFollowUpAction) {
+      return [];
+    }
+
+    return [
+      {
+        key: "selected-follow-up-action",
+        speaker: "You",
+        role: "Learner",
+        label: "Selected follow-up action",
+        type: "learnerFollowUpAction",
+        cssClass: "chat-message chat-message-learner",
+        text: this.activeFollowUpAction.learnerMessage
+      },
+      {
+        key: "final-delivery-response",
+        ...this.activeFollowUpAction.response,
+        label: "Final predefined response",
+        type: "finalResponse",
+        cssClass: "chat-message chat-message-response"
       }
     ];
   }
@@ -170,6 +257,14 @@ export default class ScenarioLauncher extends LightningElement {
 
   get hasSelectedEvidence() {
     return Boolean(this.selectedEvidence);
+  }
+
+  get selectedOutcome() {
+    return this.activeFollowUpAction?.outcome;
+  }
+
+  get hasSelectedOutcome() {
+    return Boolean(this.selectedOutcome);
   }
 
   get deferredCapabilities() {
@@ -196,10 +291,16 @@ export default class ScenarioLauncher extends LightningElement {
 
   handleChoiceSelect(event) {
     this.selectedChoiceId = event.currentTarget.dataset.choiceId;
+    this.selectedFollowUpActionId = undefined;
+  }
+
+  handleFollowUpActionSelect(event) {
+    this.selectedFollowUpActionId = event.currentTarget.dataset.actionId;
   }
 
   handleResetPreview() {
     this.selectedChoiceId = undefined;
+    this.selectedFollowUpActionId = undefined;
   }
 
   handleSupportingContextToggle() {
