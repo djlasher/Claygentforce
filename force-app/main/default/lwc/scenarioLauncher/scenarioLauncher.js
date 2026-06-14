@@ -3,6 +3,7 @@ import { DELIVERY_ROOM_CATALOG } from "./scenarioCatalog";
 
 export default class ScenarioLauncher extends LightningElement {
   selectedChoiceId;
+  isSupportingContextExpanded = false;
 
   get productSummary() {
     return DELIVERY_ROOM_CATALOG.productSummary;
@@ -179,11 +180,29 @@ export default class ScenarioLauncher extends LightningElement {
     return DELIVERY_ROOM_CATALOG.currentConstraints;
   }
 
+  get supportingContextToggleLabel() {
+    return this.isSupportingContextExpanded
+      ? "Hide supporting context"
+      : "Show supporting context";
+  }
+
+  get supportingContextAriaExpanded() {
+    return this.isSupportingContextExpanded ? "true" : "false";
+  }
+
+  get supportingContextSummary() {
+    return "Delivery snapshot, team roles, scenario board, learning path, transcript notes, deferred capabilities, and constraints are available below.";
+  }
+
   handleChoiceSelect(event) {
     this.selectedChoiceId = event.currentTarget.dataset.choiceId;
   }
 
   handleResetPreview() {
     this.selectedChoiceId = undefined;
+  }
+
+  handleSupportingContextToggle() {
+    this.isSupportingContextExpanded = !this.isSupportingContextExpanded;
   }
 }
