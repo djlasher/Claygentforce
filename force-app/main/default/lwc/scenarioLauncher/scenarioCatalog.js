@@ -43,7 +43,16 @@ const LEARNER_CHOICE_DETAILS = [
             "Missed precedence rows can hide stale values or incorrect High Risk Reason outcomes.",
           recommendedNextStep:
             "Use the matrix to drive focused org smoke testing."
-        }
+        },
+        validationChecklist: [
+          "Create needed test Cases with Case Origin = Phone.",
+          "Verify closed Case clearing runs before every escalation path.",
+          "Confirm Manual Review, Strategic Customer, Stale Escalation, and Critical Severity reasons are set by the expected branch.",
+          "Check High Risk and High Risk Reason on each Case after save.",
+          "Confirm only active high-risk Cases appear in Open High-Risk Cases."
+        ],
+        evaluationPlaceholder:
+          "Future evaluation can compare whether the learner chose broad precedence coverage before release claims."
       },
       {
         id: "test-clean-path-clearing",
@@ -65,7 +74,16 @@ const LEARNER_CHOICE_DETAILS = [
             "If this is skipped, managers may keep seeing Cases that no longer belong in active review.",
           recommendedNextStep:
             "Add clean-path rows to the smoke checklist before release review."
-        }
+        },
+        validationChecklist: [
+          "Create or update Cases with Case Origin = Phone where new records are needed.",
+          "Disable High Risk Override and lower Priority below High.",
+          "Move Customer Tier away from Strategic and avoid stale criteria.",
+          "Confirm High Risk and High Risk Reason clear after save.",
+          "Verify the Case no longer appears in Open High-Risk Cases."
+        ],
+        evaluationPlaceholder:
+          "Future evaluation can reward learners who test records leaving escalation, not only records entering escalation."
       }
     ]
   },
@@ -113,7 +131,15 @@ const LEARNER_CHOICE_DETAILS = [
             "Unclear access evidence can make the demo look correct only because the tester has elevated permissions.",
           recommendedNextStep:
             "Validate with the intended reviewer access model, not only System Administrator."
-        }
+        },
+        validationChecklist: [
+          "Confirm the scenario permission set is assigned to the intended reviewer user.",
+          "Verify field access for High Risk, High Risk Reason, override, and Customer Tier.",
+          "Open the Case record page as the reviewer persona.",
+          "Confirm the Scenario 001 risk panel renders without admin-only assumptions."
+        ],
+        evaluationPlaceholder:
+          "Future evaluation can push back when learners validate only as System Administrator."
       },
       {
         id: "verify-manager-access",
@@ -134,7 +160,16 @@ const LEARNER_CHOICE_DETAILS = [
             "If access is incomplete, the Flow may flag Cases correctly while managers still cannot review them.",
           recommendedNextStep:
             "Capture a short access note or screenshot during manual org testing."
-        }
+        },
+        validationChecklist: [
+          "Use the intended manager or reviewer access model.",
+          "Open an active high-risk Case and confirm key fields are visible.",
+          "Open the Open High-Risk Cases list view.",
+          "Confirm visibility comes from normal Case sharing plus scenario access.",
+          "Do not rely only on administrator access for the result."
+        ],
+        evaluationPlaceholder:
+          "Future evaluation can distinguish implementation validation from persona-based visibility validation."
       }
     ]
   },
@@ -183,7 +218,16 @@ const LEARNER_CHOICE_DETAILS = [
             "Without this test, closed escalation records may create false operational noise.",
           recommendedNextStep:
             "Create or update a high-risk Case, close it, then verify fields and list visibility."
-        }
+        },
+        validationChecklist: [
+          "Create or select a high-risk Case with Case Origin = Phone if creating new data.",
+          "Confirm High Risk is checked before closure.",
+          "Close the Case and save.",
+          "Verify High Risk and High Risk Reason clear.",
+          "Confirm the Case is absent from Open High-Risk Cases."
+        ],
+        evaluationPlaceholder:
+          "Future evaluation can favor lifecycle validation before list-view confidence claims."
       },
       {
         id: "test-active-queue-usefulness",
@@ -204,7 +248,16 @@ const LEARNER_CHOICE_DETAILS = [
             "A technically correct list can still fail if it creates too much escalation noise.",
           recommendedNextStep:
             "Review the list with representative active Cases and note any noisy criteria."
-        }
+        },
+        validationChecklist: [
+          "Create representative active Cases with Case Origin = Phone where needed.",
+          "Include manual override, Strategic customer, stale escalation, and priority examples.",
+          "Verify each active flagged Case appears in Open High-Risk Cases.",
+          "Confirm clean and closed Cases stay out of the list.",
+          "Note whether the resulting list feels actionable for a manager."
+        ],
+        evaluationPlaceholder:
+          "Future evaluation can assess whether the learner considered operational usefulness, not just filter correctness."
       }
     ]
   },
@@ -253,7 +306,15 @@ const LEARNER_CHOICE_DETAILS = [
             "Stakeholders may still ask why some edge Cases are not visible yet.",
           recommendedNextStep:
             "Record deferred criteria as future decision paths, not hidden requirements."
-        }
+        },
+        validationChecklist: [
+          "Confirm current Flow v3 criteria match the agreed MVP scope.",
+          "Verify High Risk Reason values explain why each Case escalated.",
+          "Check that deferred edge cases are not silently included.",
+          "Use the smoke checklist to prove the scoped paths before expanding criteria."
+        ],
+        evaluationPlaceholder:
+          "Future evaluation can weigh scope control against missed-risk pressure."
       },
       {
         id: "defer-noisy-edge-cases",
@@ -275,7 +336,15 @@ const LEARNER_CHOICE_DETAILS = [
             "Some legitimate risk cases may remain outside MVP coverage.",
           recommendedNextStep:
             "Pair the deferral with a missed-risk review after smoke testing."
-        }
+        },
+        validationChecklist: [
+          "Confirm current automation covers manual override, Strategic customer, stale, and priority paths.",
+          "Identify one deferred noisy edge case for later review.",
+          "Verify the Open High-Risk Cases list remains focused with current criteria.",
+          "Record accepted risk for Cases that remain outside MVP coverage."
+        ],
+        evaluationPlaceholder:
+          "Future evaluation can introduce stakeholder pushback when deferral hides important risk."
       }
     ]
   },
@@ -323,7 +392,16 @@ const LEARNER_CHOICE_DETAILS = [
             "Skipping this step leaves the MVP in static-validation territory.",
           recommendedNextStep:
             "Capture results in the smoke-test run artifact after manual testing."
-        }
+        },
+        validationChecklist: [
+          "Run the Scenario 001 smoke checklist in the target org.",
+          "Use Case Origin = Phone when creating manual test Cases.",
+          "Record expected Flow result and expected LWC state for each path.",
+          "Verify Open High-Risk Cases list visibility.",
+          "Mark any deferred manual items clearly."
+        ],
+        evaluationPlaceholder:
+          "Future evaluation can separate source readiness from completed org smoke testing."
       },
       {
         id: "capture-deploy-evidence",
@@ -345,7 +423,15 @@ const LEARNER_CHOICE_DETAILS = [
             "This does not prove manager visibility or list view behavior in the org.",
           recommendedNextStep:
             "Follow deploy evidence with targeted manual Scenario 001 smoke tests."
-        }
+        },
+        validationChecklist: [
+          "Run lint and capture the result.",
+          "Validate deploy with the Scenario 001 manifest if available.",
+          "Confirm package members include the launcher, Case panel, Flow, fields, list view, permission set, app, tab, and FlexiPages.",
+          "Record that deploy validation is not the same as manual smoke testing."
+        ],
+        evaluationPlaceholder:
+          "Future evaluation can push back when learners overstate deploy validation as user validation."
       }
     ]
   },
@@ -394,7 +480,16 @@ const LEARNER_CHOICE_DETAILS = [
             "Without transition coverage, the list view may collect stale or misleading records over time.",
           recommendedNextStep:
             "Add transition rows to the regression matrix before declaring readiness."
-        }
+        },
+        validationChecklist: [
+          "Change Priority from High to Medium and verify clearing or alternate criteria.",
+          "Enable and disable High Risk Override and verify Manual Review precedence.",
+          "Change Customer Tier into and out of Strategic.",
+          "Close a previously high-risk Case and verify clearing.",
+          "Confirm list view membership after each transition."
+        ],
+        evaluationPlaceholder:
+          "Future evaluation can reward transition coverage over create-only testing."
       },
       {
         id: "add-negative-path-rows",
@@ -416,7 +511,15 @@ const LEARNER_CHOICE_DETAILS = [
             "If negative paths are skipped, the MVP may train managers to distrust the list.",
           recommendedNextStep:
             "Pair each positive escalation path with at least one clean or clearing path."
-        }
+        },
+        validationChecklist: [
+          "Create a non-Strategic, non-stale, non-High priority Case with Case Origin = Phone.",
+          "Confirm High Risk remains unchecked and High Risk Reason remains blank.",
+          "Verify the Case does not appear in Open High-Risk Cases.",
+          "Add a closed Case negative path to confirm active escalation stays clear."
+        ],
+        evaluationPlaceholder:
+          "Future evaluation can flag missing negative-path evidence as an overconfidence risk."
       }
     ]
   }

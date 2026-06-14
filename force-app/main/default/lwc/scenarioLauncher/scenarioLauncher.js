@@ -162,6 +162,10 @@ export default class ScenarioLauncher extends LightningElement {
     );
   }
 
+  get selectedDecisionLabel() {
+    return this.activeChoiceDetail?.label;
+  }
+
   get activeFollowUpActions() {
     if (!this.activeChoiceDetail) {
       return [];
@@ -182,6 +186,10 @@ export default class ScenarioLauncher extends LightningElement {
     return this.activeChoiceDetail?.followUpActions.find(
       (action) => action.id === this.selectedFollowUpActionId
     );
+  }
+
+  get selectedFollowUpActionLabel() {
+    return this.activeFollowUpAction?.label;
   }
 
   get selectedChatMessages() {
@@ -265,6 +273,51 @@ export default class ScenarioLauncher extends LightningElement {
 
   get hasSelectedOutcome() {
     return Boolean(this.selectedOutcome);
+  }
+
+  get sessionResultRows() {
+    if (!this.activeFollowUpAction) {
+      return [];
+    }
+
+    return [
+      {
+        label: "Decision path",
+        value: this.selectedDecisionLabel
+      },
+      {
+        label: "Follow-up action",
+        value: this.selectedFollowUpActionLabel
+      },
+      {
+        label: "Outcome",
+        value: this.selectedOutcome.label
+      },
+      {
+        label: "Outcome summary",
+        value: this.selectedOutcome.summary
+      },
+      {
+        label: "Consequence",
+        value: this.selectedOutcome.consequence
+      },
+      {
+        label: "Recommended next step",
+        value: this.selectedOutcome.recommendedNextStep
+      }
+    ];
+  }
+
+  get hasSessionResult() {
+    return this.sessionResultRows.length > 0;
+  }
+
+  get selectedValidationChecklist() {
+    return this.activeFollowUpAction?.validationChecklist || [];
+  }
+
+  get hasSelectedValidationChecklist() {
+    return this.selectedValidationChecklist.length > 0;
   }
 
   get deferredCapabilities() {

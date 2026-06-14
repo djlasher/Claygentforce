@@ -225,6 +225,51 @@
           </section>
         </template>
 
+        <template if:true={hasSessionResult}>
+          <section
+            class="session-result-panel"
+            aria-labelledby="session-result-heading"
+          >
+            <div class="session-result-section">
+              <p class="eyebrow">Decision path</p>
+              <h4 id="session-result-heading" class="session-result-heading">
+                Session Result
+              </h4>
+              <dl class="session-result-grid">
+                <template for:each={sessionResultRows} for:item="row">
+                  <div key={row.label} class="session-result-item">
+                    <dt>{row.label}</dt>
+                    <dd>{row.value}</dd>
+                  </div>
+                </template>
+              </dl>
+            </div>
+
+            <template if:true={hasSelectedValidationChecklist}>
+              <div
+                class="manual-validation-section"
+                aria-labelledby="manual-validation-heading"
+              >
+                <p class="eyebrow">Validation next steps</p>
+                <h4
+                  id="manual-validation-heading"
+                  class="session-result-heading"
+                >
+                  Manual Validation Checklist
+                </h4>
+                <ol class="manual-validation-list">
+                  <template
+                    for:each={selectedValidationChecklist}
+                    for:item="item"
+                  >
+                    <li key={item}>{item}</li>
+                  </template>
+                </ol>
+              </div>
+            </template>
+          </section>
+        </template>
+
         <p class="chat-preview-note">{sectionSubtitles.chatPreviewNote}</p>
       </section>
 
