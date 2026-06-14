@@ -227,10 +227,34 @@
                 </p>
                 <p>
                   <strong>Recommended next step:</strong>
-                  {selectedOutcome.recommendedNextStep}
+                  <span>{selectedOutcome.recommendedNextStep}</span>
                 </p>
               </div>
             </div>
+
+            <template if:true={hasSelectedTeamReview}>
+              <div
+                class="team-review-section"
+                aria-labelledby="team-review-heading"
+              >
+                <p class="eyebrow">Delivery feedback</p>
+                <h4 id="team-review-heading" class="session-result-heading">
+                  Team Review
+                </h4>
+                <div class="team-review-card">
+                  <p class="team-review-role">{selectedTeamReview.role}</p>
+                  <p>{selectedTeamReview.summary}</p>
+                  <p>
+                    <strong>Strength:</strong>
+                    <span>{selectedTeamReview.strength}</span>
+                  </p>
+                  <p>
+                    <strong>Watch out:</strong>
+                    <span>{selectedTeamReview.watchOut}</span>
+                  </p>
+                </div>
+              </div>
+            </template>
 
             <template if:true={hasSelectedValidationChecklist}>
               <div

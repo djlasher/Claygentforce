@@ -308,6 +308,14 @@ export default class ScenarioLauncher extends LightningElement {
     return this.selectedValidationChecklist.length > 0;
   }
 
+  get selectedTeamReview() {
+    return this.activeFollowUpAction?.teamReview;
+  }
+
+  get hasSelectedTeamReview() {
+    return Boolean(this.selectedTeamReview);
+  }
+
   get deferredCapabilities() {
     return DELIVERY_ROOM_CATALOG.deferredCapabilities;
   }

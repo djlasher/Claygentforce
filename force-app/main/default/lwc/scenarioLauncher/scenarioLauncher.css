@@ -537,6 +537,7 @@
 
 .session-result-section,
 .outcome-summary-section,
+.team-review-section,
 .manual-validation-section {
   border-left: 0.25rem solid #1b5297;
   padding-left: 0.75rem;
@@ -545,6 +546,10 @@
 .outcome-summary-section,
 .manual-validation-section {
   border-left-color: #2e844a;
+}
+
+.team-review-section {
+  border-left-color: #706e6b;
 }
 
 .session-result-heading {
@@ -595,6 +600,31 @@
 
 .outcome-summary-copy p {
   margin: 0;
+}
+
+.outcome-summary-copy strong + span,
+.team-review-card strong + span {
+  margin-left: 0.25rem;
+}
+
+.team-review-card {
+  background: #fafaf9;
+  border: 1px solid #dddbda;
+  border-radius: 0.25rem;
+  color: #2e2e2e;
+  display: grid;
+  gap: 0.4rem;
+  line-height: 1.45;
+  padding: 0.625rem;
+}
+
+.team-review-card p {
+  margin: 0;
+}
+
+.team-review-role {
+  color: #181818;
+  font-weight: 700;
 }
 
 .manual-validation-list {

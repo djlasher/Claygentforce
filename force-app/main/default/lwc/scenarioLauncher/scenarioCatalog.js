@@ -51,6 +51,16 @@ const LEARNER_CHOICE_DETAILS = [
           "Check High Risk and High Risk Reason on each Case after save.",
           "Confirm only active high-risk Cases appear in Open High-Risk Cases."
         ],
+        teamReview: {
+          role: "QA",
+          summary:
+            "Useful precedence-focused path. The team can see how each Flow branch should behave before org testing starts.",
+          strength:
+            "Connects High Risk, High Risk Reason, and list visibility to one validation matrix.",
+          watchOut:
+            "Do not let the matrix replace manual checks in the Salesforce org.",
+          futureEvaluationType: "precedence-coverage"
+        },
         evaluationPlaceholder:
           "Future evaluation can compare whether the learner chose broad precedence coverage before release claims."
       },
@@ -82,6 +92,16 @@ const LEARNER_CHOICE_DETAILS = [
           "Confirm High Risk and High Risk Reason clear after save.",
           "Verify the Case no longer appears in Open High-Risk Cases."
         ],
+        teamReview: {
+          role: "Architect",
+          summary:
+            "Useful clearing-focused path. The team would see that active escalation flags are removed when criteria stop matching.",
+          strength:
+            "Validates the lifecycle behavior that keeps manager visibility current.",
+          watchOut:
+            "The team would still ask for transition coverage across override, tier, stale, priority, and closure changes.",
+          futureEvaluationType: "clearing-coverage"
+        },
         evaluationPlaceholder:
           "Future evaluation can reward learners who test records leaving escalation, not only records entering escalation."
       }
@@ -138,6 +158,16 @@ const LEARNER_CHOICE_DETAILS = [
           "Open the Case record page as the reviewer persona.",
           "Confirm the Scenario 001 risk panel renders without admin-only assumptions."
         ],
+        teamReview: {
+          role: "Security",
+          summary:
+            "Good access-focused path. The team can inspect whether the scenario permission set supports the intended review experience.",
+          strength:
+            "Separates scenario access from broad administrator privileges.",
+          watchOut:
+            "Do not rely on administrator access as proof that support managers can review the work.",
+          futureEvaluationType: "access-governance"
+        },
         evaluationPlaceholder:
           "Future evaluation can push back when learners validate only as System Administrator."
       },
@@ -168,6 +198,16 @@ const LEARNER_CHOICE_DETAILS = [
           "Confirm visibility comes from normal Case sharing plus scenario access.",
           "Do not rely only on administrator access for the result."
         ],
+        teamReview: {
+          role: "Support Manager",
+          summary:
+            "Good manager-visibility path. The team can validate whether the escalation surface is usable by the intended reviewer.",
+          strength:
+            "Checks the Case panel, list view, and field visibility as one manager workflow.",
+          watchOut:
+            "The team would still ask whether sharing assumptions match the real support organization.",
+          futureEvaluationType: "manager-visibility"
+        },
         evaluationPlaceholder:
           "Future evaluation can distinguish implementation validation from persona-based visibility validation."
       }
@@ -226,6 +266,16 @@ const LEARNER_CHOICE_DETAILS = [
           "Verify High Risk and High Risk Reason clear.",
           "Confirm the Case is absent from Open High-Risk Cases."
         ],
+        teamReview: {
+          role: "QA",
+          summary:
+            "Strong lifecycle-validation path. The team can see whether closed Cases leave active escalation tracking.",
+          strength:
+            "Tests both field clearing and Open High-Risk Cases visibility.",
+          watchOut:
+            "The team would still ask whether historical reporting needs separate treatment later.",
+          futureEvaluationType: "lifecycle-clearing"
+        },
         evaluationPlaceholder:
           "Future evaluation can favor lifecycle validation before list-view confidence claims."
       },
@@ -256,6 +306,15 @@ const LEARNER_CHOICE_DETAILS = [
           "Confirm clean and closed Cases stay out of the list.",
           "Note whether the resulting list feels actionable for a manager."
         ],
+        teamReview: {
+          role: "Support Manager",
+          summary:
+            "Useful operational path. The team can review whether the manager list is accurate and actionable.",
+          strength: "Looks beyond field correctness to queue usefulness.",
+          watchOut:
+            "Watch for escalation noise if too many active Cases appear without clear review priority.",
+          futureEvaluationType: "operational-usefulness"
+        },
         evaluationPlaceholder:
           "Future evaluation can assess whether the learner considered operational usefulness, not just filter correctness."
       }
@@ -313,6 +372,16 @@ const LEARNER_CHOICE_DETAILS = [
           "Check that deferred edge cases are not silently included.",
           "Use the smoke checklist to prove the scoped paths before expanding criteria."
         ],
+        teamReview: {
+          role: "Product Owner",
+          summary:
+            "Useful scope-focused path. The team can protect the MVP from becoming hard to explain or test.",
+          strength:
+            "Keeps stakeholder expectations tied to criteria that are currently implemented.",
+          watchOut:
+            "The team would still ask how deferred edge cases will be revisited after validation.",
+          futureEvaluationType: "scope-control"
+        },
         evaluationPlaceholder:
           "Future evaluation can weigh scope control against missed-risk pressure."
       },
@@ -343,6 +412,16 @@ const LEARNER_CHOICE_DETAILS = [
           "Verify the Open High-Risk Cases list remains focused with current criteria.",
           "Record accepted risk for Cases that remain outside MVP coverage."
         ],
+        teamReview: {
+          role: "Architect",
+          summary:
+            "Practical signal-quality path. The team can keep current automation focused before adding noisy edge cases.",
+          strength:
+            "Treats escalation criteria as a governed signal, not just a growing rule list.",
+          watchOut:
+            "Watch for stakeholder pressure if deferred Cases later look important.",
+          futureEvaluationType: "signal-quality"
+        },
         evaluationPlaceholder:
           "Future evaluation can introduce stakeholder pushback when deferral hides important risk."
       }
@@ -400,6 +479,16 @@ const LEARNER_CHOICE_DETAILS = [
           "Verify Open High-Risk Cases list visibility.",
           "Mark any deferred manual items clearly."
         ],
+        teamReview: {
+          role: "DevOps",
+          summary:
+            "Strong release-readiness path. The team can separate source confidence from observed org behavior.",
+          strength:
+            "Connects smoke checklist execution to Flow results, LWC state, and list visibility.",
+          watchOut:
+            "The team would still ask for evidence, not just an intention to run the checklist.",
+          futureEvaluationType: "release-validation"
+        },
         evaluationPlaceholder:
           "Future evaluation can separate source readiness from completed org smoke testing."
       },
@@ -430,6 +519,16 @@ const LEARNER_CHOICE_DETAILS = [
           "Confirm package members include the launcher, Case panel, Flow, fields, list view, permission set, app, tab, and FlexiPages.",
           "Record that deploy validation is not the same as manual smoke testing."
         ],
+        teamReview: {
+          role: "DevOps",
+          summary:
+            "Useful deployability path. The team can confirm the metadata package is structurally ready.",
+          strength:
+            "Captures lint, deploy validation, and manifest coverage as release inputs.",
+          watchOut:
+            "Do not present deploy validation as proof that managers can use the scenario in the org.",
+          futureEvaluationType: "deploy-evidence"
+        },
         evaluationPlaceholder:
           "Future evaluation can push back when learners overstate deploy validation as user validation."
       }
@@ -488,6 +587,16 @@ const LEARNER_CHOICE_DETAILS = [
           "Close a previously high-risk Case and verify clearing.",
           "Confirm list view membership after each transition."
         ],
+        teamReview: {
+          role: "QA",
+          summary:
+            "Strong regression-focused path. The team can test whether existing Cases move between escalation states cleanly.",
+          strength:
+            "Covers state transitions instead of only new Case creation.",
+          watchOut:
+            "The team would still ask for negative paths so clean Cases do not over-escalate.",
+          futureEvaluationType: "state-transition-regression"
+        },
         evaluationPlaceholder:
           "Future evaluation can reward transition coverage over create-only testing."
       },
@@ -518,6 +627,15 @@ const LEARNER_CHOICE_DETAILS = [
           "Verify the Case does not appear in Open High-Risk Cases.",
           "Add a closed Case negative path to confirm active escalation stays clear."
         ],
+        teamReview: {
+          role: "QA",
+          summary:
+            "Useful negative-path validation. The team can confirm clean Cases stay out of active escalation.",
+          strength: "Protects manager trust by checking for over-escalation.",
+          watchOut:
+            "The team would still ask for paired positive paths so each escalation route is also proven.",
+          futureEvaluationType: "negative-path-coverage"
+        },
         evaluationPlaceholder:
           "Future evaluation can flag missing negative-path evidence as an overconfidence risk."
       }
