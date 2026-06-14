@@ -46,7 +46,7 @@ Claygentforce is a Salesforce delivery team simulation and enablement project.
 
 This is not the previous game or roguelite sandbox project.
 
-The product direction is a chat-first simulated Salesforce delivery room. Different delivery roles provide contextual guidance, concerns, tradeoffs, and review notes through a compact conversation-style interface.
+The product direction is a chat-first simulated Salesforce delivery room. Different delivery roles provide contextual guidance, concerns, tradeoffs, review notes, role pushback, and closeout feedback through a compact conversation-style interface.
 
 This is not intended to become a generic chatbot.
 
@@ -83,6 +83,9 @@ For Scenario 001 implementation prompts, assume these constraints apply unless t
 - do not add Agentforce integration
 - do not add freeform chat input
 - do not add navigation
+- do not add timers or async message streaming
+- do not add scoring unless explicitly requested
+- do not add randomization unless explicitly requested
 - do not change Salesforce metadata unless the task is specifically about metadata
 - do not update DEVLOG, ISSUES_LOG, roadmap docs, or ADRs unless explicitly requested
 - avoid broad refactors when a targeted change is enough
@@ -96,6 +99,9 @@ Allowed bounded interactivity examples:
 - display-only or predefined learner choices
 - static predefined follow-up messages
 - static predefined validation/evidence notes
+- static predefined role challenge/pushback messages
+- static predefined challenge response choices
+- static predefined closeout notes
 
 Disallowed unless explicitly requested:
 
@@ -107,12 +113,14 @@ Disallowed unless explicitly requested:
 - live Agentforce invocation
 - timers/async message streaming
 - navigation
+- scoring/best-answer mechanics
 
 After implementation:
 
 - run lint for LWC changes
 - summarize changed files only
 - mention validation performed
+- say explicitly whether a manifest update was needed
 
 ---
 
@@ -168,17 +176,31 @@ For the current launcher:
 
 Current launcher direction:
 
-- chat-first mini simulation session
-- bounded local learner choices
-- static predefined role responses
-- static validation/evidence guidance
-- compact supporting dashboard context
+- bounded local Scenario 001 Delivery Room run
+- realistic scenario moment before choices
+- chat-first delivery role messages
+- first learner decision
+- follow-up action
+- Team Review feedback
+- Team Challenge / role pushback
+- challenge response choice in the main chat flow
+- compact Session Result / Manual Validation Checklist
+- collapsible supporting dashboard context, collapsed by default
+
+Important UX rules for launcher work:
+
+- active learner choices should appear in the main chat flow
+- result panels should summarize what happened, not hide the next action
+- supporting dashboard content should stay secondary/collapsible
+- avoid creating new large information panels when a compact chat message or summary would work
+- preserve local reset behavior across all selected run state
 
 Future goal:
 
-- messages should eventually appear like an actual chat
+- messages should eventually feel like an actual delivery-room conversation
 - scenario context should generally be revealed by delivery-role messages or learner prompts
 - always-visible dashboard panels should continue shrinking over time
+- future scoring/evaluation should be data-backed, but not added until explicitly requested
 
 ---
 
@@ -223,7 +245,17 @@ For current chat-first launcher work, read only what is relevant from:
 - `force-app/main/default/lwc/scenarioLauncher/scenarioLauncher.js-meta.xml`
 - `manifest/scenario-001-package.xml`
 
-The next expected launcher task is cleanup/refactor after rapid iteration. Preserve current behavior unless the prompt explicitly asks for behavior changes.
+The current launcher is already refactored into a bounded local run. Preserve the current run shape unless the prompt explicitly changes it:
+
+1. Scenario Moment
+2. first learner decision
+3. role follow-up and simulation note
+4. follow-up action
+5. final role response
+6. Team Challenge / role pushback
+7. challenge response in main chat flow
+8. final reaction / closeout
+9. Session Result summary and Manual Validation Checklist
 
 ---
 
@@ -278,10 +310,9 @@ For focused Scenario 001 deploy:
 sf project deploy start --manifest manifest/scenario-001-package.xml --target-org Claygentforce
 ```
 
-For normal git review/commit flow:
+For normal git commit flow:
 
 ```bash
-git status
 git add <changed paths>
 git commit -m "<concise message>"
 git push
@@ -334,10 +365,10 @@ The current Scenario 001 MVP includes:
 - before-save Case Flow v3 with precedence paths
 - read-only Case LWC risk panel
 - `scenarioPreviewSection` child LWC for repeated preview sections
-- `scenarioLauncher` chat-first mini simulation session
+- `scenarioLauncher` bounded local Delivery Room run
 - `Claygentforce` custom app
 - `Claygentforce_Home` FlexiPage and custom tab
 - smoke test checklist
 - simulated run artifacts
 
-The launcher has begun moving from static dashboard toward bounded local chat-style simulation. Continue evolving this in small, reviewable increments.
+The launcher has moved from a static dashboard toward bounded local chat-style simulation. Continue evolving it through compact, reviewable, scenario-driven increments.
