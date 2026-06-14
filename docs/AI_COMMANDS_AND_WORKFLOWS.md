@@ -46,11 +46,11 @@ Claygentforce is a Salesforce delivery team simulation and enablement project.
 
 This is not the previous game or roguelite sandbox project.
 
-The product direction is a simulated Salesforce delivery-team channel experience, similar to a Teams or Slack room, where different delivery roles provide contextual guidance, concerns, tradeoffs, and review notes.
+The product direction is a chat-first simulated Salesforce delivery room. Different delivery roles provide contextual guidance, concerns, tradeoffs, and review notes through a compact conversation-style interface.
 
 This is not intended to become a generic chatbot.
 
-Make the smallest useful change.
+Make the smallest useful change that moves the demo or scenario capability forward.
 
 Keep changes:
 
@@ -58,14 +58,16 @@ Keep changes:
 - reviewable
 - scenario-driven
 - grounded in existing repository docs
+- biased toward visible Salesforce/LWC behavior when the user asks for demo progress
 
 Unless explicitly requested:
 
 - do not create Apex
 - do not create external AI calls
-- do not create chat input
+- do not create freeform chat input
 - do not modify unrelated metadata
 - do not rewrite large docs unnecessarily
+- do not add Scenario 002 yet
 
 ---
 
@@ -73,19 +75,38 @@ Unless explicitly requested:
 
 For Scenario 001 implementation prompts, assume these constraints apply unless the prompt explicitly says otherwise:
 
-- keep the LWC static/read-only
 - keep changes state-driven where practical
 - preserve existing Flow precedence behavior
 - do not add Apex
 - do not add persistence
-- do not add orchestration
 - do not add external AI calls
-- do not add chat functionality
-- do not add buttons or click handlers unless explicitly requested
+- do not add Agentforce integration
+- do not add freeform chat input
+- do not add navigation
 - do not change Salesforce metadata unless the task is specifically about metadata
 - do not update DEVLOG, ISSUES_LOG, roadmap docs, or ADRs unless explicitly requested
-- avoid reviewer/demo-only framing unless the task specifically asks for demo polish
 - avoid broad refactors when a targeted change is enough
+
+Interactivity is allowed only when explicitly requested and should be bounded/local unless the prompt says otherwise.
+
+Allowed bounded interactivity examples:
+
+- local selected choice state
+- local reset control
+- display-only or predefined learner choices
+- static predefined follow-up messages
+- static predefined validation/evidence notes
+
+Disallowed unless explicitly requested:
+
+- persistence
+- server calls
+- Apex controllers
+- freeform chat input
+- generated AI responses
+- live Agentforce invocation
+- timers/async message streaming
+- navigation
 
 After implementation:
 
@@ -111,6 +132,8 @@ Examples:
 Preserve existing manifest members unless the task explicitly removes metadata.
 
 Markdown files, scenario notes, run artifacts, and docs do not require manifest updates.
+
+Changes inside an existing LWC bundle usually do not require manifest updates.
 
 For deployable metadata tasks, summarize:
 
@@ -141,8 +164,21 @@ For the current launcher:
 - tab: `Claygentforce_Home`
 - FlexiPage: `Claygentforce_Home`
 - LWC: `scenarioLauncher`
+- catalog module: `scenarioCatalog.js`
 
-If the page exists but does not appear in the app, check CustomTab metadata, app navigation, profile tab visibility, and whether manual org navigation changes need to be retrieved back into source.
+Current launcher direction:
+
+- chat-first mini simulation session
+- bounded local learner choices
+- static predefined role responses
+- static validation/evidence guidance
+- compact supporting dashboard context
+
+Future goal:
+
+- messages should eventually appear like an actual chat
+- scenario context should generally be revealed by delivery-role messages or learner prompts
+- always-visible dashboard panels should continue shrinking over time
 
 ---
 
@@ -163,16 +199,31 @@ When clearing string fields in Flow metadata, use empty `<stringValue></stringVa
 
 For Lightning Web Component work:
 
-- keep components read-only unless explicitly asked otherwise
 - use SLDS classes where practical
 - use plain scoped CSS for MVP styling
 - do not use Salesforce internal design tokens
 - do not use `force:*` tokens
 - do not use `--lwc-*` styling hooks unless they are already proven safe in this repo
 - avoid styling choices that require org theme assumptions
-- keep styling subtle and professional
+- keep styling professional and compact
+- prefer preserving behavior during cleanup/refactor tasks
 
 Reason: a previous LWC CSS update failed deployment because a styling hook compiled to an internal Salesforce token that custom namespace components cannot access.
+
+---
+
+## Current Scenario Launcher Files
+
+For current chat-first launcher work, read only what is relevant from:
+
+- `force-app/main/default/lwc/scenarioLauncher/scenarioLauncher.html`
+- `force-app/main/default/lwc/scenarioLauncher/scenarioLauncher.js`
+- `force-app/main/default/lwc/scenarioLauncher/scenarioCatalog.js`
+- `force-app/main/default/lwc/scenarioLauncher/scenarioLauncher.css`
+- `force-app/main/default/lwc/scenarioLauncher/scenarioLauncher.js-meta.xml`
+- `manifest/scenario-001-package.xml`
+
+The next expected launcher task is cleanup/refactor after rapid iteration. Preserve current behavior unless the prompt explicitly asks for behavior changes.
 
 ---
 
@@ -192,7 +243,7 @@ For Scenario 001 implementation work:
 - `scenarios/001-case-escalation-manager-visibility/SMOKE_TEST_CHECKLIST.md`
 - `manifest/scenario-001-package.xml`
 
-For Scenario 001 LWC work:
+For Scenario 001 Case panel LWC work:
 
 - `force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.html`
 - `force-app/main/default/lwc/scenario001CaseRiskPanel/scenario001CaseRiskPanel.js`
@@ -207,9 +258,36 @@ Do not ingest unnecessary repository context for small targeted changes.
 
 ## Validation and Deploy Reference
 
-If validation or deployment commands are needed, use the existing Salesforce DX and npm workflows already established in the repository.
+Use these commands when relevant.
 
-Do not repeatedly restate the full command list in every Codex prompt.
+For LWC/code validation:
+
+```bash
+npm run lint
+```
+
+For focused Scenario 001 deploy validation:
+
+```bash
+sf project deploy validate --manifest manifest/scenario-001-package.xml --target-org Claygentforce
+```
+
+For focused Scenario 001 deploy:
+
+```bash
+sf project deploy start --manifest manifest/scenario-001-package.xml --target-org Claygentforce
+```
+
+For normal git review/commit flow:
+
+```bash
+git status
+git add <changed paths>
+git commit -m "<concise message>"
+git push
+```
+
+Do not repeatedly restate full command lists in every implementation response unless the user asks.
 
 ---
 
@@ -227,6 +305,8 @@ The current working pattern is:
 Do not create a devlog entry for every tiny file change.
 
 Prefer milestone-oriented devlog entries.
+
+No issue-log update is needed unless there is meaningful friction, a deployment problem, or a lesson worth preserving.
 
 ---
 
@@ -254,10 +334,10 @@ The current Scenario 001 MVP includes:
 - before-save Case Flow v3 with precedence paths
 - read-only Case LWC risk panel
 - `scenarioPreviewSection` child LWC for repeated preview sections
-- `scenarioLauncher` LWC
+- `scenarioLauncher` chat-first mini simulation session
 - `Claygentforce` custom app
 - `Claygentforce_Home` FlexiPage and custom tab
 - smoke test checklist
 - simulated run artifacts
 
-The LWC and launcher are being evolved toward a simulated delivery-team enablement experience in small, reviewable increments.
+The launcher has begun moving from static dashboard toward bounded local chat-style simulation. Continue evolving this in small, reviewable increments.

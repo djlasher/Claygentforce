@@ -4,6 +4,48 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-06-08 — Chat-first Delivery Room and bounded interaction milestone
+
+### Summary
+
+Moved the Claygentforce launcher from a broad static dashboard toward the intended chat-style delivery simulation experience. The `scenarioLauncher` LWC now presents a compact mini simulation session for Scenario 001 with a chat-first layout, structured session context, role messages, learner choice selection, selected-choice chat flow, static follow-up guidance, phase/progress display, recommended validation evidence, and a local reset control.
+
+The implementation remains intentionally bounded: no Apex, persistence, external AI calls, Agentforce integration, freeform chat input, navigation, or new Salesforce metadata were added.
+
+### Files Updated
+
+- force-app/main/default/lwc/scenarioLauncher/*
+- scenarios/001-case-escalation-manager-visibility/runs/RUN-004-smoke-test-validation.md
+- scenarios/README.md
+- scenarios/TEMPLATE_SCENARIO/*
+- docs/DEVLOG.md
+- docs/ROADMAP.md
+- docs/AI_SESSION_STARTER.md
+- docs/AI_COMMANDS_AND_WORKFLOWS.md
+
+### Notes
+
+- Added `scenarioCatalog.js` to keep launcher simulation data structured outside the main component class.
+- Rebalanced the launcher toward a chat-first product surface while keeping supporting dashboard context secondary.
+- Added a static conversation preview, then evolved it into a bounded learner-choice interaction.
+- Added local component state for selected learner focus and reset behavior.
+- Added static evidence guidance by choice so the demo teaches what to validate next without claiming real org validation.
+- Aligned reusable scenario templates with the Delivery Room direction without creating duplicate role runbooks.
+
+### Validation Notes
+
+- LWC work was validated through the established local lint/deploy workflow during implementation.
+- The final mini simulation session was visually reviewed in the org and is suitable as the current demo surface.
+- Full Scenario 001 manual end-to-end smoke testing remains deferred; `RUN-004-smoke-test-validation.md` captures static validation and deferred manual coverage.
+
+### Next Actions
+
+- Start next session with code cleanup/refactor of `scenarioLauncher` before adding more behavior.
+- Keep the final product direction chat-first: context should generally appear through agent messages or learner prompts rather than always-visible panels.
+- After cleanup, continue toward richer bounded interactivity before live agents, persistence, or Agentforce integration.
+
+---
+
 ## 2026-06-02 — Scenario 001 simulation mechanics and launcher milestone
 
 ### Summary
@@ -281,81 +323,13 @@ The current Scenario 001 MVP supports this workflow:
 
 The list view filters to open high-risk Cases and includes High_Risk_Reason__c as a visible column.
 
-The LWC is intentionally simple and read-only. It is the first UI foundation for the future simulated delivery-team channel experience, not a generic chatbot.
-
-### Notes
-
-The first source-controlled Salesforce implementation slice is intentionally small. This keeps the project aligned with the principle of validating real delivery behavior before expanding automation.
-
-The project now has a cleaner permissions path through a scenario-specific permission set instead of relying only on full System Administrator profile edits.
-
-Flow v2 intentionally still avoids customer tier logic, stale Case logic, notifications, assignment changes, clearing behavior, and custom code.
-
-The LWC intentionally avoids Apex, external AI calls, chat input, and orchestration. It provides the first visual pattern for role-style guidance inside Salesforce.
-
-The AI support docs were also refocused: `AI_SESSION_STARTER.md` is ChatGPT project rehydration, while `AI_COMMANDS_AND_WORKFLOWS.md` is Codex/task-execution guidance.
+The LWC is intentionally simple and read-only at this phase. It helps the learner understand why the Case is or is not currently high risk and what different delivery roles would care about.
 
 ### Next Actions
 
-- Execute the Scenario 001 smoke test checklist against the dev org and record any final findings.
-- Decide whether Flow v2 should eventually clear high-risk values when a Case no longer meets criteria, or defer that until requirements are clearer.
-- Decide whether the next Scenario 001 increment should add customer tier logic, stale Case logic, or richer static channel guidance.
-- Keep the LWC read-only and avoid Apex/external AI calls until the static UI pattern is proven.
+- Continue expanding Scenario 001 only through small, deployable increments.
+- Add richer Flow criteria after the initial fields, list view, layout, permission set, Flow, and LWC are stable.
+- Keep a strong boundary between real Salesforce metadata work and simulated agent behavior.
+- Do not add Apex, persistence, or live AI until the static learning surface has proven useful.
 
 ---
-
-## 2026-05-29 — Documentation cleanup and alignment pass
-
-### Summary
-
-Performed a repository-wide documentation cleanup pass before Salesforce org authentication work begins.
-
-The goal was to reduce stale project framing, improve GitHub readability, align documentation with the current repository state, and remove confusion between the original technical-architect emphasis and the broader Salesforce delivery team simulator vision.
-
-### Files Updated
-
-- README.md
-- docs/AI_SESSION_STARTER.md
-- docs/PROJECT_VISION.md
-- docs/DEVLOG.md
-
-### Cleanup Areas
-
-- updated project identity language to emphasize full delivery team simulation
-- corrected outdated roadmap and status wording
-- aligned documentation with the current Scenario 001 metadata state
-- added missing Scenario 001 artifacts to repository structure examples
-- converted major repository structure examples to fenced text blocks for better GitHub rendering
-- documented future documentation maintenance expectations
-
-### Notes
-
-The project now has enough foundational documentation to shift focus toward Salesforce org authentication, validation, and small scenario-driven metadata implementation.
-
-Large-scale documentation expansion should remain secondary to validating the simulator against real Salesforce delivery workflows.
-
----
-
-## 2026-05-23 — Scenario 001 planning and metadata preparation
-
-### Summary
-
-Prepared Scenario 001 for its first Salesforce implementation increment.
-
-Added a focused Scenario 001 deployment manifest and documented the first planned Flow behavior before creating Flow metadata.
-
-### Files Updated
-
-- manifest/scenario-001-package.xml
-- scenarios/001-case-escalation-manager-visibility/METADATA_BUILD_NOTES.md
-- scenarios/001-case-escalation-manager-visibility/FLOW_DESIGN.md
-- scenarios/README.md
-- docs/DEVLOG.md
-
-### Notes
-
-The scenario-specific manifest initially included only the Case high-risk fields.
-
-The recommended first Flow version remains intentionally small: evaluate Case open or closed status, evaluate Priority, set High_Risk__c, and set High_Risk_Reason__c.
-
-Customer tier, stale Case logic, manual override, and notifications remain deferred until supporting fields and requirements are confirmed.
