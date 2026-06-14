@@ -89,7 +89,7 @@ export default class ScenarioLauncher extends LightningElement {
       },
       {
         label: "Current focus",
-        value: this.selectedChoiceLabel
+        value: this.currentFocusLabel
       }
     ];
   }
@@ -115,8 +115,12 @@ export default class ScenarioLauncher extends LightningElement {
   get currentSimulationPhase() {
     const session = DELIVERY_ROOM_CATALOG.simulationSession;
 
-    if (this.hasSelectedFollowUpAction) {
+    if (this.hasSelectedChallengeResponse) {
       return session.reviewCompletePhase;
+    }
+
+    if (this.hasSelectedFollowUpAction) {
+      return session.challengeResponsePhase;
     }
 
     if (this.hasSelectedChoice) {
@@ -129,8 +133,12 @@ export default class ScenarioLauncher extends LightningElement {
   get activePhaseId() {
     const session = DELIVERY_ROOM_CATALOG.simulationSession;
 
+    if (this.hasSelectedChallengeResponse) {
+      return session.activePhaseAfterChallengeResponse;
+    }
+
     if (this.hasSelectedFollowUpAction) {
-      return session.activePhaseAfterFollowUp;
+      return session.activePhaseDuringChallenge;
     }
 
     return this.hasSelectedChoice
@@ -141,8 +149,12 @@ export default class ScenarioLauncher extends LightningElement {
   get completedPhaseIds() {
     const session = DELIVERY_ROOM_CATALOG.simulationSession;
 
+    if (this.hasSelectedChallengeResponse) {
+      return session.completedAfterChallengeResponse;
+    }
+
     if (this.hasSelectedFollowUpAction) {
-      return session.completedAfterFollowUp;
+      return session.completedDuringChallenge;
     }
 
     return this.hasSelectedChoice
@@ -169,6 +181,20 @@ export default class ScenarioLauncher extends LightningElement {
       this.activeChoiceDetail?.label ||
       DELIVERY_ROOM_CATALOG.simulationSession.defaultFocus
     );
+  }
+
+  get currentFocusLabel() {
+    const session = DELIVERY_ROOM_CATALOG.simulationSession;
+
+    if (this.hasSelectedChallengeResponse) {
+      return this.selectedFollowUpActionLabel;
+    }
+
+    if (this.hasSelectedFollowUpAction) {
+      return session.challengePendingFocus;
+    }
+
+    return this.selectedChoiceLabel;
   }
 
   get selectedDecisionLabel() {
@@ -248,7 +274,7 @@ export default class ScenarioLauncher extends LightningElement {
       return [];
     }
 
-    return [
+    const messages = [
       {
         key: "selected-follow-up-action",
         speaker: "You",
@@ -266,6 +292,35 @@ export default class ScenarioLauncher extends LightningElement {
         cssClass: "chat-message chat-message-response"
       }
     ];
+
+    if (!this.selectedRolePushback) {
+      return messages;
+    }
+
+    return messages
+      .concat([
+        {
+          key: "team-challenge",
+          speaker: this.selectedRolePushback.speaker,
+          role: this.selectedRolePushback.role,
+          label: "Team Challenge",
+          type: "teamChallenge",
+          cssClass: "chat-message chat-message-response",
+          text: this.selectedRolePushback.challenge,
+          learningNote: `Risk if ignored: ${this.selectedRolePushback.riskIfIgnored}`
+        },
+        {
+          key: "challenge-response-prompt",
+          speaker: "You",
+          role: "Learner prompt",
+          label: "Local static simulation",
+          type: "challengePrompt",
+          cssClass: "chat-message",
+          text: "How do you respond to this challenge?",
+          challengeResponses: this.activeChallengeResponses
+        }
+      ])
+      .concat(this.selectedChallengeResponseMessages);
   }
 
   get selectedEvidence() {
@@ -371,7 +426,7 @@ export default class ScenarioLauncher extends LightningElement {
         role: "Learner",
         label: "Challenge response",
         type: "learnerChallengeResponse",
-        cssClass: "challenge-response-message challenge-response-learner",
+        cssClass: "chat-message chat-message-learner",
         text: this.activeChallengeResponse.learnerMessage
       },
       {
@@ -379,7 +434,7 @@ export default class ScenarioLauncher extends LightningElement {
         ...this.activeChallengeResponse.reaction,
         label: "Delivery-room reaction",
         type: "challengeReaction",
-        cssClass: "challenge-response-message challenge-response-reaction"
+        cssClass: "chat-message chat-message-response"
       }
     ];
   }

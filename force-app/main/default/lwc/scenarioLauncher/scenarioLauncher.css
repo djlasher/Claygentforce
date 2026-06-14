@@ -383,6 +383,30 @@
   color: #194e31;
 }
 
+.chat-message[data-type="teamChallenge"] .chat-avatar {
+  background: #fff3d6;
+  border-color: #e4c46d;
+  color: #6f4e00;
+}
+
+.chat-message[data-type="challengePrompt"] .chat-avatar {
+  background: #f3f3f3;
+  border-color: #ba7700;
+  color: #6f4e00;
+}
+
+.chat-message[data-type="learnerChallengeResponse"] .chat-avatar {
+  background: #f3f3f3;
+  border-color: #706e6b;
+  color: #181818;
+}
+
+.chat-message[data-type="challengeReaction"] .chat-avatar {
+  background: #e3fcef;
+  border-color: #91db8b;
+  color: #194e31;
+}
+
 .chat-bubble {
   background: #ffffff;
   border: 1px solid #dddbda;
@@ -429,6 +453,29 @@
 }
 
 .chat-message[data-type="finalResponse"] .chat-bubble {
+  border-color: #91db8b;
+  border-left: 0.25rem solid #2e844a;
+}
+
+.chat-message[data-type="teamChallenge"] .chat-bubble {
+  background: #fffaf1;
+  border-color: #e4c46d;
+  border-left: 0.25rem solid #ba7700;
+}
+
+.chat-message[data-type="challengePrompt"] .chat-bubble {
+  background: #ffffff;
+  border-color: #ba7700;
+  border-left: 0.25rem solid #ba7700;
+}
+
+.chat-message[data-type="learnerChallengeResponse"] .chat-bubble {
+  background: #fdfdfd;
+  border-color: #706e6b;
+  border-left: 0.25rem solid #706e6b;
+}
+
+.chat-message[data-type="challengeReaction"] .chat-bubble {
   border-color: #91db8b;
   border-left: 0.25rem solid #2e844a;
 }
@@ -715,26 +762,11 @@
   gap: 0.5rem;
 }
 
-.challenge-response-prompt {
-  background: #ffffff;
-  border: 1px solid #e4c46d;
-  border-radius: 0.25rem;
-  display: grid;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
-  padding: 0.55rem 0.625rem;
-}
-
-.challenge-response-prompt p {
-  color: #181818;
-  font-weight: 700;
-  margin: 0;
-}
-
 .challenge-response-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
+  margin-top: 0.625rem;
 }
 
 .challenge-response-button {
@@ -758,28 +790,6 @@
   background: #fff3d6;
   border-style: solid;
   color: #181818;
-}
-
-.challenge-response-thread {
-  display: grid;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
-}
-
-.challenge-response-message {
-  background: #ffffff;
-  border: 1px solid #dddbda;
-  border-left: 0.25rem solid #706e6b;
-  border-radius: 0.25rem;
-  padding: 0.55rem 0.625rem;
-}
-
-.challenge-response-message p {
-  margin: 0;
-}
-
-.challenge-response-reaction {
-  border-left-color: #2e844a;
 }
 
 .closeout-note-card {
