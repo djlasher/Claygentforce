@@ -32,6 +32,18 @@ The project should help learners practice Salesforce delivery judgment, not just
 
 ---
 
+## Current Launcher Follow-Up Notes
+
+Next Claygentforce session should start with a launcher polish pass before adding more behavior:
+
+- Restore or relocate a clearly visible full reset control. The reset handler still exists as `handleResetPreview`, but the visible reset button appears only in the pre-completion evidence panel, so after a completed run the user can change answers reactively but cannot easily do a full reset.
+- Reduce repeated information between the top hero/product framing and the expanded supporting context. The expanded Dashboard Reference repeats mode, implementation status, roles, scenario board, learning path, transcript notes, deferred capabilities, and constraints that are already partly communicated by the hero and bounded simulation area.
+- Keep the supporting context collapsed by default, but when expanded it should feel like optional reference material, not another full dashboard competing with the simulation.
+- Consider trimming or consolidating `Delivery Room Snapshot`, `Delivery Team Roles`, `Current Scenario Board`, `Learning Path`, `Static Delivery Room Transcript`, `Deferred Capabilities`, and `Current Constraints` so the demo stays focused on the bounded run.
+- Preserve the rule that active learner choices belong in the main chat flow and result panels summarize the run.
+
+---
+
 ## Important Context
 
 Repository:
@@ -241,7 +253,7 @@ Current launcher behavior includes:
 - Manual Validation Checklist
 - optional closeout note when a challenge response is selected
 - collapsible supporting dashboard context, collapsed by default
-- local reset control that clears all selected run state
+- local reset handler that clears all selected run state
 
 Current first learner choice options include:
 
@@ -276,7 +288,9 @@ The product direction is to make this feel like an actual delivery-room simulati
 
 Immediate next intended launcher step:
 
-- Add a compact closeout/run-status treatment only if it improves clarity without creating another dashboard panel.
+- Add a visible full reset control that works after completion.
+- Trim duplicated expanded supporting context so it is optional reference, not another full dashboard.
+- Then add compact closeout/run-status treatment only if it improves clarity without creating another dashboard panel.
 - Then begin non-scored decision quality scaffolding so future versions can distinguish strong, incomplete, and risky learner paths without yet labeling choices as right/wrong.
 
 ---
