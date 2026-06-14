@@ -26,7 +26,7 @@ The goal is to build a realistic Salesforce delivery simulator that helps learne
 - incident response
 - retrospective learning
 
-The product direction is now a **chat-first simulated Salesforce delivery room**. Different delivery roles should surface context through messages, prompts, bounded learner choices, and follow-up guidance instead of showing every artifact as an always-visible dashboard.
+The product direction is now a **chat-first simulated Salesforce delivery room**. Different delivery roles should surface context through messages, prompts, bounded learner choices, follow-up guidance, role pushback, and closeout feedback instead of showing every artifact as an always-visible dashboard.
 
 The project should help learners practice Salesforce delivery judgment, not just memorize Salesforce syntax.
 
@@ -207,7 +207,7 @@ The Salesforce app path is source-controlled:
 
 `Claygentforce` app → `Claygentforce Home` tab → `Claygentforce_Home` FlexiPage → `scenarioLauncher` LWC
 
-The launcher has evolved from a static dashboard into the current demo surface: a **chat-first mini simulation session** for Scenario 001.
+The launcher has evolved from a static dashboard into the current demo surface: a **bounded local Scenario 001 Delivery Room run**.
 
 Current launcher bundle files include:
 
@@ -220,23 +220,44 @@ Current launcher bundle files include:
 Current launcher behavior includes:
 
 - compact hero/product framing
-- mini simulation session header
+- bounded simulation header
 - scenario/mode/phase/current focus context
 - phase/progress strip
-- chat-style role messages
-- learner prompt with bounded choices
+- realistic Scenario 001 Support Manager scenario moment
+- chat-style delivery role messages
+- first learner prompt with bounded response choices
 - selected learner choice rendered as a chat message
 - static role follow-up message based on selected choice
 - static simulation note/evidence guidance based on selected choice
-- recommended validation evidence panel after a choice is selected
-- local reset preview control
-- compact supporting sections below the chat-first surface
+- second bounded follow-up action prompt
+- selected follow-up action rendered as a learner chat message
+- final predefined delivery-role response
+- Team Challenge / role pushback rendered in the main chat flow
+- third-stage learner challenge response prompt in the main chat flow
+- selected challenge response rendered as a learner chat message
+- final delivery-room reaction rendered as a role message
+- compact Session Result summary
+- Team Review section
+- Manual Validation Checklist
+- optional closeout note when a challenge response is selected
+- collapsible supporting dashboard context, collapsed by default
+- local reset control that clears all selected run state
 
-Current learner choice options:
+Current first learner choice options include:
 
 - Flow precedence
 - Permission visibility
 - List view accuracy
+- Stakeholder tradeoff
+- Release readiness
+- Regression risk
+
+Current local launcher state includes:
+
+- `selectedChoiceId`
+- `selectedFollowUpActionId`
+- `selectedChallengeResponseId`
+- `isSupportingContextExpanded`
 
 Current launcher implementation intentionally uses local LWC state only:
 
@@ -246,9 +267,17 @@ Current launcher implementation intentionally uses local LWC state only:
 - no Agentforce integration
 - no freeform chat input
 - no navigation
+- no timers or async message streaming
+- no scoring
+- no randomization
 - no new Salesforce metadata
 
-The final product direction is to make this feel like an actual chat window where messages appear over time and context is revealed by delivery roles or learner choices. The current behavior is a bounded/local/static preview of that direction.
+The product direction is to make this feel like an actual delivery-room simulation where messages, choices, role pushback, and consequences teach Salesforce delivery judgment. Active learner choices should stay in the main chat flow; result panels should summarize the run, not hide the next action.
+
+Immediate next intended launcher step:
+
+- Add a compact closeout/run-status treatment only if it improves clarity without creating another dashboard panel.
+- Then begin non-scored decision quality scaffolding so future versions can distinguish strong, incomplete, and risky learner paths without yet labeling choices as right/wrong.
 
 ---
 
@@ -299,6 +328,10 @@ Documentation ownership:
 User preference:
 
 - When giving local commands, put them in copyable code blocks.
+- Do not include `cd` commands for the repo; user is already in `D:\Github Repos\Claygentforce`.
+- Split commands into three blocks: lint+validate, deploy, then git add/commit/push.
+- Do not include standalone `git status` in the standard command set.
+- After implementation prompts and commands, include an `After this...` line describing the intended next step so the user can push back before the work drifts.
 - Avoid documentation-heavy tasking when the goal is demo progress.
 - Bias toward visible Salesforce/LWC behavior unless the user explicitly asks for docs.
 
@@ -344,7 +377,7 @@ Documented in `docs/ISSUES_LOG.md`:
 - Flow metadata clearing assignments should use empty `<stringValue></stringValue>`, not `$GlobalConstant.EmptyString` or `$GlobalConstant.Null`.
 - Lightning App Page launcher visibility required a FlexiPage, CustomTab, app navigation entry, profile visibility, and source retrieval after manual nav adjustment.
 
-No new issue-log entry was needed for the 2026-06-08 session.
+No new issue-log entry was needed for the 2026-06-14 session.
 
 ---
 
@@ -366,8 +399,10 @@ Latest org/app validation confirmed:
 - the `Claygentforce Home` custom tab exists
 - the `Claygentforce Home` tab points to the `Claygentforce_Home` FlexiPage
 - the `scenarioLauncher` LWC renders through the app tab
-- the launcher now works as a chat-first mini simulation session
-- bounded learner choices render selected learner messages, static role follow-ups, evidence notes, and can be reset locally
+- the launcher now works as a bounded local Scenario 001 Delivery Room run
+- active learner choices appear in the main chat flow
+- first decision, follow-up action, Team Challenge, and challenge response interactions work locally
+- the supporting dashboard context is collapsible and collapsed by default
 
 Full smoke/regression testing is still pending and should be completed from `SMOKE_TEST_CHECKLIST.md` when there is time.
 
@@ -386,32 +421,5 @@ When updating docs:
 - verify file lists against the actual repository
 - avoid leaving placeholder roadmap items after they are completed
 - keep project framing aligned with the chat-first full-team simulation vision
-- avoid creating redundant docs when an existing doc can be updated
-- keep `AI_SESSION_STARTER.md` focused on ChatGPT rehydration
-- keep `AI_COMMANDS_AND_WORKFLOWS.md` focused on Codex/task execution guidance
-- keep `DEVLOG.md` milestone-oriented
-- keep `ISSUES_LOG.md` focused on meaningful friction, not every transient hiccup
-
----
-
-## Current Best Next Task
-
-Do not restart setup work.
-
-Do not expand large documentation just for its own sake.
-
-Do not add Scenario 002 yet unless the user explicitly pivots there.
-
-Next session should start with **code cleanup/refactor of `scenarioLauncher`** because today's rapid iteration made the component messy.
-
-The cleanup should preserve current behavior while improving maintainability:
-
-- review and simplify `scenarioLauncher.html`
-- review and simplify `scenarioLauncher.js`
-- review and organize `scenarioCatalog.js`
-- review and organize `scenarioLauncher.css`
-- consider extracting a small child component only if it clearly reduces complexity
-- keep current bounded interaction behavior unchanged
-- maintain no Apex, no persistence, no external AI, no Agentforce, no freeform chat input, and no new metadata
-
-After cleanup, continue toward richer bounded local interactivity and eventually streamed/chat-like message sequencing.
+- avoid creating redundant docs
+- keep devlog entries milestone-oriented
