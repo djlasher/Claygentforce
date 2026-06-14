@@ -1,3 +1,89 @@
+const LEARNER_CHOICE_DETAILS = [
+  {
+    id: "flow-precedence",
+    label: "Flow precedence",
+    learnerMessage: "I would validate Flow precedence next.",
+    followUp: {
+      speaker: "QA",
+      role: "QA",
+      text: "Start by proving each precedence path in order: closed clearing, manual override, Strategic customer, stale escalation, then priority.",
+      learningNote:
+        "Evidence: a focused test matrix showing expected High Risk and High Risk Reason outcomes for each path."
+    },
+    simulationNote: {
+      speaker: "SIM",
+      role: "Simulation note",
+      text: "Capture evidence that each Flow branch wins in the expected order before claiming the automation is release-ready."
+    },
+    validationEvidence: {
+      recommendedEvidence:
+        "A compact test matrix covering closed clearing, manual override, Strategic customer, stale escalation, priority, and clean paths.",
+      whyItMatters:
+        "Precedence bugs can make the right Case visible for the wrong reason or leave stale high-risk values behind.",
+      whatNotToClaimYet:
+        "Do not claim full smoke-test completion until the paths are manually verified in the org."
+    }
+  },
+  {
+    id: "permission-visibility",
+    label: "Permission visibility",
+    learnerMessage: "I would validate permission visibility next.",
+    followUp: {
+      speaker: "SE",
+      role: "Security",
+      text: "Validate that manager visibility comes from standard Case sharing plus the scenario permission set, not from hidden automation shortcuts.",
+      learningNote:
+        "Evidence: permission set access, field visibility, and list view access checked with the intended reviewer profile."
+    },
+    simulationNote: {
+      speaker: "SIM",
+      role: "Simulation note",
+      text: "Capture access evidence with the intended support manager user before claiming visibility is correctly governed."
+    },
+    validationEvidence: {
+      recommendedEvidence:
+        "Permission set, field visibility, and list view access checked with the intended reviewer access model.",
+      whyItMatters:
+        "The scenario should teach normal Salesforce visibility, not hidden access shortcuts.",
+      whatNotToClaimYet:
+        "Do not claim production-ready access governance until profile and sharing assumptions are reviewed."
+    }
+  },
+  {
+    id: "list-view-accuracy",
+    label: "List view accuracy",
+    learnerMessage: "I would validate list view accuracy next.",
+    followUp: {
+      speaker: "SM",
+      role: "Support Manager",
+      text: "Confirm the Open High-Risk Cases list stays actionable by including active high-risk Cases and excluding closed Cases.",
+      learningNote:
+        "Evidence: list view screenshots or notes for open flagged, closed flagged, and clean-path Cases."
+    },
+    simulationNote: {
+      speaker: "SIM",
+      role: "Simulation note",
+      text: "Capture list view evidence across open flagged, closed flagged, and clean-path Cases before claiming the queue view is accurate."
+    },
+    validationEvidence: {
+      recommendedEvidence:
+        "List view results for open high-risk Cases, closed Cases, and Cases where criteria no longer match.",
+      whyItMatters:
+        "Managers need a focused queue view they can trust during operational review.",
+      whatNotToClaimYet:
+        "Do not claim queue accuracy until closed and clean-path records are checked in the target org."
+    }
+  }
+];
+
+const LEARNER_PROMPT_CHOICES = LEARNER_CHOICE_DETAILS.map(
+  ({ id, label, learnerMessage }) => ({
+    id,
+    label,
+    learnerMessage
+  })
+);
+
 export const DELIVERY_ROOM_CATALOG = {
   productSummary:
     "A static Salesforce delivery-room preview for practicing implementation judgment before live agents, scoring, or orchestration are introduced.",
@@ -28,7 +114,11 @@ export const DELIVERY_ROOM_CATALOG = {
     mode: "Local Static Simulation",
     decisionPhase: "Learner Decision",
     followUpPhase: "Follow-up Review",
-    defaultFocus: "Not selected yet"
+    defaultFocus: "Not selected yet",
+    activePhaseBeforeChoice: "learner-decision",
+    activePhaseAfterChoice: "follow-up",
+    completedBeforeChoice: ["intake", "team-review"],
+    completedAfterChoice: ["intake", "team-review", "learner-decision"]
   },
 
   simulationPhases: [
@@ -297,94 +387,11 @@ export const DELIVERY_ROOM_CATALOG = {
       role: "Learner prompt",
       type: "learnerPrompt",
       text: "What should you validate next?",
-      choices: [
-        {
-          id: "flow-precedence",
-          label: "Flow precedence",
-          learnerMessage: "I would validate Flow precedence next."
-        },
-        {
-          id: "permission-visibility",
-          label: "Permission visibility",
-          learnerMessage: "I would validate permission visibility next."
-        },
-        {
-          id: "list-view-accuracy",
-          label: "List view accuracy",
-          learnerMessage: "I would validate list view accuracy next."
-        }
-      ]
+      choices: LEARNER_PROMPT_CHOICES
     }
   ],
 
-  learnerChoiceResponses: {
-    "flow-precedence": {
-      speaker: "QA",
-      role: "QA",
-      text: "Start by proving each precedence path in order: closed clearing, manual override, Strategic customer, stale escalation, then priority.",
-      learningNote:
-        "Evidence: a focused test matrix showing expected High Risk and High Risk Reason outcomes for each path."
-    },
-    "permission-visibility": {
-      speaker: "SE",
-      role: "Security",
-      text: "Validate that manager visibility comes from standard Case sharing plus the scenario permission set, not from hidden automation shortcuts.",
-      learningNote:
-        "Evidence: permission set access, field visibility, and list view access checked with the intended reviewer profile."
-    },
-    "list-view-accuracy": {
-      speaker: "SM",
-      role: "Support Manager",
-      text: "Confirm the Open High-Risk Cases list stays actionable by including active high-risk Cases and excluding closed Cases.",
-      learningNote:
-        "Evidence: list view screenshots or notes for open flagged, closed flagged, and clean-path Cases."
-    }
-  },
-
-  simulationNotesByChoice: {
-    "flow-precedence": {
-      speaker: "SIM",
-      role: "Simulation note",
-      text: "Capture evidence that each Flow branch wins in the expected order before claiming the automation is release-ready."
-    },
-    "permission-visibility": {
-      speaker: "SIM",
-      role: "Simulation note",
-      text: "Capture access evidence with the intended support manager user before claiming visibility is correctly governed."
-    },
-    "list-view-accuracy": {
-      speaker: "SIM",
-      role: "Simulation note",
-      text: "Capture list view evidence across open flagged, closed flagged, and clean-path Cases before claiming the queue view is accurate."
-    }
-  },
-
-  validationEvidenceByChoice: {
-    "flow-precedence": {
-      recommendedEvidence:
-        "A compact test matrix covering closed clearing, manual override, Strategic customer, stale escalation, priority, and clean paths.",
-      whyItMatters:
-        "Precedence bugs can make the right Case visible for the wrong reason or leave stale high-risk values behind.",
-      whatNotToClaimYet:
-        "Do not claim full smoke-test completion until the paths are manually verified in the org."
-    },
-    "permission-visibility": {
-      recommendedEvidence:
-        "Permission set, field visibility, and list view access checked with the intended reviewer access model.",
-      whyItMatters:
-        "The scenario should teach normal Salesforce visibility, not hidden access shortcuts.",
-      whatNotToClaimYet:
-        "Do not claim production-ready access governance until profile and sharing assumptions are reviewed."
-    },
-    "list-view-accuracy": {
-      recommendedEvidence:
-        "List view results for open high-risk Cases, closed Cases, and Cases where criteria no longer match.",
-      whyItMatters:
-        "Managers need a focused queue view they can trust during operational review.",
-      whatNotToClaimYet:
-        "Do not claim queue accuracy until closed and clean-path records are checked in the target org."
-    }
-  },
+  learnerChoiceDetails: LEARNER_CHOICE_DETAILS,
 
   deferredCapabilities: [
     {

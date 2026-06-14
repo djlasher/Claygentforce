@@ -2,7 +2,7 @@ import { LightningElement } from "lwc";
 import { DELIVERY_ROOM_CATALOG } from "./scenarioCatalog";
 
 export default class ScenarioLauncher extends LightningElement {
-  selectedChoice;
+  selectedChoiceId;
 
   get productSummary() {
     return DELIVERY_ROOM_CATALOG.productSummary;
@@ -50,9 +50,9 @@ export default class ScenarioLauncher extends LightningElement {
         ...message,
         choices: message.choices.map((choice) => ({
           ...choice,
-          ariaPressed: choice.id === this.selectedChoice ? "true" : "false",
+          ariaPressed: choice.id === this.selectedChoiceId ? "true" : "false",
           cssClass:
-            choice.id === this.selectedChoice
+            choice.id === this.selectedChoiceId
               ? "choice-button choice-button-selected"
               : "choice-button"
         }))
@@ -84,10 +84,13 @@ export default class ScenarioLauncher extends LightningElement {
   }
 
   get simulationPhases() {
-    const activePhase = this.selectedChoice ? "follow-up" : "learner-decision";
-    const completedPhases = this.selectedChoice
-      ? ["intake", "team-review", "learner-decision"]
-      : ["intake", "team-review"];
+    const session = DELIVERY_ROOM_CATALOG.simulationSession;
+    const activePhase = this.hasSelectedChoice
+      ? session.activePhaseAfterChoice
+      : session.activePhaseBeforeChoice;
+    const completedPhases = this.hasSelectedChoice
+      ? session.completedAfterChoice
+      : session.completedBeforeChoice;
 
     return DELIVERY_ROOM_CATALOG.simulationPhases.map((phase) => {
       const isActive = phase.id === activePhase;
@@ -106,50 +109,62 @@ export default class ScenarioLauncher extends LightningElement {
   get currentSimulationPhase() {
     const session = DELIVERY_ROOM_CATALOG.simulationSession;
 
-    return this.selectedChoice ? session.followUpPhase : session.decisionPhase;
+    return this.hasSelectedChoice
+      ? session.followUpPhase
+      : session.decisionPhase;
   }
 
-  get selectedChoiceResponse() {
-    return DELIVERY_ROOM_CATALOG.learnerChoiceResponses[this.selectedChoice];
+  get hasSelectedChoice() {
+    return Boolean(this.selectedChoiceId);
   }
 
-  get selectedChoiceConfig() {
-    return DELIVERY_ROOM_CATALOG.chatPreviewMessages
-      .find((message) => message.choices)
-      ?.choices.find((choice) => choice.id === this.selectedChoice);
-  }
-
-  get selectedLearnerMessage() {
-    return this.selectedChoiceConfig?.learnerMessage;
+  get activeChoiceDetail() {
+    return DELIVERY_ROOM_CATALOG.learnerChoiceDetails.find(
+      (choice) => choice.id === this.selectedChoiceId
+    );
   }
 
   get selectedChoiceLabel() {
     return (
-      this.selectedChoiceConfig?.label ||
+      this.activeChoiceDetail?.label ||
       DELIVERY_ROOM_CATALOG.simulationSession.defaultFocus
     );
   }
 
-  get hasSelectedLearnerMessage() {
-    return Boolean(this.selectedLearnerMessage);
-  }
+  get selectedChatMessages() {
+    if (!this.activeChoiceDetail) {
+      return [];
+    }
 
-  get hasSelectedChoiceResponse() {
-    return Boolean(this.selectedChoiceResponse);
-  }
-
-  get selectedSimulationNote() {
-    return DELIVERY_ROOM_CATALOG.simulationNotesByChoice[this.selectedChoice];
-  }
-
-  get hasSelectedSimulationNote() {
-    return Boolean(this.selectedSimulationNote);
+    return [
+      {
+        key: "selected-learner-choice",
+        speaker: "You",
+        role: "Learner",
+        label: "Selected choice",
+        type: "learnerChoice",
+        cssClass: "chat-message chat-message-learner",
+        text: this.activeChoiceDetail.learnerMessage
+      },
+      {
+        key: "selected-follow-up",
+        ...this.activeChoiceDetail.followUp,
+        label: "Predefined response",
+        type: "agentFollowUp",
+        cssClass: "chat-message chat-message-response"
+      },
+      {
+        key: "selected-simulation-note",
+        ...this.activeChoiceDetail.simulationNote,
+        label: "Static guidance",
+        type: "simulationNote",
+        cssClass: "chat-message"
+      }
+    ];
   }
 
   get selectedEvidence() {
-    return DELIVERY_ROOM_CATALOG.validationEvidenceByChoice[
-      this.selectedChoice
-    ];
+    return this.activeChoiceDetail?.validationEvidence;
   }
 
   get hasSelectedEvidence() {
@@ -165,10 +180,10 @@ export default class ScenarioLauncher extends LightningElement {
   }
 
   handleChoiceSelect(event) {
-    this.selectedChoice = event.currentTarget.dataset.choiceId;
+    this.selectedChoiceId = event.currentTarget.dataset.choiceId;
   }
 
   handleResetPreview() {
-    this.selectedChoice = undefined;
+    this.selectedChoiceId = undefined;
   }
 }
