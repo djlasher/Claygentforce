@@ -267,6 +267,10 @@ export default class ScenarioLauncher extends LightningElement {
     return Boolean(this.selectedEvidence);
   }
 
+  get hasSelectedEvidenceBeforeCompletion() {
+    return this.hasSelectedEvidence && !this.hasSelectedFollowUpAction;
+  }
+
   get selectedOutcome() {
     return this.activeFollowUpAction?.outcome;
   }
@@ -282,28 +286,12 @@ export default class ScenarioLauncher extends LightningElement {
 
     return [
       {
-        label: "Decision path",
+        label: "First decision",
         value: this.selectedDecisionLabel
       },
       {
         label: "Follow-up action",
         value: this.selectedFollowUpActionLabel
-      },
-      {
-        label: "Outcome",
-        value: this.selectedOutcome.label
-      },
-      {
-        label: "Outcome summary",
-        value: this.selectedOutcome.summary
-      },
-      {
-        label: "Consequence",
-        value: this.selectedOutcome.consequence
-      },
-      {
-        label: "Recommended next step",
-        value: this.selectedOutcome.recommendedNextStep
       }
     ];
   }

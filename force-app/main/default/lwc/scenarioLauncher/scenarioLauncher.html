@@ -159,7 +159,7 @@
           </template>
         </div>
 
-        <template if:true={hasSelectedEvidence}>
+        <template if:true={hasSelectedEvidenceBeforeCompletion}>
           <section
             class="evidence-panel"
             aria-labelledby="evidence-panel-heading"
@@ -197,34 +197,6 @@
           </section>
         </template>
 
-        <template if:true={hasSelectedOutcome}>
-          <section
-            class="outcome-panel"
-            aria-labelledby="outcome-panel-heading"
-          >
-            <div class="outcome-header">
-              <p class="eyebrow">Final consequence and outcome</p>
-              <h4 id="outcome-panel-heading" class="outcome-heading">
-                {selectedOutcome.label}
-              </h4>
-            </div>
-            <dl class="outcome-grid">
-              <div>
-                <dt>Outcome</dt>
-                <dd>{selectedOutcome.summary}</dd>
-              </div>
-              <div>
-                <dt>Consequence</dt>
-                <dd>{selectedOutcome.consequence}</dd>
-              </div>
-              <div>
-                <dt>Recommended next step</dt>
-                <dd>{selectedOutcome.recommendedNextStep}</dd>
-              </div>
-            </dl>
-          </section>
-        </template>
-
         <template if:true={hasSessionResult}>
           <section
             class="session-result-panel"
@@ -235,7 +207,7 @@
               <h4 id="session-result-heading" class="session-result-heading">
                 Session Result
               </h4>
-              <dl class="session-result-grid">
+              <dl class="decision-path-summary">
                 <template for:each={sessionResultRows} for:item="row">
                   <div key={row.label} class="session-result-item">
                     <dt>{row.label}</dt>
@@ -243,6 +215,21 @@
                   </div>
                 </template>
               </dl>
+            </div>
+
+            <div class="outcome-summary-section">
+              <p class="eyebrow">Outcome summary</p>
+              <h4 class="session-result-heading">{selectedOutcome.label}</h4>
+              <div class="outcome-summary-copy">
+                <p>{selectedOutcome.summary}</p>
+                <p>
+                  <strong>Consequence:</strong> {selectedOutcome.consequence}
+                </p>
+                <p>
+                  <strong>Recommended next step:</strong>
+                  {selectedOutcome.recommendedNextStep}
+                </p>
+              </div>
             </div>
 
             <template if:true={hasSelectedValidationChecklist}>
