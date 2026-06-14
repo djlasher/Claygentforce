@@ -4,6 +4,7 @@ import { DELIVERY_ROOM_CATALOG } from "./scenarioCatalog";
 export default class ScenarioLauncher extends LightningElement {
   selectedChoiceId;
   selectedFollowUpActionId;
+  selectedChallengeResponseId;
   isSupportingContextExpanded = false;
 
   get productSummary() {
@@ -332,6 +333,65 @@ export default class ScenarioLauncher extends LightningElement {
     return Boolean(this.selectedRolePushback);
   }
 
+  get activeChallengeResponses() {
+    if (!this.selectedRolePushback) {
+      return [];
+    }
+
+    return this.selectedRolePushback.challengeResponses.map((response) => ({
+      ...response,
+      ariaPressed:
+        response.id === this.selectedChallengeResponseId ? "true" : "false",
+      cssClass:
+        response.id === this.selectedChallengeResponseId
+          ? "challenge-response-button challenge-response-button-selected"
+          : "challenge-response-button"
+    }));
+  }
+
+  get activeChallengeResponse() {
+    return this.selectedRolePushback?.challengeResponses.find(
+      (response) => response.id === this.selectedChallengeResponseId
+    );
+  }
+
+  get hasSelectedChallengeResponse() {
+    return Boolean(this.activeChallengeResponse);
+  }
+
+  get selectedChallengeResponseMessages() {
+    if (!this.activeChallengeResponse) {
+      return [];
+    }
+
+    return [
+      {
+        key: "challenge-response-learner",
+        speaker: "You",
+        role: "Learner",
+        label: "Challenge response",
+        type: "learnerChallengeResponse",
+        cssClass: "challenge-response-message challenge-response-learner",
+        text: this.activeChallengeResponse.learnerMessage
+      },
+      {
+        key: "challenge-response-reaction",
+        ...this.activeChallengeResponse.reaction,
+        label: "Delivery-room reaction",
+        type: "challengeReaction",
+        cssClass: "challenge-response-message challenge-response-reaction"
+      }
+    ];
+  }
+
+  get selectedCloseoutNote() {
+    return this.activeChallengeResponse?.closeoutNote;
+  }
+
+  get hasSelectedCloseoutNote() {
+    return Boolean(this.selectedCloseoutNote);
+  }
+
   get deferredCapabilities() {
     return DELIVERY_ROOM_CATALOG.deferredCapabilities;
   }
@@ -357,15 +417,22 @@ export default class ScenarioLauncher extends LightningElement {
   handleChoiceSelect(event) {
     this.selectedChoiceId = event.currentTarget.dataset.choiceId;
     this.selectedFollowUpActionId = undefined;
+    this.selectedChallengeResponseId = undefined;
   }
 
   handleFollowUpActionSelect(event) {
     this.selectedFollowUpActionId = event.currentTarget.dataset.actionId;
+    this.selectedChallengeResponseId = undefined;
+  }
+
+  handleChallengeResponseSelect(event) {
+    this.selectedChallengeResponseId = event.currentTarget.dataset.responseId;
   }
 
   handleResetPreview() {
     this.selectedChoiceId = undefined;
     this.selectedFollowUpActionId = undefined;
+    this.selectedChallengeResponseId = undefined;
   }
 
   handleSupportingContextToggle() {

@@ -763,7 +763,59 @@ const LEARNER_CHOICE_DETAILS = [
   }
 ];
 
-const LEARNER_PROMPT_CHOICES = LEARNER_CHOICE_DETAILS.map(
+const buildChallengeResponses = (action) => [
+  {
+    id: `${action.id}-targeted-validation`,
+    label: "Add targeted validation",
+    learnerMessage:
+      "I would turn the challenge into a targeted validation step before closing the run.",
+    reaction: {
+      speaker: action.rolePushback.speaker,
+      role: action.rolePushback.role,
+      text: `Good. That turns the challenge into evidence instead of a release assumption. ${action.rolePushback.suggestedResponse}`,
+      learningNote:
+        "This keeps the response bounded while tying the closeout to observable Scenario 001 validation."
+    },
+    closeoutNote: {
+      summary:
+        "The run closes with a concrete validation action tied to the delivery team's concern.",
+      nextStep: action.rolePushback.suggestedResponse
+    }
+  },
+  {
+    id: `${action.id}-follow-up-risk`,
+    label: "Capture follow-up risk",
+    learnerMessage:
+      "I would capture this as an explicit follow-up risk for the release review.",
+    reaction: {
+      speaker: action.rolePushback.speaker,
+      role: action.rolePushback.role,
+      text: "That can fit a narrow MVP, but the team should be explicit about what remains unproven.",
+      learningNote: action.rolePushback.riskIfIgnored
+    },
+    closeoutNote: {
+      summary:
+        "The run closes with an unresolved delivery risk that should remain visible after the simulation.",
+      nextStep:
+        "Record the risk, owner, and validation trigger before presenting the scenario as release-ready."
+    }
+  }
+];
+
+const LEARNER_CHOICE_DETAILS_WITH_RESPONSES = LEARNER_CHOICE_DETAILS.map(
+  (choice) => ({
+    ...choice,
+    followUpActions: choice.followUpActions.map((action) => ({
+      ...action,
+      rolePushback: {
+        ...action.rolePushback,
+        challengeResponses: buildChallengeResponses(action)
+      }
+    }))
+  })
+);
+
+const LEARNER_PROMPT_CHOICES = LEARNER_CHOICE_DETAILS_WITH_RESPONSES.map(
   ({ id, label, learnerMessage }) => ({
     id,
     label,
@@ -1108,7 +1160,7 @@ export const DELIVERY_ROOM_CATALOG = {
     }
   ],
 
-  learnerChoiceDetails: LEARNER_CHOICE_DETAILS,
+  learnerChoiceDetails: LEARNER_CHOICE_DETAILS_WITH_RESPONSES,
 
   deferredCapabilities: [
     {

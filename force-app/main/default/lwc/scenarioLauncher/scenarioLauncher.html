@@ -312,6 +312,67 @@
                     <strong>Suggested response:</strong>
                     <span>{selectedRolePushback.suggestedResponse}</span>
                   </p>
+                  <div
+                    class="challenge-response-prompt"
+                    aria-label="Bounded challenge response choices"
+                  >
+                    <p>How do you respond to this challenge?</p>
+                    <div class="challenge-response-actions">
+                      <template
+                        for:each={activeChallengeResponses}
+                        for:item="response"
+                      >
+                        <button
+                          key={response.id}
+                          class={response.cssClass}
+                          type="button"
+                          data-response-id={response.id}
+                          aria-pressed={response.ariaPressed}
+                          onclick={handleChallengeResponseSelect}
+                        >
+                          {response.label}
+                        </button>
+                      </template>
+                    </div>
+                  </div>
+                  <template if:true={hasSelectedChallengeResponse}>
+                    <div class="challenge-response-thread">
+                      <template
+                        for:each={selectedChallengeResponseMessages}
+                        for:item="message"
+                      >
+                        <article key={message.key} class={message.cssClass}>
+                          <div class="chat-meta">
+                            <span class="chat-role">{message.role}</span>
+                            <span class="chat-label">{message.label}</span>
+                          </div>
+                          <p>{message.text}</p>
+                          <template if:true={message.learningNote}>
+                            <p class="learning-note">{message.learningNote}</p>
+                          </template>
+                        </article>
+                      </template>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </template>
+
+            <template if:true={hasSelectedCloseoutNote}>
+              <div
+                class="closeout-note-section"
+                aria-labelledby="closeout-note-heading"
+              >
+                <p class="eyebrow">Run closeout</p>
+                <h4 id="closeout-note-heading" class="session-result-heading">
+                  Closeout Note
+                </h4>
+                <div class="closeout-note-card">
+                  <p>{selectedCloseoutNote.summary}</p>
+                  <p>
+                    <strong>Next step:</strong>
+                    <span>{selectedCloseoutNote.nextStep}</span>
+                  </p>
                 </div>
               </div>
             </template>
