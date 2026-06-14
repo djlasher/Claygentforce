@@ -696,6 +696,24 @@ export const DELIVERY_ROOM_CATALOG = {
     ]
   },
 
+  scenarioMoment: {
+    title: "Support manager escalation pressure",
+    speaker: "SM",
+    role: "Support Manager",
+    situation:
+      "Managers need a reliable way to see high-risk open Cases before customer escalations are missed.",
+    pressure:
+      "The stakeholder wants visibility quickly, but the team needs to avoid noisy or misleading manager alerts before release.",
+    learnerPrompt: "How do you respond before calling this release-ready?",
+    stakes:
+      "A fast but unvalidated solution could flag Cases correctly while managers still cannot trust or access the review surface.",
+    contextBullets: [
+      "Scenario 001 uses real Case fields, before-save Flow v3, a manager list view, permissions, and LWCs.",
+      "The team must balance speed, visibility, access, regression coverage, and escalation noise.",
+      "Your first response sets the validation lens for the rest of this local simulation run."
+    ]
+  },
+
   simulationPhases: [
     {
       id: "intake",
@@ -749,7 +767,7 @@ export const DELIVERY_ROOM_CATALOG = {
     transcript:
       "Static role notes that preview the future delivery-room conversation.",
     chatPreview:
-      "A compact static preview of the future chat-style delivery room.",
+      "A bounded local run where the learner responds to a Scenario 001 delivery-room moment.",
     chatPreviewNote:
       "Future versions will stream role messages and prompt learner choices one at a time. This preview uses local static choices only.",
     deferred: "Capabilities intentionally held for later milestones.",
@@ -965,7 +983,7 @@ export const DELIVERY_ROOM_CATALOG = {
       speaker: "You",
       role: "Learner prompt",
       type: "learnerPrompt",
-      text: "What should you validate next?",
+      text: "How do you respond before calling this release-ready?",
       choices: LEARNER_PROMPT_CHOICES
     }
   ],

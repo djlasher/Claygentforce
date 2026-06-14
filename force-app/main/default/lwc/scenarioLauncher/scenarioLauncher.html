@@ -41,13 +41,13 @@
       >
         <div class="section-header section-header-row">
           <div>
-            <p class="eyebrow">Future direction</p>
+            <p class="eyebrow">Bounded simulation</p>
             <h3 id="chat-preview-heading" class="section-heading">
-              Delivery Room Conversation Preview
+              Scenario 001 Delivery Room
             </h3>
             <p class="section-subtitle">{sectionSubtitles.chatPreview}</p>
           </div>
-          <span class="section-badge">Static Preview</span>
+          <span class="section-badge">Local Simulation</span>
         </div>
 
         <div class="session-shell" aria-label="Current simulation session">
@@ -72,6 +72,34 @@
             </template>
           </ol>
         </div>
+
+        <section
+          class="scenario-moment-panel"
+          aria-labelledby="scenario-moment-heading"
+        >
+          <div class="scenario-moment-header">
+            <div class="chat-avatar" aria-hidden="true">
+              {scenarioMoment.speaker}
+            </div>
+            <div>
+              <p class="eyebrow">{scenarioMoment.role}</p>
+              <h4 id="scenario-moment-heading" class="scenario-moment-heading">
+                {scenarioMoment.title}
+              </h4>
+            </div>
+          </div>
+          <div class="scenario-moment-copy">
+            <p>{scenarioMoment.situation}</p>
+            <p><strong>Pressure:</strong> {scenarioMoment.pressure}</p>
+            <p><strong>What is at risk:</strong> {scenarioMoment.stakes}</p>
+          </div>
+          <ul class="scenario-moment-list">
+            <template for:each={scenarioMomentContextBullets} for:item="item">
+              <li key={item}>{item}</li>
+            </template>
+          </ul>
+          <p class="scenario-moment-prompt">{scenarioMoment.learnerPrompt}</p>
+        </section>
 
         <div
           class="chat-window"

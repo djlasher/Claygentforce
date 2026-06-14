@@ -42,6 +42,14 @@ export default class ScenarioLauncher extends LightningElement {
     return DELIVERY_ROOM_CATALOG.scenario001TranscriptPreview;
   }
 
+  get scenarioMoment() {
+    return DELIVERY_ROOM_CATALOG.scenarioMoment;
+  }
+
+  get scenarioMomentContextBullets() {
+    return this.scenarioMoment.contextBullets || [];
+  }
+
   get chatPreviewMessages() {
     return DELIVERY_ROOM_CATALOG.chatPreviewMessages.map((message) => {
       if (!message.choices) {
