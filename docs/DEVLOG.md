@@ -16,9 +16,16 @@ This is still intentionally local and deterministic: no Apex, callouts, persiste
 
 - force-app/main/default/lwc/scenarioLauncher/*
 - manifest/scenario-launcher-package.xml
+- docs/PROJECT_VISION.md
+- docs/ARCHITECTURE.md
+- docs/AGENT_ROLES.md
+- docs/DELIVERY_SIMULATION_LOOP.md
 - docs/ROADMAP.md
 - docs/ISSUES_LOG.md
 - docs/DEVLOG.md
+- docs/AI_SESSION_STARTER.md
+- docs/AI_COMMANDS_AND_WORKFLOWS.md
+- README.md
 
 ### Notes
 
@@ -33,6 +40,7 @@ This is still intentionally local and deterministic: no Apex, callouts, persiste
 - Added `deliveryRoomPlan.js` so the orchestrator builds explicit deterministic task plans by stage.
 - Added `deliveryRoomAdapter.js` as the local execution seam for future Agentforce/Data Cloud/server-backed task execution.
 - Added `manifest/scenario-launcher-package.xml` so launcher-only work can validate and deploy without redeploying the Scenario 001 Flow.
+- Cleaned up duplicated/stale documentation by condensing core docs and removing outdated runbook, run-mode, app setup, launcher design, template strategy, and AI workflow note files.
 
 ### Validation Notes
 
