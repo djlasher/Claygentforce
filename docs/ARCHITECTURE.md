@@ -1,372 +1,144 @@
 # Architecture
 
-Claygentforce is an SFDX-based Salesforce project and documentation-driven AI simulation framework.
+Claygentforce is a Salesforce DX project and delivery-room simulation prototype.
 
-The current architecture is intentionally lightweight. The project should first establish reusable documentation, role definitions, simulation flow, and AI prompt structure before adding complex Salesforce metadata or application automation.
+The architecture is intentionally incremental:
 
----
-
-## Architecture Goals
-
-Claygentforce should support three architecture goals:
-
-1. Maintain a valid Salesforce DX project structure.
-2. Preserve reusable context for humans and AI tools.
-3. Enable repeatable Salesforce delivery simulations through documented agents, prompts, scenarios, and review loops.
-
-The initial architecture prioritizes clarity and iteration speed over platform complexity.
+1. build real Salesforce metadata in small scenario-driven slices
+2. simulate delivery-team intelligence with deterministic local orchestration
+3. later replace selected local tasks with Agentforce/Data Cloud/server-backed role agents
 
 ---
 
-## Current Repository Structure
+## Current Architecture Summary
 
-Claygentforce/
-  force-app/
-  manifest/
-  docs/
-    PROJECT_VISION.md
-    AGENT_ROLES.md
-    DELIVERY_SIMULATION_LOOP.md
-    ARCHITECTURE.md
-    DEVLOG.md
-    ISSUES_LOG.md
-    AI_WORKFLOW_NOTES.md
-  prompts/
-    admin-agent.md
-    architect-agent.md
-    ba-agent.md
-    client-stakeholder-agent.md
-    developer-agent.md
-    devops-agent.md
-    incident-commander-agent.md
-    product-owner-agent.md
-    qa-agent.md
-    security-agent.md
-  sfdx-project.json
-  README.md
-  .gitignore
+Current Scenario 001 launcher architecture:
+
+```text
+learner run state
+  -> deliveryRoomOrchestrator.js
+  -> deliveryRoomPlan.js
+  -> deliveryRoomAdapter.js
+  -> deliveryRoomAgents.js
+  -> normalized task outputs
+  -> run model
+  -> scenarioLauncher LWC renderer
+```
+
+The LWC renderer should stay focused on displaying the run model and handling local click events. The orchestration modules own run-state interpretation, task planning, local role-agent routing, and normalized outputs.
 
 ---
 
-## Root-Level Structure
+## Key Source Areas
 
-### force-app/
+| Area | Purpose |
+|---|---|
+| `force-app/main/default/` | Deployable Salesforce metadata. |
+| `force-app/main/default/lwc/scenarioLauncher/` | Chat-first Scenario 001 Delivery Room launcher and local orchestration modules. |
+| `force-app/main/default/lwc/scenario001CaseRiskPanel/` | Read-only Case record risk review panel for Scenario 001. |
+| `manifest/scenario-001-package.xml` | Full Scenario 001 metadata manifest. Use only for full scenario validation/deployment. |
+| `manifest/scenario-launcher-package.xml` | Launcher-only manifest for normal LWC/orchestration iterations. |
+| `scenarios/` | Scenario artifacts, templates, smoke tests, and run logs. |
+| `docs/` | Project memory: vision, architecture, roadmap, devlog, issues, AI workflow guidance, and ADRs. |
+| `prompts/` | Reusable role prompts for manual or AI-assisted simulation work. |
 
-Contains Salesforce source metadata.
+---
 
-This should be reserved for deployable Salesforce metadata, such as:
+## Scenario 001 Salesforce Architecture
 
-- Apex classes
-- Lightning Web Components
-- Flows
-- Custom Objects
-- Permission Sets
-- Custom Metadata
-- Reports or Dashboards if needed
-- Other Salesforce metadata required by scenarios
+Scenario 001 is **Case Escalation and Manager Visibility**.
 
-Non-deployable planning documents should not be placed inside force-app.
+The real Salesforce implementation includes:
 
-### manifest/
+- Case high-risk fields
+- before-save Case Flow
+- Case layout section
+- Open High-Risk Cases list view
+- scenario-specific permission set
+- read-only Case risk panel LWC
+- Claygentforce app/home tab/launcher page
+- chat-first Scenario 001 launcher LWC
 
-Contains package manifests used for Salesforce deployment and retrieval.
+The Case Flow owns real record evaluation. The launcher owns local learner simulation. The two surfaces should remain clearly separated unless a future scenario intentionally connects them.
 
-The project was initialized as an SFDX project with manifest support. This is useful for controlled retrieval, deployment, and validation as the project grows.
+---
 
-### docs/
+## Current Local Orchestration Modules
 
-Contains human-readable project documentation.
+| File | Responsibility |
+|---|---|
+| `scenarioLauncher.js` | LWC controller/renderer bridge. Stores local run state and exposes run-model getters. |
+| `scenarioLauncher.html` | Chat-first learner surface and compact summary panels. |
+| `scenarioLauncher.css` | Scoped launcher styling. |
+| `scenarioCatalog.js` | Static Scenario 001 content, choices, follow-up actions, role pushback, decision quality data, and closeout copy. |
+| `deliveryRoomOrchestrator.js` | Converts run state and catalog data into the derived run model. |
+| `deliveryRoomPlan.js` | Builds deterministic role-agent task plans by run stage. |
+| `deliveryRoomAdapter.js` | Executes local task plans and creates the future replacement seam for Agentforce/Data Cloud/server-backed task execution. |
+| `deliveryRoomAgents.js` | Routes deterministic local role-agent tasks through a local role-agent registry. |
 
-This folder acts as the project memory layer. It stores vision, architecture, delivery process, agent roles, issue history, AI workflow notes, and future design decisions.
+Current local run state includes:
 
-The docs folder should be treated as a first-class part of the project, not an afterthought.
+- `selectedChoiceId`
+- `selectedFollowUpActionId`
+- `selectedChallengeResponseId`
 
-### prompts/
+Supporting context expansion is UI-only state and should remain separate from the learner run state.
 
-Contains Claygentforce-specific AI workflow assets.
+---
 
-This folder is for internal project guidance, reusable prompt files, role instructions, scenario seeds, and future AI orchestration notes.
+## Architecture Boundaries
 
-It is intentionally separate from force-app because these files are not Salesforce metadata.
+The current launcher intentionally avoids:
+
+- Apex
+- persistence
+- external AI calls
+- live Agentforce invocation
+- Data Cloud integration
+- freeform chat input
+- navigation
+- timers or async streaming
+- scoring
+- randomization
+
+These are future capabilities, not current MVP defaults.
 
 ---
 
 ## Documentation Architecture
 
-The documentation layer is the first major system component.
-
-It provides stable context for:
-
-- the human builder
-- ChatGPT
-- Codex
-- GitHub Copilot
-- future AI agents
-- future contributors
-- portfolio reviewers
-
-The documentation layer reduces repeated prompting and helps future AI tools understand the project quickly.
-
-### Current Documentation Files
+The docs folder should stay lean and role-specific:
 
 | File | Purpose |
 |---|---|
-| docs/PROJECT_VISION.md | Defines the product idea, why it exists, learning goals, principles, and long-term direction. |
-| docs/AGENT_ROLES.md | Defines the simulated Salesforce delivery roles and their responsibilities. |
-| docs/DELIVERY_SIMULATION_LOOP.md | Defines the repeatable delivery learning loop. |
-| docs/ARCHITECTURE.md | Defines the repository and system architecture. |
-| docs/DEVLOG.md | Tracks development progress and project milestones. |
-| docs/ISSUES_LOG.md | Tracks setup issues, tool problems, errors, and fixes. |
-| docs/AI_WORKFLOW_NOTES.md | Documents how AI tools are used in the project workflow. |
+| `docs/PROJECT_VISION.md` | Product direction and current status. |
+| `docs/ARCHITECTURE.md` | Current system and repository architecture. |
+| `docs/AGENT_ROLES.md` | Delivery role model and local role-agent responsibilities. |
+| `docs/DELIVERY_SIMULATION_LOOP.md` | Core delivery learning loop and run modes. |
+| `docs/ROADMAP.md` | Active priorities and future direction. |
+| `docs/DEVLOG.md` | Milestone-oriented development history. |
+| `docs/ISSUES_LOG.md` | Meaningful setup/tooling/deployment issues and lessons. |
+| `docs/AI_SESSION_STARTER.md` | ChatGPT rehydration and current project state. |
+| `docs/AI_COMMANDS_AND_WORKFLOWS.md` | Codex/implementation workflow guidance. |
+| `docs/adr/` | Architecture decision records. |
+
+Avoid adding new documentation files unless the new file has a clearly distinct job.
 
 ---
 
-## AI Context Architecture
+## Future Architecture Direction
 
-Claygentforce is designed to work well with AI-assisted development.
+The current local adapter is the planned replacement seam.
 
-The project should store enough context in files that future AI tools can operate with shorter, more precise prompts.
+Later versions may replace selected local role-agent tasks with:
 
-Instead of repeatedly explaining the entire project in chat, the repository should contain:
+- Agentforce actions for bounded role guidance
+- Data Cloud context for customer/account risk enrichment
+- Apex-backed persistence for saved learner runs
+- server-side evaluation or reflection logic
+- CI validation and deployment automation
 
-- project vision
-- agent role definitions
-- simulation loop
-- architecture notes
-- issue history
-- AI workflow notes
-- prompt files
-- coding conventions
-- scenario templates
-- development logs
-
-This creates a durable project memory that is independent of any single chat session.
-
-### Intended AI Tool Roles
-
-| Tool Type | Intended Use |
-|---|---|
-| ChatGPT | Planning, architecture, documentation, scenario design, debugging support, prompt refinement. |
-| Codex | Code implementation, file edits, test scaffolding, repository updates when intentionally used. |
-| GitHub Copilot | In-editor code completion, refactoring assistance, local development support. |
-| Future agents | Role-based simulation, scenario orchestration, automated review, feedback generation. |
-
----
-
-## Simulation Architecture
-
-At the conceptual level, a simulation contains:
-
-Scenario
-  -> Stakeholder Intake
-  -> Requirements Clarification
-  -> Architecture Review
-  -> Implementation Plan
-  -> Build Task
-  -> QA Review
-  -> Security Review
-  -> DevOps Review
-  -> UAT / Stakeholder Review
-  -> Outcome Feedback
-  -> Retrospective
-
-Each simulation should produce artifacts that can be reviewed later.
-
-Potential simulation artifacts include:
-
-- scenario brief
-- user stories
-- acceptance criteria
-- architecture decision record
-- metadata change list
-- QA test plan
-- security review notes
-- deployment checklist
-- release notes
-- incident report
-- retrospective notes
----
-
-## Agent Architecture
-
-Agents are currently prompt-defined roles.
-
-In the first phase, an agent is simply a reusable prompt file that describes:
-
-- role purpose
-- responsibilities
-- review concerns
-- expected outputs
-- boundaries
-- interaction style
-
-Later, agents may become more automated.
-
-Possible future implementations:
-
-- individual prompt files invoked manually
-- local scripts that assemble prompts
-- GitHub issue templates that simulate scenarios
-- Salesforce records representing scenarios and decisions
-- custom metadata defining scenario stages
-- LWC interface for running simulations
-- external orchestration framework
-- multi-agent workflow engine
-
-The project should not prematurely commit to one orchestration model.
-
----
-
-## Salesforce Metadata Architecture
-
-Salesforce metadata should be added only when it supports a simulation or learning goal.
-
-The first metadata examples should be small and realistic.
-
-Suggested first scenario metadata:
-
-- Case fields
-- Case escalation criteria
-- Flow or Apex automation
-- permission set
-- report or list view
-- test class if Apex is used
-- deployment manifest entries
-
-The project should avoid building random metadata that does not serve the simulator.
-
----
-
-## Scenario Data Model Concept
-
-Future versions may define a lightweight scenario model.
-
-Potential objects or conceptual records:
-
-| Concept | Purpose |
-|---|---|
-| Scenario | The top-level simulated business problem. |
-| Stage | A step in the delivery loop. |
-| Agent Response | Feedback or guidance from a simulated role. |
-| Learner Decision | A decision made by the learner. |
-| Artifact | A generated output such as user story, ADR, test plan, or deployment checklist. |
-| Consequence | Simulated outcome caused by earlier choices. |
-| Retrospective Note | Learning summary after the scenario. |
-
-This does not need to be implemented immediately. It is a conceptual architecture for later design.
-
----
-
-## Review Gates
-
-Each simulation should eventually support review gates.
-
-Suggested gates:
-
-1. Requirements Ready
-2. Architecture Ready
-3. Build Ready
-4. QA Ready
-5. Security Ready
-6. Deployment Ready
-7. Stakeholder Accepted
-8. Retrospective Complete
-
-A gate should not simply be a checkbox. It should represent a meaningful review moment where agents may identify gaps or risks.
-
----
-
-## Error and Issue Tracking
-
-Project issues should be documented as they occur.
-
-Use docs/ISSUES_LOG.md for:
-
-- setup errors
-- credential/auth problems
-- tool failures
-- confusing behavior
-- environment problems
-- workarounds
-- follow-up actions
-
-This keeps project friction visible and reusable.
-
----
-
-## Development Logging
-
-Use docs/DEVLOG.md for development progress.
-
-The devlog should record:
-
-- dates
-- milestones
-- files added
-- major decisions
-- validation steps
-- next actions
-
-This helps preserve momentum and makes the project easier to resume after breaks.
-
----
-
-## Initial Architecture Boundary
-
-For the initial phase, Claygentforce should remain mostly documentation and prompt driven.
-
-Do not rush into:
-
-- complex custom objects
-- full UI
-- automated multi-agent orchestration
-- unnecessary Apex
-- large scenario libraries
-- packaging decisions
-- managed package concerns
-
-The first goal is a clear, reusable foundation.
-
----
-
-## Near-Term Architecture Roadmap
-
-### Phase 0 — Project Foundation
-
-- SFDX project created
-- GitHub repo created
-- documentation scaffold created
-- issues log created
-- project vision defined
-- agent roles defined
-- simulation loop defined
-- architecture documented
-
-### Phase 1 — Prompt and Scenario Foundation
-
-- fill role prompt files
-- define first scenario
-- create scenario template
-- create architecture decision record template
-- create BA/admin/developer/QA/security/DevOps review templates
-- create product owner, stakeholder, and incident response templates
-- keep AI workflow notes current
-
-### Phase 2 — First Salesforce Scenario
-
-- implement a small Case escalation scenario
-- define metadata changes
-- add validation steps
-- document build/review/release path
-- simulate outcome feedback
-
-### Phase 3 — Interactive Simulator Concept
-
-- evaluate whether to build a Salesforce-native UI, external UI, or prompt-driven workflow
-- define scenario state model
-- define learner decision tracking
-- define scoring or feedback approach
-- explore agent orchestration options
+Do not wire dynamic agents into the UI until the deterministic local task model is stable and easy to reason about.
 
 ---
 
@@ -374,8 +146,8 @@ The first goal is a clear, reusable foundation.
 
 Architecture should serve the learning loop.
 
-Every technical decision should answer this question:
+Every technical decision should answer:
 
-Does this make Salesforce delivery judgment easier to practice, inspect, and improve?
+> Does this make Salesforce delivery judgment easier to practice, inspect, and improve?
 
 If the answer is no, defer it.
