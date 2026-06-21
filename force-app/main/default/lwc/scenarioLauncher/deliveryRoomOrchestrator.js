@@ -1,3 +1,5 @@
+import { runRoleAgentTask } from "./deliveryRoomAgents";
+
 export const createInitialRunState = () => ({
   selectedChoiceId: undefined,
   selectedFollowUpActionId: undefined,
@@ -101,6 +103,13 @@ const buildSelectedChallengeResponseMessages = (activeChallengeResponse) => {
     return [];
   }
 
+  const challengeReaction = runRoleAgentTask({
+    taskName: "produceChallengeReaction",
+    context: {
+      reaction: activeChallengeResponse.reaction
+    }
+  });
+
   return [
     {
       key: "challenge-response-learner",
@@ -113,10 +122,7 @@ const buildSelectedChallengeResponseMessages = (activeChallengeResponse) => {
     },
     {
       key: "challenge-response-reaction",
-      ...activeChallengeResponse.reaction,
-      label: "Delivery-room reaction",
-      type: "challengeReaction",
-      cssClass: "chat-message chat-message-response"
+      ...challengeReaction
     }
   ];
 };
@@ -143,10 +149,12 @@ const buildSelectedFollowUpChatMessages = ({
     },
     {
       key: "final-delivery-response",
-      ...activeFollowUpAction.response,
-      label: "Final predefined response",
-      type: "finalResponse",
-      cssClass: "chat-message chat-message-response"
+      ...runRoleAgentTask({
+        taskName: "produceFollowUpResponse",
+        context: {
+          response: activeFollowUpAction.response
+        }
+      })
     }
   ];
 
@@ -158,13 +166,12 @@ const buildSelectedFollowUpChatMessages = ({
     .concat([
       {
         key: "team-challenge",
-        speaker: selectedRolePushback.speaker,
-        role: selectedRolePushback.role,
-        label: "Team Challenge",
-        type: "teamChallenge",
-        cssClass: "chat-message chat-message-response",
-        text: selectedRolePushback.challenge,
-        learningNote: `Risk if ignored: ${selectedRolePushback.riskIfIgnored}`
+        ...runRoleAgentTask({
+          taskName: "produceRolePushbackMessage",
+          context: {
+            rolePushback: selectedRolePushback
+          }
+        })
       },
       {
         key: "challenge-response-prompt",
@@ -201,17 +208,21 @@ const buildSelectedChatMessages = ({
     },
     {
       key: "selected-follow-up",
-      ...activeChoiceDetail.followUp,
-      label: "Predefined response",
-      type: "agentFollowUp",
-      cssClass: "chat-message chat-message-response"
+      ...runRoleAgentTask({
+        taskName: "produceInitialRoleFollowUp",
+        context: {
+          followUp: activeChoiceDetail.followUp
+        }
+      })
     },
     {
       key: "selected-simulation-note",
-      ...activeChoiceDetail.simulationNote,
-      label: "Static guidance",
-      type: "simulationNote",
-      cssClass: "chat-message"
+      ...runRoleAgentTask({
+        taskName: "produceSimulationNote",
+        context: {
+          simulationNote: activeChoiceDetail.simulationNote
+        }
+      })
     },
     {
       key: "follow-up-action-prompt",
@@ -234,7 +245,14 @@ export const buildRunModel = (runState, catalog) => {
   const activeFollowUpAction = activeChoiceDetail?.followUpActions.find(
     (action) => action.id === runState.selectedFollowUpActionId
   );
-  const selectedRolePushback = activeFollowUpAction?.rolePushback;
+  const selectedRolePushback = activeFollowUpAction
+    ? runRoleAgentTask({
+        taskName: "produceRolePushback",
+        context: {
+          rolePushback: activeFollowUpAction.rolePushback
+        }
+      })
+    : undefined;
   const activeChallengeResponse = selectedRolePushback?.challengeResponses.find(
     (response) => response.id === runState.selectedChallengeResponseId
   );
@@ -272,11 +290,32 @@ export const buildRunModel = (runState, catalog) => {
       : selectedChoiceLabel;
   const selectedEvidence = activeChoiceDetail?.validationEvidence;
   const selectedOutcome = activeFollowUpAction?.outcome;
-  const selectedDecisionQuality = activeFollowUpAction?.decisionQuality;
+  const selectedDecisionQuality = activeFollowUpAction
+    ? runRoleAgentTask({
+        taskName: "produceDecisionQuality",
+        context: {
+          decisionQuality: activeFollowUpAction.decisionQuality
+        }
+      })
+    : undefined;
   const selectedValidationChecklist =
     activeFollowUpAction?.validationChecklist || [];
-  const selectedTeamReview = activeFollowUpAction?.teamReview;
-  const selectedCloseoutNote = activeChallengeResponse?.closeoutNote;
+  const selectedTeamReview = activeFollowUpAction
+    ? runRoleAgentTask({
+        taskName: "produceTeamReview",
+        context: {
+          teamReview: activeFollowUpAction.teamReview
+        }
+      })
+    : undefined;
+  const selectedCloseoutNote = activeChallengeResponse
+    ? runRoleAgentTask({
+        taskName: "produceCloseoutNote",
+        context: {
+          closeoutNote: activeChallengeResponse.closeoutNote
+        }
+      })
+    : undefined;
   const activeFollowUpActions = activeChoiceDetail
     ? buildFollowUpButtons(
         activeChoiceDetail.followUpActions,
