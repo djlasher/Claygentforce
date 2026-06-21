@@ -876,17 +876,17 @@ const buildChallengeResponses = (action) => [
     id: `${action.id}-targeted-validation`,
     label: "Add targeted validation",
     learnerMessage:
-      "I would turn the challenge into a targeted validation step before closing the run.",
+      "I would turn the challenge into a concrete validation step now.",
     reaction: {
       speaker: action.rolePushback.speaker,
       role: action.rolePushback.role,
-      text: `Good. That turns the challenge into evidence instead of a release assumption. ${action.rolePushback.suggestedResponse}`,
+      text: `Good. That converts the concern into a validation step instead of a release assumption. ${action.rolePushback.suggestedResponse}`,
       learningNote:
-        "This keeps the response bounded while tying the closeout to observable Scenario 001 validation."
+        "This keeps the response bounded and tied to observable Scenario 001 evidence."
     },
     closeoutNote: {
       summary:
-        "The run closes with a concrete validation action tied to the delivery team's concern.",
+        "The run closes with an immediate validation action tied to the delivery team's concern.",
       nextStep: action.rolePushback.suggestedResponse
     }
   },
@@ -894,18 +894,18 @@ const buildChallengeResponses = (action) => [
     id: `${action.id}-follow-up-risk`,
     label: "Capture follow-up risk",
     learnerMessage:
-      "I would capture this as an explicit follow-up risk for the release review.",
+      "I would record this as an unresolved release-review risk with an owner and trigger.",
     reaction: {
       speaker: action.rolePushback.speaker,
       role: action.rolePushback.role,
-      text: "That can fit a narrow MVP, but the team should be explicit about what remains unproven.",
+      text: "That fits a narrow MVP when the team is explicit about what remains unproven.",
       learningNote: action.rolePushback.riskIfIgnored
     },
     closeoutNote: {
       summary:
-        "The run closes with an unresolved delivery risk that should remain visible after the simulation.",
+        "The run closes with an unresolved delivery risk captured for release review, not treated as validated.",
       nextStep:
-        "Record the risk, owner, and validation trigger before presenting the scenario as release-ready."
+        "Record the risk, owner, and validation trigger before presenting the scenario as ready for broader review."
     }
   }
 ];

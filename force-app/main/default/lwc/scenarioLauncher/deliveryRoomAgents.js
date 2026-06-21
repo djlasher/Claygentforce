@@ -27,7 +27,7 @@ const TASK_DEFAULTS = {
     cssClass: "chat-message chat-message-response"
   },
   produceSimulationNote: {
-    label: "Static guidance",
+    label: "Local coordinator task",
     type: "simulationNote",
     cssClass: "chat-message"
   },
@@ -59,6 +59,12 @@ const normalizeRoleMessage = (source, defaults = {}) => ({
   cssClass: defaults.cssClass
 });
 
+const buildRolePushbackMessageSource = (rolePushback = {}) => {
+  const messageSource = { ...rolePushback };
+  delete messageSource.challengeResponses;
+  return messageSource;
+};
+
 // Deterministic local stand-in for future Agentforce/Data Cloud-backed role tasks.
 export const runRoleAgentTask = ({ taskName, context = {} }) => {
   switch (taskName) {
@@ -69,7 +75,10 @@ export const runRoleAgentTask = ({ taskName, context = {} }) => {
       );
     case "produceSimulationNote":
       return normalizeRoleMessage(
-        context.simulationNote,
+        {
+          ...context.simulationNote,
+          role: "Delivery Coordinator"
+        },
         TASK_DEFAULTS.produceSimulationNote
       );
     case "produceFollowUpResponse":
@@ -82,15 +91,19 @@ export const runRoleAgentTask = ({ taskName, context = {} }) => {
         ...context.rolePushback,
         agentKey: getAgentKeyForSource(context.rolePushback)
       };
-    case "produceRolePushbackMessage":
+    case "produceRolePushbackMessage": {
+      const rolePushbackMessageSource = buildRolePushbackMessageSource(
+        context.rolePushback
+      );
       return {
         ...normalizeRoleMessage(
-          context.rolePushback,
+          rolePushbackMessageSource,
           TASK_DEFAULTS.produceRolePushback
         ),
-        text: context.rolePushback?.challenge,
-        learningNote: `Risk if ignored: ${context.rolePushback?.riskIfIgnored}`
+        text: rolePushbackMessageSource.challenge,
+        learningNote: `Risk if ignored: ${rolePushbackMessageSource.riskIfIgnored}`
       };
+    }
     case "produceChallengeReaction":
       return normalizeRoleMessage(
         context.reaction,
