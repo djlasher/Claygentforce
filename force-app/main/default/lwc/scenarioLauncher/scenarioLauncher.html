@@ -300,6 +300,31 @@
               </div>
             </template>
 
+            <template if:true={hasCompletedRun}>
+              <div
+                class="completed-run-section"
+                aria-labelledby="completed-run-heading"
+              >
+                <p class="eyebrow">Run status</p>
+                <h4 id="completed-run-heading" class="session-result-heading">
+                  Scenario Run Closed
+                </h4>
+                <p class="completed-run-intro">
+                  This static run is complete. Review the selected path,
+                  evidence gap, and next validation action before claiming
+                  readiness.
+                </p>
+                <dl class="completed-run-grid">
+                  <template for:each={completedRunSummaryRows} for:item="row">
+                    <div key={row.label} class="completed-run-item">
+                      <dt>{row.label}</dt>
+                      <dd>{row.value}</dd>
+                    </div>
+                  </template>
+                </dl>
+              </div>
+            </template>
+
             <div class="outcome-summary-section">
               <p class="eyebrow">Outcome summary</p>
               <h4 class="session-result-heading">{selectedOutcome.label}</h4>

@@ -435,6 +435,47 @@ export default class ScenarioLauncher extends LightningElement {
     return Boolean(this.activeChallengeResponse);
   }
 
+  get hasCompletedRun() {
+    return this.hasSelectedChallengeResponse;
+  }
+
+  get selectedChallengeResponseLabel() {
+    return this.activeChallengeResponse?.label;
+  }
+
+  get completedRunNextAction() {
+    return (
+      this.selectedCloseoutNote?.nextStep ||
+      this.selectedDecisionQuality?.evidenceGap ||
+      this.selectedValidationChecklist[0]
+    );
+  }
+
+  get completedRunSummaryRows() {
+    if (!this.hasCompletedRun) {
+      return [];
+    }
+
+    return [
+      {
+        label: "Selected decision",
+        value: this.selectedDecisionLabel
+      },
+      {
+        label: "Follow-up action",
+        value: this.selectedFollowUpActionLabel
+      },
+      {
+        label: "Challenge response",
+        value: this.selectedChallengeResponseLabel
+      },
+      {
+        label: "Next validation action",
+        value: this.completedRunNextAction
+      }
+    ];
+  }
+
   get selectedChallengeResponseMessages() {
     if (!this.activeChallengeResponse) {
       return [];

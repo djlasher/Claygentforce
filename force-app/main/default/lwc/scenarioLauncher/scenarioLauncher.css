@@ -654,6 +654,7 @@
 
 .session-result-section,
 .decision-quality-section,
+.completed-run-section,
 .outcome-summary-section,
 .team-review-section,
 .team-challenge-section,
@@ -675,6 +676,10 @@
 
 .decision-quality-section {
   border-left-color: #706e6b;
+}
+
+.completed-run-section {
+  border-left-color: #1b5297;
 }
 
 .team-challenge-section {
@@ -758,6 +763,47 @@
 }
 
 .decision-quality-item dd {
+  color: #2e2e2e;
+  line-height: 1.4;
+  margin: 0.2rem 0 0;
+}
+
+.completed-run-section {
+  background: #fafaf9;
+  border: 1px solid #dddbda;
+  border-left: 0.25rem solid #1b5297;
+  border-radius: 0.25rem;
+  padding: 0.625rem 0.75rem;
+}
+
+.completed-run-intro {
+  color: #2e2e2e;
+  line-height: 1.45;
+  margin: -0.25rem 0 0.625rem;
+}
+
+.completed-run-grid {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  margin: 0;
+}
+
+.completed-run-item {
+  background: #ffffff;
+  border: 1px solid #dddbda;
+  border-radius: 0.25rem;
+  padding: 0.55rem 0.625rem;
+}
+
+.completed-run-item dt {
+  color: #5c5c5c;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.completed-run-item dd {
   color: #2e2e2e;
   line-height: 1.4;
   margin: 0.2rem 0 0;
