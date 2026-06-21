@@ -2,80 +2,49 @@
 
 Claygentforce is a Salesforce delivery team simulation and enablement project.
 
-The goal is to build a realistic, AI-assisted Salesforce delivery simulator that helps learners practice requirements discovery, architecture decisions, implementation planning, admin configuration, DevOps workflows, QA review, security review, stakeholder tradeoffs, and incident response in a safe sandbox environment.
+The goal is to help learners practice Salesforce delivery judgment: requirements discovery, architecture decisions, implementation planning, admin configuration, DevOps workflows, QA review, security review, stakeholder tradeoffs, deployment readiness, and incident response.
 
-This project is intentionally starting with documentation, role prompts, scenario artifacts, and small scenario-driven Salesforce metadata before building complex automation or a full simulator UI.
-
----
-
-## What This Is
-
-Claygentforce simulates a Salesforce delivery team using role-based AI agents.
-
-Each agent represents a different delivery perspective, including:
-
-- Business Analyst
-- Technical Architect
-- Salesforce Admin
-- Salesforce Developer
-- QA Engineer
-- DevOps Engineer
-- Security Reviewer
-- Product Owner
-- Client Stakeholder
-- Incident Commander
-- Simulation Runner
-
-The learner interacts with these roles while working through realistic Salesforce delivery scenarios.
-
-The purpose is to practice Salesforce delivery judgment, not just Salesforce syntax.
-
----
-
-## Why This Exists
-
-Salesforce professionals can learn platform features through documentation, Trailhead, certifications, and project experience.
-
-However, many of the hardest skills are learned through real delivery pressure:
-
-- interpreting unclear requirements
-- asking better stakeholder questions
-- choosing between imperfect architecture options
-- balancing declarative and programmatic solutions
-- managing scope and business value
-- understanding security and sharing implications
-- validating QA and UAT readiness
-- planning deployments and rollback
-- responding to production incidents
-- documenting decisions and lessons learned
-
-Claygentforce is designed to make those experiences repeatable, inspectable, and safe.
+Claygentforce is not a generic chatbot, quiz app, or simple Salesforce demo. It is a scenario-driven Salesforce learning environment where realistic metadata and local role-agent orchestration help learners practice delivery decisions safely.
 
 ---
 
 ## Current Project Status
 
-Current status: early Phase 1 with a small Scenario 001 metadata increment started.
+Current status: Scenario 001 implemented as a real Salesforce vertical slice with a chat-first local orchestration prototype.
+
+Scenario 001 is:
+
+**Case Escalation and Manager Visibility**
 
 The project currently includes:
 
 - Salesforce DX project structure
-- manifest support
-- documentation scaffold
-- expanded role prompt set
-- simulation runbook and run modes
-- reusable scenario template
-- first scenario artifacts
-- issue and development logs
-- AI workflow notes
-- initial Scenario 001 Case field metadata
-- focused Scenario 001 deployment manifest
+- full Scenario 001 deployment manifest
+- launcher-only deployment manifest
+- Case high-risk fields
+- before-save Case Flow with precedence paths
+- Case layout/list view/permission set support
+- read-only Case risk panel LWC
+- source-controlled Claygentforce app/home tab/launcher page
+- chat-first `scenarioLauncher` LWC
+- deterministic local orchestration modules in the launcher bundle
+- reusable scenario template and Scenario 001 artifacts
+- smoke checklist and run logs
+- devlog, issue log, roadmap, architecture, and AI workflow guidance
 
-The project does not yet contain a full Salesforce application, authenticated org connection, or automated simulator UI.
+The current launcher architecture is:
 
-That is intentional.
+```text
+run state
+  -> orchestration plan
+  -> local adapter
+  -> role-agent registry
+  -> normalized task outputs
+  -> run model
+  -> LWC renderer
+```
 
-The current focus is building a strong foundation, validating small Salesforce metadata increments, and keeping every build step tied to a scenario learning objective.
+Current implementation remains local and deterministic: no Apex, persistence, external AI calls, live Agentforce invocation, Data Cloud integration, freeform chat input, async streaming, randomization, or scoring.
 
 ---
 
@@ -84,223 +53,104 @@ The current focus is building a strong foundation, validating small Salesforce m
 ```text
 Claygentforce/
   force-app/
-    main/default/objects/Case/fields/
-      High_Risk__c.field-meta.xml
-      High_Risk_Reason__c.field-meta.xml
+    main/default/
+      applications/
+      flexipages/
+      flows/
+      layouts/
+      lwc/
+        scenario001CaseRiskPanel/
+        scenarioLauncher/
+      objects/
+      permissionsets/
+      tabs/
   manifest/
     package.xml
     scenario-001-package.xml
+    scenario-launcher-package.xml
   docs/
     AI_SESSION_STARTER.md
+    AI_COMMANDS_AND_WORKFLOWS.md
     PROJECT_VISION.md
+    ARCHITECTURE.md
     AGENT_ROLES.md
     DELIVERY_SIMULATION_LOOP.md
-    SIMULATION_RUNBOOK.md
-    SIMULATION_RUN_MODES.md
-    TEMPLATE_STRATEGY.md
-    ARCHITECTURE.md
+    ROADMAP.md
     DEVLOG.md
     ISSUES_LOG.md
-    AI_WORKFLOW_NOTES.md
+    adr/
   prompts/
-    admin-agent.md
-    architect-agent.md
-    ba-agent.md
-    client-stakeholder-agent.md
-    developer-agent.md
-    devops-agent.md
-    incident-commander-agent.md
-    product-owner-agent.md
-    qa-agent.md
-    security-agent.md
-    simulation-runner.md
   scenarios/
     README.md
     TEMPLATE_SCENARIO/
-      README.md
-      SCENARIO_BRIEF.md
-      STAKEHOLDER_INTAKE.md
-      ACCEPTANCE_CRITERIA.md
-      ARCHITECTURE_DECISION.md
-      QA_REVIEW.md
-      SECURITY_REVIEW.md
-      DEPLOYMENT_REVIEW.md
-      RETROSPECTIVE.md
     001-case-escalation-manager-visibility/
-      SCENARIO_BRIEF.md
-      STAKEHOLDER_INTAKE.md
-      ACCEPTANCE_CRITERIA.md
-      ARCHITECTURE_DECISION.md
-      QA_REVIEW.md
-      SECURITY_REVIEW.md
-      DEPLOYMENT_REVIEW.md
-      RETROSPECTIVE.md
-      IMPLEMENTATION_PLAN.md
-      METADATA_BUILD_NOTES.md
-      FLOW_DESIGN.md
       runs/
-        2026-05-23-agent-smoke-test001.md
-        2026-05-23-artifact-promotion-plan001.md
   sfdx-project.json
   README.md
 ```
 
 ---
 
-## Documentation
-
-The docs folder is the project memory layer.
+## Key Docs
 
 Start here:
 
-- docs/AI_SESSION_STARTER.md — first-read context for future AI-assisted sessions
-- docs/PROJECT_VISION.md — product vision and long-term direction
-- docs/AGENT_ROLES.md — role definitions for the simulated delivery team
-- docs/DELIVERY_SIMULATION_LOOP.md — repeatable delivery simulation flow
-- docs/SIMULATION_RUNBOOK.md — operational guide for running simulations
-- docs/SIMULATION_RUN_MODES.md — supported simulation modes and run log guidance
-- docs/TEMPLATE_STRATEGY.md — strategy for creating and maintaining reusable scenario templates
-- docs/ARCHITECTURE.md — repository and conceptual architecture
-- docs/AI_WORKFLOW_NOTES.md — how AI tools are used in the project workflow
-- docs/ISSUES_LOG.md — setup problems, tool friction, and fixes
-- docs/DEVLOG.md — development progress and milestones
+- `docs/AI_SESSION_STARTER.md` — current project state for future ChatGPT sessions
+- `docs/AI_COMMANDS_AND_WORKFLOWS.md` — Codex and implementation workflow guidance
+- `docs/PROJECT_VISION.md` — product direction and current status
+- `docs/ARCHITECTURE.md` — current system/repository architecture
+- `docs/AGENT_ROLES.md` — high-level delivery role model
+- `docs/DELIVERY_SIMULATION_LOOP.md` — delivery learning loop and run modes
+- `docs/ROADMAP.md` — active priorities and future direction
+- `docs/DEVLOG.md` — milestone-oriented development history
+- `docs/ISSUES_LOG.md` — meaningful setup/tooling/deployment issues and lessons
+- `docs/adr/` — architecture decision records
+
+Scenario-specific guidance lives under `scenarios/` instead of separate duplicate docs.
 
 ---
 
-## Agent Prompt Files
+## Current Deployment Manifests
 
-The prompts folder contains reusable role prompts for AI-assisted Salesforce delivery simulations.
-
-Current prompt files:
-
-- prompts/admin-agent.md
-- prompts/architect-agent.md
-- prompts/ba-agent.md
-- prompts/client-stakeholder-agent.md
-- prompts/developer-agent.md
-- prompts/devops-agent.md
-- prompts/incident-commander-agent.md
-- prompts/product-owner-agent.md
-- prompts/qa-agent.md
-- prompts/security-agent.md
-- prompts/simulation-runner.md
-
-These prompts define each role’s responsibilities, review concerns, expected outputs, readiness gates, tone, and simulation behavior.
-
----
-
-## Current Simulation Concept
-
-The initial Claygentforce simulation loop is:
-
-1. Scenario Intake
-2. Requirements Clarification
-3. Product Scope Review
-4. Architecture and Tradeoff Review
-5. Admin Configuration Review
-6. Developer Implementation Review
-7. Build
-8. QA Review
-9. Security Review
-10. DevOps and Release Review
-11. Stakeholder / UAT Review
-12. Outcome and Consequence Feedback
-13. Retrospective and Learning Notes
-
-The first active scenario is:
-
-Case Escalation and Manager Visibility
-
-A support team is missing urgent customer Cases. The learner must clarify escalation criteria, choose an automation and visibility approach, consider security and reporting, plan the build, and prepare for deployment.
-
----
-
-## Scenario Templates
-
-Claygentforce includes a reusable scenario template folder:
-
-- scenarios/TEMPLATE_SCENARIO/
-
-New scenarios should be created by copying this folder, renaming it with the standard scenario naming pattern, and replacing the placeholder content.
-
-The template system helps preserve a consistent delivery lifecycle across scenarios while still allowing each scenario to contain realistic ambiguity, tradeoffs, risks, and consequences.
-
-Template strategy is documented in:
-
-- docs/TEMPLATE_STRATEGY.md
-
----
-
-## AI-Assisted Workflow
-
-This project uses AI tools intentionally as planning, documentation, implementation, and review assistants.
-
-Important project context is stored in repository files so future AI-assisted sessions can use shorter prompts and avoid repeated explanation.
-
-The workflow favors:
-
-- documentation-first setup
-- small commits
-- manual review
-- issue logging
-- scoped AI prompts
-- human ownership of final decisions
-
-AI output should not be accepted blindly.
-
----
-
-## Local Setup
-
-This repository is a Salesforce DX project.
-
-Basic commands:
+For full Scenario 001 metadata validation/deployment:
 
 ```bash
-git status
-git pull
-git push
-sf project deploy validate --manifest manifest/scenario-001-package.xml --target-org YOUR_ORG_ALIAS
-sf project deploy start --manifest manifest/package.xml --target-org YOUR_ORG_ALIAS
-sf project retrieve start --manifest manifest/package.xml --target-org YOUR_ORG_ALIAS
+sf project deploy validate --manifest manifest/scenario-001-package.xml --target-org Claygentforce
+sf project deploy start --manifest manifest/scenario-001-package.xml --target-org Claygentforce
 ```
 
-Salesforce org authentication has not happened yet.
+For normal launcher-only LWC/orchestration iterations:
 
-Validate the focused Scenario 001 manifest before assuming any metadata is deployable in a real org.
+```bash
+sf project deploy validate --manifest manifest/scenario-launcher-package.xml --target-org Claygentforce
+sf project deploy start --manifest manifest/scenario-launcher-package.xml --target-org Claygentforce
+```
 
----
-
-## Development Notes
-
-Known setup and workflow issues are tracked in:
-
-- docs/ISSUES_LOG.md
-
-Development milestones are tracked in:
-
-- docs/DEVLOG.md
-
-A major early lesson: large AI-generated Markdown files should be copied in smaller chunks or verified after pushing, especially if they contain code block formatting.
+Use the launcher-only manifest for launcher work so the Scenario 001 Flow is not redeployed unnecessarily.
 
 ---
 
-## Near-Term Roadmap
+## Scenario 001
 
-Next likely work:
+Scenario 001 teaches the learner to evaluate Case escalation and manager visibility tradeoffs.
 
-1. Authenticate or connect a Salesforce org.
-2. Validate `manifest/scenario-001-package.xml` against the authenticated org.
-3. Fix any metadata validation issues.
-4. Deploy or retrieve the first Scenario 001 metadata increment only after validation succeeds.
-5. Build the Scenario 001 Flow in the org or retrieve reviewed Flow metadata when ready.
-6. Continue adding Salesforce metadata only when it directly supports a scenario learning objective.
-7. Explore lightweight orchestration options for loading scenario context and invoking role prompts.
+It currently includes:
+
+- real Salesforce metadata for high-risk Case visibility
+- Flow precedence behavior for closed cases, manual override, strategic customer escalation, stale escalation, priority escalation, and clean/no-match clearing
+- read-only Case risk review panel
+- chat-first launcher with local role-agent task routing
+- bounded learner choices
+- Team Challenge pushback
+- Decision Quality Signals
+- compact closeout and validation checklist
+
+Full manual smoke/regression testing remains tracked through the Scenario 001 smoke checklist.
 
 ---
 
 ## Guiding Principle
 
-Claygentforce is not trying to be flashy first.
+Claygentforce should make Salesforce delivery judgment easier to practice, inspect, and improve.
 
-It is trying to make Salesforce delivery judgment easier to practice, inspect, and improve.
+If a feature does not improve that learning loop, defer it.
