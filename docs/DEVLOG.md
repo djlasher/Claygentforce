@@ -4,6 +4,53 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## 2026-06-21 — Local orchestration prototype milestone
+
+### Summary
+
+Moved the Scenario 001 launcher from a bounded local chat simulation toward a real local orchestration prototype. The launcher now has a deterministic orchestration shape: learner run state produces an orchestration plan, the plan executes through a local adapter, role-agent tasks are routed through a local role-agent registry, and normalized task outputs feed the run model rendered by the LWC.
+
+This is still intentionally local and deterministic: no Apex, callouts, persistence, external AI, Agentforce invocation, Data Cloud integration, freeform chat input, async streaming, randomization, scoring, or new Salesforce metadata outside the existing LWC bundle were added. The architecture now has a clearer replacement seam for future Agentforce/Data Cloud-backed task execution.
+
+### Files Updated
+
+- force-app/main/default/lwc/scenarioLauncher/*
+- manifest/scenario-launcher-package.xml
+- docs/ROADMAP.md
+- docs/ISSUES_LOG.md
+- docs/DEVLOG.md
+
+### Notes
+
+- Added a visible top-level `Reset run` control that remains available after run completion.
+- Trimmed the expanded supporting context so it stays secondary to the chat-first run instead of acting like a second dashboard.
+- Added non-scored Decision Quality Signals for selected follow-up actions so the run can distinguish coverage, evidence gaps, reviewer lens, and future evaluation direction without right/wrong labels or scoring.
+- Added a compact completed-run closeout summary that appears only after the learner selects a challenge response.
+- Introduced `deliveryRoomOrchestrator.js` so Scenario 001 run state is converted into a derived run model outside the LWC renderer/controller.
+- Added `deliveryRoomAgents.js` so local role-agent tasks are routed through deterministic role-agent handlers instead of being assembled directly by the component.
+- Fixed a Team Challenge rendering issue where `challengeResponses` leaked into the role pushback message and caused duplicate raw/default challenge response buttons.
+- Converted the former `Simulation note` into a local `Delivery Coordinator` role-agent task.
+- Added `deliveryRoomPlan.js` so the orchestrator builds explicit deterministic task plans by stage.
+- Added `deliveryRoomAdapter.js` as the local execution seam for future Agentforce/Data Cloud/server-backed task execution.
+- Added `manifest/scenario-launcher-package.xml` so launcher-only work can validate and deploy without redeploying the Scenario 001 Flow.
+
+### Validation Notes
+
+- Launcher work should now use `manifest/scenario-launcher-package.xml` for LWC-only validation and deployment.
+- The previous full-manifest validation path hit the org Flow version limit for `Scenario001_Case_High_Risk_Flagging`; that issue is documented in `docs/ISSUES_LOG.md`.
+- The launcher was visually reviewed during the session, including the duplicate challenge response button fix and the Delivery Coordinator message.
+- Full Scenario 001 manual end-to-end smoke testing remains deferred and should still use `SMOKE_TEST_CHECKLIST.md` when time allows.
+
+### Next Actions
+
+- Continue evolving the local orchestration path from static role-agent outputs toward replaceable task adapters.
+- Keep future work focused on forward motion toward real orchestration rather than adding more explanatory panels.
+- Do not use the full Scenario 001 manifest for launcher-only iterations.
+- When Flow work is needed again, clean up old Flow versions in the org before validating or deploying Flow metadata.
+- Later, evaluate where Agentforce and Data Cloud should replace or enrich local role-agent tasks once the deterministic local orchestration shape is stable.
+
+---
+
 ## 2026-06-14 — Scenario 001 bounded Delivery Room run milestone
 
 ### Summary
