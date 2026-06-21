@@ -1,11 +1,21 @@
 import { LightningElement } from "lwc";
+import {
+  buildRunModel,
+  createInitialRunState,
+  resetRunState,
+  selectChallengeResponse,
+  selectFollowUpAction,
+  selectLearnerChoice
+} from "./deliveryRoomOrchestrator";
 import { DELIVERY_ROOM_CATALOG } from "./scenarioCatalog";
 
 export default class ScenarioLauncher extends LightningElement {
-  selectedChoiceId;
-  selectedFollowUpActionId;
-  selectedChallengeResponseId;
+  runState = createInitialRunState();
   isSupportingContextExpanded = false;
+
+  get runModel() {
+    return buildRunModel(this.runState, DELIVERY_ROOM_CATALOG);
+  }
 
   get productSummary() {
     return DELIVERY_ROOM_CATALOG.productSummary;
@@ -32,481 +42,179 @@ export default class ScenarioLauncher extends LightningElement {
   }
 
   get chatPreviewMessages() {
-    return DELIVERY_ROOM_CATALOG.chatPreviewMessages.map((message) => {
-      if (!message.choices) {
-        return message;
-      }
-
-      return {
-        ...message,
-        choices: message.choices.map((choice) => ({
-          ...choice,
-          ariaPressed: choice.id === this.selectedChoiceId ? "true" : "false",
-          cssClass:
-            choice.id === this.selectedChoiceId
-              ? "choice-button choice-button-selected"
-              : "choice-button"
-        }))
-      };
-    });
+    return this.runModel.chatPreviewMessages;
   }
 
   get simulationSessionSummary() {
-    const session = DELIVERY_ROOM_CATALOG.simulationSession;
-
-    return [
-      {
-        label: "Scenario",
-        value: session.scenario
-      },
-      {
-        label: "Mode",
-        value: session.mode
-      },
-      {
-        label: "Phase",
-        value: this.currentSimulationPhase
-      },
-      {
-        label: "Current focus",
-        value: this.currentFocusLabel
-      }
-    ];
+    return this.runModel.simulationSessionSummary;
   }
 
   get simulationPhases() {
-    const activePhase = this.activePhaseId;
-    const completedPhases = this.completedPhaseIds;
-
-    return DELIVERY_ROOM_CATALOG.simulationPhases.map((phase) => {
-      const isActive = phase.id === activePhase;
-      const isComplete = completedPhases.includes(phase.id);
-
-      return {
-        ...phase,
-        ariaCurrent: isActive ? "step" : null,
-        cssClass: `phase-step${isActive ? " phase-step-active" : ""}${
-          isComplete ? " phase-step-complete" : ""
-        }`
-      };
-    });
+    return this.runModel.simulationPhases;
   }
 
   get currentSimulationPhase() {
-    const session = DELIVERY_ROOM_CATALOG.simulationSession;
-
-    if (this.hasSelectedChallengeResponse) {
-      return session.reviewCompletePhase;
-    }
-
-    if (this.hasSelectedFollowUpAction) {
-      return session.challengeResponsePhase;
-    }
-
-    if (this.hasSelectedChoice) {
-      return session.followUpActionPhase;
-    }
-
-    return session.decisionPhase;
+    return this.runModel.currentSimulationPhase;
   }
 
   get activePhaseId() {
-    const session = DELIVERY_ROOM_CATALOG.simulationSession;
-
-    if (this.hasSelectedChallengeResponse) {
-      return session.activePhaseAfterChallengeResponse;
-    }
-
-    if (this.hasSelectedFollowUpAction) {
-      return session.activePhaseDuringChallenge;
-    }
-
-    return this.hasSelectedChoice
-      ? session.activePhaseAfterChoice
-      : session.activePhaseBeforeChoice;
+    return this.runModel.activePhaseId;
   }
 
   get completedPhaseIds() {
-    const session = DELIVERY_ROOM_CATALOG.simulationSession;
-
-    if (this.hasSelectedChallengeResponse) {
-      return session.completedAfterChallengeResponse;
-    }
-
-    if (this.hasSelectedFollowUpAction) {
-      return session.completedDuringChallenge;
-    }
-
-    return this.hasSelectedChoice
-      ? session.completedAfterChoice
-      : session.completedBeforeChoice;
+    return this.runModel.completedPhaseIds;
   }
 
   get hasSelectedChoice() {
-    return Boolean(this.selectedChoiceId);
+    return this.runModel.hasSelectedChoice;
   }
 
   get hasSelectedFollowUpAction() {
-    return Boolean(this.selectedFollowUpActionId);
+    return this.runModel.hasSelectedFollowUpAction;
   }
 
   get hasStartedRun() {
-    return (
-      this.hasSelectedChoice ||
-      this.hasSelectedFollowUpAction ||
-      this.hasSelectedChallengeResponse
-    );
+    return this.runModel.hasStartedRun;
   }
 
   get activeChoiceDetail() {
-    return DELIVERY_ROOM_CATALOG.learnerChoiceDetails.find(
-      (choice) => choice.id === this.selectedChoiceId
-    );
+    return this.runModel.activeChoiceDetail;
   }
 
   get selectedChoiceLabel() {
-    return (
-      this.activeChoiceDetail?.label ||
-      DELIVERY_ROOM_CATALOG.simulationSession.defaultFocus
-    );
+    return this.runModel.selectedChoiceLabel;
   }
 
   get currentFocusLabel() {
-    const session = DELIVERY_ROOM_CATALOG.simulationSession;
-
-    if (this.hasSelectedChallengeResponse) {
-      return this.selectedFollowUpActionLabel;
-    }
-
-    if (this.hasSelectedFollowUpAction) {
-      return session.challengePendingFocus;
-    }
-
-    return this.selectedChoiceLabel;
+    return this.runModel.currentFocusLabel;
   }
 
   get selectedDecisionLabel() {
-    return this.activeChoiceDetail?.label;
+    return this.runModel.selectedDecisionLabel;
   }
 
   get activeFollowUpActions() {
-    if (!this.activeChoiceDetail) {
-      return [];
-    }
-
-    return this.activeChoiceDetail.followUpActions.map((action) => ({
-      ...action,
-      ariaPressed:
-        action.id === this.selectedFollowUpActionId ? "true" : "false",
-      cssClass:
-        action.id === this.selectedFollowUpActionId
-          ? "follow-up-button follow-up-button-selected"
-          : "follow-up-button"
-    }));
+    return this.runModel.activeFollowUpActions;
   }
 
   get activeFollowUpAction() {
-    return this.activeChoiceDetail?.followUpActions.find(
-      (action) => action.id === this.selectedFollowUpActionId
-    );
+    return this.runModel.activeFollowUpAction;
   }
 
   get selectedFollowUpActionLabel() {
-    return this.activeFollowUpAction?.label;
+    return this.runModel.selectedFollowUpActionLabel;
   }
 
   get selectedChatMessages() {
-    if (!this.activeChoiceDetail) {
-      return [];
-    }
-
-    return [
-      {
-        key: "selected-learner-choice",
-        speaker: "You",
-        role: "Learner",
-        label: "Selected choice",
-        type: "learnerChoice",
-        cssClass: "chat-message chat-message-learner",
-        text: this.activeChoiceDetail.learnerMessage
-      },
-      {
-        key: "selected-follow-up",
-        ...this.activeChoiceDetail.followUp,
-        label: "Predefined response",
-        type: "agentFollowUp",
-        cssClass: "chat-message chat-message-response"
-      },
-      {
-        key: "selected-simulation-note",
-        ...this.activeChoiceDetail.simulationNote,
-        label: "Static guidance",
-        type: "simulationNote",
-        cssClass: "chat-message"
-      },
-      {
-        key: "follow-up-action-prompt",
-        speaker: "SIM",
-        role: "Follow-up prompt",
-        label: "Local static simulation",
-        type: "followUpPrompt",
-        cssClass: "chat-message",
-        text: "Which follow-up action would you take?",
-        followUpActions: this.activeFollowUpActions
-      }
-    ].concat(this.selectedFollowUpChatMessages);
+    return this.runModel.selectedChatMessages;
   }
 
   get selectedFollowUpChatMessages() {
-    if (!this.activeFollowUpAction) {
-      return [];
-    }
-
-    const messages = [
-      {
-        key: "selected-follow-up-action",
-        speaker: "You",
-        role: "Learner",
-        label: "Selected follow-up action",
-        type: "learnerFollowUpAction",
-        cssClass: "chat-message chat-message-learner",
-        text: this.activeFollowUpAction.learnerMessage
-      },
-      {
-        key: "final-delivery-response",
-        ...this.activeFollowUpAction.response,
-        label: "Final predefined response",
-        type: "finalResponse",
-        cssClass: "chat-message chat-message-response"
-      }
-    ];
-
-    if (!this.selectedRolePushback) {
-      return messages;
-    }
-
-    return messages
-      .concat([
-        {
-          key: "team-challenge",
-          speaker: this.selectedRolePushback.speaker,
-          role: this.selectedRolePushback.role,
-          label: "Team Challenge",
-          type: "teamChallenge",
-          cssClass: "chat-message chat-message-response",
-          text: this.selectedRolePushback.challenge,
-          learningNote: `Risk if ignored: ${this.selectedRolePushback.riskIfIgnored}`
-        },
-        {
-          key: "challenge-response-prompt",
-          speaker: "You",
-          role: "Learner prompt",
-          label: "Local static simulation",
-          type: "challengePrompt",
-          cssClass: "chat-message",
-          text: "How do you respond to this challenge?",
-          challengeResponses: this.activeChallengeResponses
-        }
-      ])
-      .concat(this.selectedChallengeResponseMessages);
+    return this.runModel.selectedFollowUpChatMessages;
   }
 
   get selectedEvidence() {
-    return this.activeChoiceDetail?.validationEvidence;
+    return this.runModel.selectedEvidence;
   }
 
   get hasSelectedEvidence() {
-    return Boolean(this.selectedEvidence);
+    return this.runModel.hasSelectedEvidence;
   }
 
   get hasSelectedEvidenceBeforeCompletion() {
-    return this.hasSelectedEvidence && !this.hasSelectedFollowUpAction;
+    return this.runModel.hasSelectedEvidenceBeforeCompletion;
   }
 
   get selectedOutcome() {
-    return this.activeFollowUpAction?.outcome;
+    return this.runModel.selectedOutcome;
   }
 
   get hasSelectedOutcome() {
-    return Boolean(this.selectedOutcome);
+    return this.runModel.hasSelectedOutcome;
   }
 
   get sessionResultRows() {
-    if (!this.activeFollowUpAction) {
-      return [];
-    }
-
-    return [
-      {
-        label: "First decision",
-        value: this.selectedDecisionLabel
-      },
-      {
-        label: "Follow-up action",
-        value: this.selectedFollowUpActionLabel
-      }
-    ];
+    return this.runModel.sessionResultRows;
   }
 
   get hasSessionResult() {
-    return this.sessionResultRows.length > 0;
+    return this.runModel.hasSessionResult;
   }
 
   get selectedDecisionQuality() {
-    return this.activeFollowUpAction?.decisionQuality;
+    return this.runModel.selectedDecisionQuality;
   }
 
   get hasSelectedDecisionQuality() {
-    return Boolean(this.selectedDecisionQuality);
+    return this.runModel.hasSelectedDecisionQuality;
   }
 
   get decisionQualityRows() {
-    if (!this.selectedDecisionQuality) {
-      return [];
-    }
-
-    return [
-      {
-        label: "Signal",
-        value: this.selectedDecisionQuality.primarySignal
-      },
-      {
-        label: "Evidence gap",
-        value: this.selectedDecisionQuality.evidenceGap
-      },
-      {
-        label: "Reviewer lens",
-        value: this.selectedDecisionQuality.reviewerLens
-      },
-      {
-        label: "Future evaluation note",
-        value: this.selectedDecisionQuality.futureEvaluationNote
-      }
-    ];
+    return this.runModel.decisionQualityRows;
   }
 
   get selectedValidationChecklist() {
-    return this.activeFollowUpAction?.validationChecklist || [];
+    return this.runModel.selectedValidationChecklist;
   }
 
   get hasSelectedValidationChecklist() {
-    return this.selectedValidationChecklist.length > 0;
+    return this.runModel.hasSelectedValidationChecklist;
   }
 
   get selectedTeamReview() {
-    return this.activeFollowUpAction?.teamReview;
+    return this.runModel.selectedTeamReview;
   }
 
   get hasSelectedTeamReview() {
-    return Boolean(this.selectedTeamReview);
+    return this.runModel.hasSelectedTeamReview;
   }
 
   get selectedRolePushback() {
-    return this.activeFollowUpAction?.rolePushback;
+    return this.runModel.selectedRolePushback;
   }
 
   get hasSelectedRolePushback() {
-    return Boolean(this.selectedRolePushback);
+    return this.runModel.hasSelectedRolePushback;
   }
 
   get activeChallengeResponses() {
-    if (!this.selectedRolePushback) {
-      return [];
-    }
-
-    return this.selectedRolePushback.challengeResponses.map((response) => ({
-      ...response,
-      ariaPressed:
-        response.id === this.selectedChallengeResponseId ? "true" : "false",
-      cssClass:
-        response.id === this.selectedChallengeResponseId
-          ? "challenge-response-button challenge-response-button-selected"
-          : "challenge-response-button"
-    }));
+    return this.runModel.activeChallengeResponses;
   }
 
   get activeChallengeResponse() {
-    return this.selectedRolePushback?.challengeResponses.find(
-      (response) => response.id === this.selectedChallengeResponseId
-    );
+    return this.runModel.activeChallengeResponse;
   }
 
   get hasSelectedChallengeResponse() {
-    return Boolean(this.activeChallengeResponse);
+    return this.runModel.hasSelectedChallengeResponse;
   }
 
   get hasCompletedRun() {
-    return this.hasSelectedChallengeResponse;
+    return this.runModel.hasCompletedRun;
   }
 
   get selectedChallengeResponseLabel() {
-    return this.activeChallengeResponse?.label;
+    return this.runModel.selectedChallengeResponseLabel;
   }
 
   get completedRunNextAction() {
-    return (
-      this.selectedCloseoutNote?.nextStep ||
-      this.selectedDecisionQuality?.evidenceGap ||
-      this.selectedValidationChecklist[0]
-    );
+    return this.runModel.completedRunNextAction;
   }
 
   get completedRunSummaryRows() {
-    if (!this.hasCompletedRun) {
-      return [];
-    }
-
-    return [
-      {
-        label: "Selected decision",
-        value: this.selectedDecisionLabel
-      },
-      {
-        label: "Follow-up action",
-        value: this.selectedFollowUpActionLabel
-      },
-      {
-        label: "Challenge response",
-        value: this.selectedChallengeResponseLabel
-      },
-      {
-        label: "Next validation action",
-        value: this.completedRunNextAction
-      }
-    ];
+    return this.runModel.completedRunSummaryRows;
   }
 
   get selectedChallengeResponseMessages() {
-    if (!this.activeChallengeResponse) {
-      return [];
-    }
-
-    return [
-      {
-        key: "challenge-response-learner",
-        speaker: "You",
-        role: "Learner",
-        label: "Challenge response",
-        type: "learnerChallengeResponse",
-        cssClass: "chat-message chat-message-learner",
-        text: this.activeChallengeResponse.learnerMessage
-      },
-      {
-        key: "challenge-response-reaction",
-        ...this.activeChallengeResponse.reaction,
-        label: "Delivery-room reaction",
-        type: "challengeReaction",
-        cssClass: "chat-message chat-message-response"
-      }
-    ];
+    return this.runModel.selectedChallengeResponseMessages;
   }
 
   get selectedCloseoutNote() {
-    return this.activeChallengeResponse?.closeoutNote;
+    return this.runModel.selectedCloseoutNote;
   }
 
   get hasSelectedCloseoutNote() {
-    return Boolean(this.selectedCloseoutNote);
+    return this.runModel.hasSelectedCloseoutNote;
   }
 
   get supportingContextToggleLabel() {
@@ -524,24 +232,28 @@ export default class ScenarioLauncher extends LightningElement {
   }
 
   handleChoiceSelect(event) {
-    this.selectedChoiceId = event.currentTarget.dataset.choiceId;
-    this.selectedFollowUpActionId = undefined;
-    this.selectedChallengeResponseId = undefined;
+    this.runState = selectLearnerChoice(
+      this.runState,
+      event.currentTarget.dataset.choiceId
+    );
   }
 
   handleFollowUpActionSelect(event) {
-    this.selectedFollowUpActionId = event.currentTarget.dataset.actionId;
-    this.selectedChallengeResponseId = undefined;
+    this.runState = selectFollowUpAction(
+      this.runState,
+      event.currentTarget.dataset.actionId
+    );
   }
 
   handleChallengeResponseSelect(event) {
-    this.selectedChallengeResponseId = event.currentTarget.dataset.responseId;
+    this.runState = selectChallengeResponse(
+      this.runState,
+      event.currentTarget.dataset.responseId
+    );
   }
 
   handleResetPreview() {
-    this.selectedChoiceId = undefined;
-    this.selectedFollowUpActionId = undefined;
-    this.selectedChallengeResponseId = undefined;
+    this.runState = resetRunState();
   }
 
   handleSupportingContextToggle() {
