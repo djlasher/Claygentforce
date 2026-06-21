@@ -352,6 +352,39 @@ export default class ScenarioLauncher extends LightningElement {
     return this.sessionResultRows.length > 0;
   }
 
+  get selectedDecisionQuality() {
+    return this.activeFollowUpAction?.decisionQuality;
+  }
+
+  get hasSelectedDecisionQuality() {
+    return Boolean(this.selectedDecisionQuality);
+  }
+
+  get decisionQualityRows() {
+    if (!this.selectedDecisionQuality) {
+      return [];
+    }
+
+    return [
+      {
+        label: "Signal",
+        value: this.selectedDecisionQuality.primarySignal
+      },
+      {
+        label: "Evidence gap",
+        value: this.selectedDecisionQuality.evidenceGap
+      },
+      {
+        label: "Reviewer lens",
+        value: this.selectedDecisionQuality.reviewerLens
+      },
+      {
+        label: "Future evaluation note",
+        value: this.selectedDecisionQuality.futureEvaluationNote
+      }
+    ];
+  }
+
   get selectedValidationChecklist() {
     return this.activeFollowUpAction?.validationChecklist || [];
   }

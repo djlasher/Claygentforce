@@ -271,6 +271,35 @@
               </dl>
             </div>
 
+            <template if:true={hasSelectedDecisionQuality}>
+              <div
+                class="decision-quality-section"
+                aria-labelledby="decision-quality-heading"
+              >
+                <p class="eyebrow">Decision quality</p>
+                <h4
+                  id="decision-quality-heading"
+                  class="session-result-heading"
+                >
+                  Decision Quality Signals
+                </h4>
+                <p class="decision-quality-intro">
+                  Non-scored review signals for this selected path.
+                </p>
+                <p class="decision-quality-type">
+                  {selectedDecisionQuality.signalType}
+                </p>
+                <dl class="decision-quality-grid">
+                  <template for:each={decisionQualityRows} for:item="row">
+                    <div key={row.label} class="decision-quality-item">
+                      <dt>{row.label}</dt>
+                      <dd>{row.value}</dd>
+                    </div>
+                  </template>
+                </dl>
+              </div>
+            </template>
+
             <div class="outcome-summary-section">
               <p class="eyebrow">Outcome summary</p>
               <h4 class="session-result-heading">{selectedOutcome.label}</h4>

@@ -71,8 +71,17 @@ const LEARNER_CHOICE_DETAILS = [
           suggestedResponse:
             "Pair the precedence matrix with transition tests for override, Customer Tier, Priority, stale conditions, and closed Case clearing."
         },
-        evaluationPlaceholder:
-          "Future evaluation can compare whether the learner chose broad precedence coverage before release claims."
+        decisionQuality: {
+          signalType: "Coverage breadth",
+          primarySignal:
+            "Connects Flow precedence to observable field and list-view outcomes.",
+          evidenceGap:
+            "Needs transition checks after records have already been flagged.",
+          reviewerLens:
+            "QA would look for branch order, clearing behavior, and list membership in one matrix.",
+          futureEvaluationNote:
+            "Later evaluation can compare precedence coverage against release-readiness claims."
+        }
       },
       {
         id: "test-clean-path-clearing",
@@ -122,8 +131,17 @@ const LEARNER_CHOICE_DETAILS = [
           suggestedResponse:
             "Validate active clearing now and capture historical reporting as a future review question."
         },
-        evaluationPlaceholder:
-          "Future evaluation can reward learners who test records leaving escalation, not only records entering escalation."
+        decisionQuality: {
+          signalType: "Lifecycle coverage",
+          primarySignal:
+            "Focuses on records leaving escalation, not only records entering it.",
+          evidenceGap:
+            "Needs paired transition examples across override, tier, stale, priority, and closure changes.",
+          reviewerLens:
+            "Architecture review would check whether active risk flags stay current over time.",
+          futureEvaluationNote:
+            "Later evaluation can identify whether the learner covers clearing behavior before release review."
+        }
       }
     ]
   },
@@ -198,8 +216,17 @@ const LEARNER_CHOICE_DETAILS = [
           suggestedResponse:
             "Validate with the intended manager access model and separate permission set evidence from administrator access."
         },
-        evaluationPlaceholder:
-          "Future evaluation can push back when learners validate only as System Administrator."
+        decisionQuality: {
+          signalType: "Access evidence",
+          primarySignal:
+            "Separates scenario permission evidence from administrator visibility.",
+          evidenceGap:
+            "Needs reviewer-user validation for fields, records, and list view access.",
+          reviewerLens:
+            "Security would inspect the access path granting manager visibility.",
+          futureEvaluationNote:
+            "Later evaluation can distinguish admin-only checks from representative access review."
+        }
       },
       {
         id: "verify-manager-access",
@@ -248,8 +275,17 @@ const LEARNER_CHOICE_DETAILS = [
           suggestedResponse:
             "Document the sharing and permission assumptions while validating the list view and Case fields."
         },
-        evaluationPlaceholder:
-          "Future evaluation can distinguish implementation validation from persona-based visibility validation."
+        decisionQuality: {
+          signalType: "Persona visibility",
+          primarySignal:
+            "Checks whether the manager persona can use the escalation surface.",
+          evidenceGap:
+            "Needs explicit sharing and permission assumptions alongside visual access checks.",
+          reviewerLens:
+            "Support and Security would review whether the intended audience can act on the list and Case fields.",
+          futureEvaluationNote:
+            "Later evaluation can separate implementation behavior from persona-based visibility evidence."
+        }
       }
     ]
   },
@@ -326,8 +362,17 @@ const LEARNER_CHOICE_DETAILS = [
           suggestedResponse:
             "Keep closed Cases out of active escalation and capture historical reporting as a later enhancement."
         },
-        evaluationPlaceholder:
-          "Future evaluation can favor lifecycle validation before list-view confidence claims."
+        decisionQuality: {
+          signalType: "Lifecycle evidence",
+          primarySignal:
+            "Ties closed Case behavior to both field clearing and active queue membership.",
+          evidenceGap:
+            "Needs historical review expectations captured outside the active manager queue.",
+          reviewerLens:
+            "QA and Support would check whether completed work leaves active escalation cleanly.",
+          futureEvaluationNote:
+            "Later evaluation can look for lifecycle validation before queue-confidence claims."
+        }
       },
       {
         id: "test-active-queue-usefulness",
@@ -375,8 +420,17 @@ const LEARNER_CHOICE_DETAILS = [
           suggestedResponse:
             "Validate representative active Cases and note whether stale, Strategic, override, and priority paths keep the list actionable."
         },
-        evaluationPlaceholder:
-          "Future evaluation can assess whether the learner considered operational usefulness, not just filter correctness."
+        decisionQuality: {
+          signalType: "Operational fit",
+          primarySignal:
+            "Frames manager usefulness as more than filter correctness.",
+          evidenceGap:
+            "Needs representative active Cases to reveal noise from stale, Strategic, override, and priority paths.",
+          reviewerLens:
+            "Support would judge whether the resulting queue is focused enough for daily review.",
+          futureEvaluationNote:
+            "Later evaluation can identify whether the learner considers operational usefulness alongside technical behavior."
+        }
       }
     ]
   },
@@ -452,8 +506,17 @@ const LEARNER_CHOICE_DETAILS = [
           suggestedResponse:
             "Pair scope decisions with smoke and regression rows for every included escalation path."
         },
-        evaluationPlaceholder:
-          "Future evaluation can weigh scope control against missed-risk pressure."
+        decisionQuality: {
+          signalType: "Scope control",
+          primarySignal:
+            "Keeps MVP criteria narrow enough for validation and stakeholder review.",
+          evidenceGap:
+            "Needs explicit notes for risks deferred outside the current criteria.",
+          reviewerLens:
+            "Product and Architecture would inspect whether the release boundary is clear.",
+          futureEvaluationNote:
+            "Later evaluation can weigh scope discipline against delivery-risk exposure."
+        }
       },
       {
         id: "defer-noisy-edge-cases",
@@ -502,8 +565,17 @@ const LEARNER_CHOICE_DETAILS = [
           suggestedResponse:
             "Record the accepted risk and revisit deferred edge cases after manager-list validation."
         },
-        evaluationPlaceholder:
-          "Future evaluation can introduce stakeholder pushback when deferral hides important risk."
+        decisionQuality: {
+          signalType: "Signal quality",
+          primarySignal:
+            "Protects the high-risk signal from noisy edge-case expansion.",
+          evidenceGap:
+            "Needs stakeholder alignment on which edge cases are intentionally deferred.",
+          reviewerLens:
+            "Product and Support would review whether deferral preserves trust without hiding urgent concerns.",
+          futureEvaluationNote:
+            "Later evaluation can surface stakeholder pushback when deferral leaves important risk ambiguous."
+        }
       }
     ]
   },
@@ -579,8 +651,17 @@ const LEARNER_CHOICE_DETAILS = [
           suggestedResponse:
             "Capture checklist results, org observations, and deferred items in the smoke-test run artifact."
         },
-        evaluationPlaceholder:
-          "Future evaluation can separate source readiness from completed org smoke testing."
+        decisionQuality: {
+          signalType: "Release caution",
+          primarySignal:
+            "Moves release review toward manual org validation before confidence claims.",
+          evidenceGap:
+            "Needs completed smoke-test evidence across Flow behavior, access, list view, and page rendering.",
+          reviewerLens:
+            "DevOps and QA would look for source readiness plus observed org behavior.",
+          futureEvaluationNote:
+            "Later evaluation can separate source readiness from completed org smoke testing."
+        }
       },
       {
         id: "capture-deploy-evidence",
@@ -629,8 +710,17 @@ const LEARNER_CHOICE_DETAILS = [
           suggestedResponse:
             "Follow deploy evidence with manual org smoke tests for manager access, list view filtering, and Case field visibility."
         },
-        evaluationPlaceholder:
-          "Future evaluation can push back when learners overstate deploy validation as user validation."
+        decisionQuality: {
+          signalType: "Deploy evidence",
+          primarySignal:
+            "Captures deployment proof without treating deploy success as user validation.",
+          evidenceGap:
+            "Needs follow-up checks for learner-facing behavior in the org.",
+          reviewerLens:
+            "DevOps would confirm package coverage while QA reviews the visible Scenario 001 experience.",
+          futureEvaluationNote:
+            "Later evaluation can flag overreliance on deploy evidence when user-facing validation is still open."
+        }
       }
     ]
   },
@@ -707,8 +797,17 @@ const LEARNER_CHOICE_DETAILS = [
           suggestedResponse:
             "Add negative-path rows for non-Strategic, non-stale, non-High priority Cases and closed Cases."
         },
-        evaluationPlaceholder:
-          "Future evaluation can reward transition coverage over create-only testing."
+        decisionQuality: {
+          signalType: "Transition coverage",
+          primarySignal:
+            "Tests how existing Cases move between escalation states after changes.",
+          evidenceGap:
+            "Needs clean negative paths so false positives are visible too.",
+          reviewerLens:
+            "QA would review update behavior across priority, override, customer tier, stale state, and closure.",
+          futureEvaluationNote:
+            "Later evaluation can identify transition coverage beyond create-only testing."
+        }
       },
       {
         id: "add-negative-path-rows",
@@ -756,8 +855,17 @@ const LEARNER_CHOICE_DETAILS = [
           suggestedResponse:
             "Pair each negative-path row with a positive path for the matching escalation criteria."
         },
-        evaluationPlaceholder:
-          "Future evaluation can flag missing negative-path evidence as an overconfidence risk."
+        decisionQuality: {
+          signalType: "Negative-path coverage",
+          primarySignal:
+            "Checks that clean Cases stay out of active escalation.",
+          evidenceGap:
+            "Needs paired positive examples for each intended escalation route.",
+          reviewerLens:
+            "QA and Architecture would compare false-positive protection with intended escalation coverage.",
+          futureEvaluationNote:
+            "Later evaluation can highlight missing negative-path evidence as a release-review risk."
+        }
       }
     ]
   }
