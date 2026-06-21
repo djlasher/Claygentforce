@@ -1,7 +1,11 @@
 import { runRoleAgentTask } from "./deliveryRoomAgents";
 import {
+  executeLocalOrchestrationPlan,
+  getTaskOutput
+} from "./deliveryRoomAdapter";
+import {
   buildOrchestrationPlan,
-  executeOrchestrationPlan
+  summarizeOrchestrationPlan
 } from "./deliveryRoomPlan";
 
 export const createInitialRunState = () => ({
@@ -104,7 +108,7 @@ const buildSimulationPhases = (catalog, activePhaseId, completedPhaseIds) =>
 
 const buildSelectedChallengeResponseMessages = (
   activeChallengeResponse,
-  agentTaskResults
+  taskOutputs
 ) => {
   if (!activeChallengeResponse) {
     return [];
@@ -122,7 +126,7 @@ const buildSelectedChallengeResponseMessages = (
     },
     {
       key: "challenge-response-reaction",
-      ...agentTaskResults.challengeReaction
+      ...taskOutputs.challengeReaction
     }
   ];
 };
@@ -132,7 +136,7 @@ const buildSelectedFollowUpChatMessages = ({
   selectedRolePushback,
   activeChallengeResponses,
   selectedChallengeResponseMessages,
-  agentTaskResults
+  taskOutputs
 }) => {
   if (!activeFollowUpAction) {
     return [];
@@ -150,7 +154,7 @@ const buildSelectedFollowUpChatMessages = ({
     },
     {
       key: "final-delivery-response",
-      ...agentTaskResults.followUpResponse
+      ...taskOutputs.followUpResponse
     }
   ];
 
@@ -162,7 +166,7 @@ const buildSelectedFollowUpChatMessages = ({
     .concat([
       {
         key: "team-challenge",
-        ...agentTaskResults.rolePushbackMessage
+        ...taskOutputs.rolePushbackMessage
       },
       {
         key: "challenge-response-prompt",
@@ -182,7 +186,7 @@ const buildSelectedChatMessages = ({
   activeChoiceDetail,
   activeFollowUpActions,
   selectedFollowUpChatMessages,
-  agentTaskResults
+  taskOutputs
 }) => {
   if (!activeChoiceDetail) {
     return [];
@@ -200,11 +204,11 @@ const buildSelectedChatMessages = ({
     },
     {
       key: "selected-follow-up",
-      ...agentTaskResults.initialRoleFollowUp
+      ...taskOutputs.initialRoleFollowUp
     },
     {
       key: "selected-simulation-note",
-      ...agentTaskResults.simulationNote
+      ...taskOutputs.simulationNote
     },
     {
       key: "follow-up-action-prompt",
@@ -237,11 +241,22 @@ export const buildRunModel = (runState, catalog) => {
     selectedRolePushback: plannedRolePushback,
     activeChallengeResponse
   });
-  const agentTaskResults = executeOrchestrationPlan({
+  const agentTaskResults = executeLocalOrchestrationPlan({
     plan: orchestrationPlan,
     runRoleAgentTask
   });
-  const selectedRolePushback = agentTaskResults.rolePushback;
+  const taskOutputs = {
+    initialRoleFollowUp: getTaskOutput(agentTaskResults, "initialRoleFollowUp"),
+    simulationNote: getTaskOutput(agentTaskResults, "simulationNote"),
+    followUpResponse: getTaskOutput(agentTaskResults, "followUpResponse"),
+    rolePushback: getTaskOutput(agentTaskResults, "rolePushback"),
+    rolePushbackMessage: getTaskOutput(agentTaskResults, "rolePushbackMessage"),
+    teamReview: getTaskOutput(agentTaskResults, "teamReview"),
+    decisionQuality: getTaskOutput(agentTaskResults, "decisionQuality"),
+    challengeReaction: getTaskOutput(agentTaskResults, "challengeReaction"),
+    closeoutNote: getTaskOutput(agentTaskResults, "closeoutNote")
+  };
+  const selectedRolePushback = taskOutputs.rolePushback;
 
   const hasSelectedChoice = Boolean(runState.selectedChoiceId);
   const hasSelectedFollowUpAction = Boolean(runState.selectedFollowUpActionId);
@@ -276,11 +291,11 @@ export const buildRunModel = (runState, catalog) => {
       : selectedChoiceLabel;
   const selectedEvidence = activeChoiceDetail?.validationEvidence;
   const selectedOutcome = activeFollowUpAction?.outcome;
-  const selectedDecisionQuality = agentTaskResults.decisionQuality;
+  const selectedDecisionQuality = taskOutputs.decisionQuality;
   const selectedValidationChecklist =
     activeFollowUpAction?.validationChecklist || [];
-  const selectedTeamReview = agentTaskResults.teamReview;
-  const selectedCloseoutNote = agentTaskResults.closeoutNote;
+  const selectedTeamReview = taskOutputs.teamReview;
+  const selectedCloseoutNote = taskOutputs.closeoutNote;
   const activeFollowUpActions = activeChoiceDetail
     ? buildFollowUpButtons(
         activeChoiceDetail.followUpActions,
@@ -296,14 +311,14 @@ export const buildRunModel = (runState, catalog) => {
   const selectedChallengeResponseMessages =
     buildSelectedChallengeResponseMessages(
       activeChallengeResponse,
-      agentTaskResults
+      taskOutputs
     );
   const selectedFollowUpChatMessages = buildSelectedFollowUpChatMessages({
     activeFollowUpAction,
     selectedRolePushback,
     activeChallengeResponses,
     selectedChallengeResponseMessages,
-    agentTaskResults
+    taskOutputs
   });
   const sessionResultRows = activeFollowUpAction
     ? [
@@ -399,9 +414,12 @@ export const buildRunModel = (runState, catalog) => {
       activeChoiceDetail,
       activeFollowUpActions,
       selectedFollowUpChatMessages,
-      agentTaskResults
+      taskOutputs
     }),
     agentTaskResults,
+    agentTaskSummary: summarizeOrchestrationPlan(orchestrationPlan),
+    currentPlanStage: orchestrationPlan.stage,
+    executedTaskCount: Object.keys(agentTaskResults).length,
     orchestrationPlan,
     sessionResultRows,
     simulationPhases: buildSimulationPhases(

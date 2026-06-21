@@ -51,9 +51,9 @@ const TASK_DEFAULTS = {
 const getAgentKeyForSource = (source) =>
   SPEAKER_AGENT_KEYS[source?.speaker] || ROLE_AGENT_KEYS.SIMULATOR;
 
-const normalizeRoleMessage = (source, defaults = {}) => ({
+const normalizeRoleMessage = (source, defaults = {}, agentKey) => ({
   ...source,
-  agentKey: getAgentKeyForSource(source),
+  agentKey: agentKey || getAgentKeyForSource(source),
   label: defaults.label,
   type: defaults.type,
   cssClass: defaults.cssClass
@@ -65,57 +65,104 @@ const buildRolePushbackMessageSource = (rolePushback = {}) => {
   return messageSource;
 };
 
-// Deterministic local stand-in for future Agentforce/Data Cloud-backed role tasks.
-export const runRoleAgentTask = ({ taskName, context = {} }) => {
-  switch (taskName) {
-    case "produceInitialRoleFollowUp":
-      return normalizeRoleMessage(
-        context.followUp,
-        TASK_DEFAULTS.produceInitialRoleFollowUp
-      );
-    case "produceSimulationNote":
-      return normalizeRoleMessage(
-        {
-          ...context.simulationNote,
-          role: "Delivery Coordinator"
-        },
-        TASK_DEFAULTS.produceSimulationNote
-      );
-    case "produceFollowUpResponse":
-      return normalizeRoleMessage(
-        context.response,
-        TASK_DEFAULTS.produceFollowUpResponse
-      );
-    case "produceRolePushback":
-      return {
-        ...context.rolePushback,
-        agentKey: getAgentKeyForSource(context.rolePushback)
-      };
-    case "produceRolePushbackMessage": {
-      const rolePushbackMessageSource = buildRolePushbackMessageSource(
-        context.rolePushback
-      );
-      return {
-        ...normalizeRoleMessage(
-          rolePushbackMessageSource,
-          TASK_DEFAULTS.produceRolePushback
-        ),
-        text: rolePushbackMessageSource.challenge,
-        learningNote: `Risk if ignored: ${rolePushbackMessageSource.riskIfIgnored}`
-      };
-    }
-    case "produceChallengeReaction":
-      return normalizeRoleMessage(
-        context.reaction,
-        TASK_DEFAULTS.produceChallengeReaction
-      );
-    case "produceCloseoutNote":
-      return context.closeoutNote;
-    case "produceTeamReview":
-      return context.teamReview;
-    case "produceDecisionQuality":
-      return context.decisionQuality;
-    default:
-      return context.source;
+const inferAgentKeyFromContext = (context = {}) =>
+  getAgentKeyForSource(
+    context.followUp ||
+      context.simulationNote ||
+      context.response ||
+      context.rolePushback ||
+      context.reaction ||
+      context.source
+  );
+
+const commonRoleAgentHandlers = {
+  produceInitialRoleFollowUp: ({ context, agentKey }) =>
+    normalizeRoleMessage(
+      context.followUp,
+      TASK_DEFAULTS.produceInitialRoleFollowUp,
+      agentKey
+    ),
+  produceFollowUpResponse: ({ context, agentKey }) =>
+    normalizeRoleMessage(
+      context.response,
+      TASK_DEFAULTS.produceFollowUpResponse,
+      agentKey
+    ),
+  produceRolePushback: ({ context, agentKey }) => ({
+    ...context.rolePushback,
+    agentKey
+  }),
+  produceRolePushbackMessage: ({ context, agentKey }) => {
+    const rolePushbackMessageSource = buildRolePushbackMessageSource(
+      context.rolePushback
+    );
+
+    return {
+      ...normalizeRoleMessage(
+        rolePushbackMessageSource,
+        TASK_DEFAULTS.produceRolePushback,
+        agentKey
+      ),
+      text: rolePushbackMessageSource.challenge,
+      learningNote: `Risk if ignored: ${rolePushbackMessageSource.riskIfIgnored}`
+    };
+  },
+  produceChallengeReaction: ({ context, agentKey }) =>
+    normalizeRoleMessage(
+      context.reaction,
+      TASK_DEFAULTS.produceChallengeReaction,
+      agentKey
+    ),
+  produceCloseoutNote: ({ context }) => context.closeoutNote,
+  produceTeamReview: ({ context }) => context.teamReview,
+  produceDecisionQuality: ({ context }) => context.decisionQuality
+};
+
+const coordinatorAgentHandlers = {
+  ...commonRoleAgentHandlers,
+  produceSimulationNote: ({ context, agentKey }) =>
+    normalizeRoleMessage(
+      {
+        ...context.simulationNote,
+        role: "Delivery Coordinator"
+      },
+      TASK_DEFAULTS.produceSimulationNote,
+      agentKey
+    )
+};
+
+const createLocalRoleAgent = (handlers = {}) => ({
+  ...commonRoleAgentHandlers,
+  ...handlers
+});
+
+const LOCAL_ROLE_AGENTS = {
+  [ROLE_AGENT_KEYS.ARCHITECT]: createLocalRoleAgent(),
+  [ROLE_AGENT_KEYS.BUSINESS_ANALYST]: createLocalRoleAgent(),
+  [ROLE_AGENT_KEYS.DEVOPS]: createLocalRoleAgent(),
+  [ROLE_AGENT_KEYS.PRODUCT_OWNER]: createLocalRoleAgent(),
+  [ROLE_AGENT_KEYS.QA]: createLocalRoleAgent(),
+  [ROLE_AGENT_KEYS.SECURITY]: createLocalRoleAgent(),
+  [ROLE_AGENT_KEYS.SIMULATOR]: createLocalRoleAgent(coordinatorAgentHandlers),
+  [ROLE_AGENT_KEYS.SUPPORT_MANAGER]: createLocalRoleAgent()
+};
+
+const runFallbackTask = ({ context = {} }) =>
+  context.source || context.response || context.followUp || {};
+
+export const runRoleAgentTask = ({ agentKey, taskName, context = {} }) => {
+  const resolvedAgentKey = agentKey || inferAgentKeyFromContext(context);
+  const roleAgent =
+    LOCAL_ROLE_AGENTS[resolvedAgentKey] ||
+    LOCAL_ROLE_AGENTS[ROLE_AGENT_KEYS.SIMULATOR];
+  const taskHandler = roleAgent[taskName];
+
+  if (!taskHandler) {
+    return runFallbackTask({ context });
   }
+
+  return taskHandler({
+    context,
+    agentKey: resolvedAgentKey
+  });
 };

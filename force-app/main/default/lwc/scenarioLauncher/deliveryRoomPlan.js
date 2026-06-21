@@ -26,8 +26,29 @@ const getAgentKeyForSource = (source) =>
   ROLE_AGENT_KEYS_BY_ROLE[source?.role] ||
   ROLE_AGENT_KEYS.SIMULATOR;
 
-const buildTask = ({ id, source, taskName, context, resultKey }) => ({
+export const derivePlanStage = ({
+  activeChoiceDetail,
+  activeFollowUpAction,
+  activeChallengeResponse
+}) => {
+  if (activeChallengeResponse) {
+    return "challenge-selected";
+  }
+
+  if (activeFollowUpAction) {
+    return "follow-up-selected";
+  }
+
+  if (activeChoiceDetail) {
+    return "choice-selected";
+  }
+
+  return "not-started";
+};
+
+const buildTask = ({ id, stage, source, taskName, context, resultKey }) => ({
   id,
+  stage,
   agentKey: getAgentKeyForSource(source),
   taskName,
   context,
@@ -41,11 +62,17 @@ export const buildOrchestrationPlan = ({
   activeChallengeResponse
 }) => {
   const tasks = [];
+  const currentPlanStage = derivePlanStage({
+    activeChoiceDetail,
+    activeFollowUpAction,
+    activeChallengeResponse
+  });
 
   if (activeChoiceDetail) {
     tasks.push(
       buildTask({
         id: "initial-role-follow-up",
+        stage: "choice-selected",
         source: activeChoiceDetail.followUp,
         taskName: "produceInitialRoleFollowUp",
         context: {
@@ -54,7 +81,8 @@ export const buildOrchestrationPlan = ({
         resultKey: "initialRoleFollowUp"
       }),
       buildTask({
-        id: "simulation-note",
+        id: "coordinator-guidance",
+        stage: "choice-selected",
         source: activeChoiceDetail.simulationNote,
         taskName: "produceSimulationNote",
         context: {
@@ -69,6 +97,7 @@ export const buildOrchestrationPlan = ({
     tasks.push(
       buildTask({
         id: "follow-up-response",
+        stage: "follow-up-selected",
         source: activeFollowUpAction.response,
         taskName: "produceFollowUpResponse",
         context: {
@@ -78,6 +107,7 @@ export const buildOrchestrationPlan = ({
       }),
       buildTask({
         id: "role-pushback",
+        stage: "follow-up-selected",
         source: activeFollowUpAction.rolePushback,
         taskName: "produceRolePushback",
         context: {
@@ -87,6 +117,7 @@ export const buildOrchestrationPlan = ({
       }),
       buildTask({
         id: "team-challenge-message",
+        stage: "follow-up-selected",
         source: selectedRolePushback,
         taskName: "produceRolePushbackMessage",
         context: {
@@ -96,6 +127,7 @@ export const buildOrchestrationPlan = ({
       }),
       buildTask({
         id: "team-review",
+        stage: "follow-up-selected",
         source: activeFollowUpAction.teamReview,
         taskName: "produceTeamReview",
         context: {
@@ -105,6 +137,7 @@ export const buildOrchestrationPlan = ({
       }),
       buildTask({
         id: "decision-quality",
+        stage: "follow-up-selected",
         source: activeFollowUpAction.rolePushback,
         taskName: "produceDecisionQuality",
         context: {
@@ -119,6 +152,7 @@ export const buildOrchestrationPlan = ({
     tasks.push(
       buildTask({
         id: "challenge-reaction",
+        stage: "challenge-selected",
         source: activeChallengeResponse.reaction,
         taskName: "produceChallengeReaction",
         context: {
@@ -128,6 +162,7 @@ export const buildOrchestrationPlan = ({
       }),
       buildTask({
         id: "closeout-note",
+        stage: "challenge-selected",
         source: activeChallengeResponse.reaction,
         taskName: "produceCloseoutNote",
         context: {
@@ -138,18 +173,16 @@ export const buildOrchestrationPlan = ({
     );
   }
 
-  return tasks;
+  return {
+    stage: currentPlanStage,
+    tasks
+  };
 };
 
-export const executeOrchestrationPlan = ({ plan, runRoleAgentTask }) =>
-  plan.reduce(
-    (results, task) => ({
-      ...results,
-      [task.resultKey]: runRoleAgentTask({
-        agentKey: task.agentKey,
-        taskName: task.taskName,
-        context: task.context
-      })
-    }),
-    {}
-  );
+export const summarizeOrchestrationPlan = (plan) =>
+  plan.tasks.map(({ stage, agentKey, taskName, resultKey }) => ({
+    stage,
+    agentKey,
+    taskName,
+    resultKey
+  }));
