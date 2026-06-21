@@ -1,4 +1,8 @@
 import { runRoleAgentTask } from "./deliveryRoomAgents";
+import {
+  buildOrchestrationPlan,
+  executeOrchestrationPlan
+} from "./deliveryRoomPlan";
 
 export const createInitialRunState = () => ({
   selectedChoiceId: undefined,
@@ -98,17 +102,13 @@ const buildSimulationPhases = (catalog, activePhaseId, completedPhaseIds) =>
     };
   });
 
-const buildSelectedChallengeResponseMessages = (activeChallengeResponse) => {
+const buildSelectedChallengeResponseMessages = (
+  activeChallengeResponse,
+  agentTaskResults
+) => {
   if (!activeChallengeResponse) {
     return [];
   }
-
-  const challengeReaction = runRoleAgentTask({
-    taskName: "produceChallengeReaction",
-    context: {
-      reaction: activeChallengeResponse.reaction
-    }
-  });
 
   return [
     {
@@ -122,7 +122,7 @@ const buildSelectedChallengeResponseMessages = (activeChallengeResponse) => {
     },
     {
       key: "challenge-response-reaction",
-      ...challengeReaction
+      ...agentTaskResults.challengeReaction
     }
   ];
 };
@@ -131,7 +131,8 @@ const buildSelectedFollowUpChatMessages = ({
   activeFollowUpAction,
   selectedRolePushback,
   activeChallengeResponses,
-  selectedChallengeResponseMessages
+  selectedChallengeResponseMessages,
+  agentTaskResults
 }) => {
   if (!activeFollowUpAction) {
     return [];
@@ -149,12 +150,7 @@ const buildSelectedFollowUpChatMessages = ({
     },
     {
       key: "final-delivery-response",
-      ...runRoleAgentTask({
-        taskName: "produceFollowUpResponse",
-        context: {
-          response: activeFollowUpAction.response
-        }
-      })
+      ...agentTaskResults.followUpResponse
     }
   ];
 
@@ -166,12 +162,7 @@ const buildSelectedFollowUpChatMessages = ({
     .concat([
       {
         key: "team-challenge",
-        ...runRoleAgentTask({
-          taskName: "produceRolePushbackMessage",
-          context: {
-            rolePushback: selectedRolePushback
-          }
-        })
+        ...agentTaskResults.rolePushbackMessage
       },
       {
         key: "challenge-response-prompt",
@@ -190,7 +181,8 @@ const buildSelectedFollowUpChatMessages = ({
 const buildSelectedChatMessages = ({
   activeChoiceDetail,
   activeFollowUpActions,
-  selectedFollowUpChatMessages
+  selectedFollowUpChatMessages,
+  agentTaskResults
 }) => {
   if (!activeChoiceDetail) {
     return [];
@@ -208,21 +200,11 @@ const buildSelectedChatMessages = ({
     },
     {
       key: "selected-follow-up",
-      ...runRoleAgentTask({
-        taskName: "produceInitialRoleFollowUp",
-        context: {
-          followUp: activeChoiceDetail.followUp
-        }
-      })
+      ...agentTaskResults.initialRoleFollowUp
     },
     {
       key: "selected-simulation-note",
-      ...runRoleAgentTask({
-        taskName: "produceSimulationNote",
-        context: {
-          simulationNote: activeChoiceDetail.simulationNote
-        }
-      })
+      ...agentTaskResults.simulationNote
     },
     {
       key: "follow-up-action-prompt",
@@ -245,17 +227,21 @@ export const buildRunModel = (runState, catalog) => {
   const activeFollowUpAction = activeChoiceDetail?.followUpActions.find(
     (action) => action.id === runState.selectedFollowUpActionId
   );
-  const selectedRolePushback = activeFollowUpAction
-    ? runRoleAgentTask({
-        taskName: "produceRolePushback",
-        context: {
-          rolePushback: activeFollowUpAction.rolePushback
-        }
-      })
-    : undefined;
-  const activeChallengeResponse = selectedRolePushback?.challengeResponses.find(
+  const plannedRolePushback = activeFollowUpAction?.rolePushback;
+  const activeChallengeResponse = plannedRolePushback?.challengeResponses.find(
     (response) => response.id === runState.selectedChallengeResponseId
   );
+  const orchestrationPlan = buildOrchestrationPlan({
+    activeChoiceDetail,
+    activeFollowUpAction,
+    selectedRolePushback: plannedRolePushback,
+    activeChallengeResponse
+  });
+  const agentTaskResults = executeOrchestrationPlan({
+    plan: orchestrationPlan,
+    runRoleAgentTask
+  });
+  const selectedRolePushback = agentTaskResults.rolePushback;
 
   const hasSelectedChoice = Boolean(runState.selectedChoiceId);
   const hasSelectedFollowUpAction = Boolean(runState.selectedFollowUpActionId);
@@ -290,32 +276,11 @@ export const buildRunModel = (runState, catalog) => {
       : selectedChoiceLabel;
   const selectedEvidence = activeChoiceDetail?.validationEvidence;
   const selectedOutcome = activeFollowUpAction?.outcome;
-  const selectedDecisionQuality = activeFollowUpAction
-    ? runRoleAgentTask({
-        taskName: "produceDecisionQuality",
-        context: {
-          decisionQuality: activeFollowUpAction.decisionQuality
-        }
-      })
-    : undefined;
+  const selectedDecisionQuality = agentTaskResults.decisionQuality;
   const selectedValidationChecklist =
     activeFollowUpAction?.validationChecklist || [];
-  const selectedTeamReview = activeFollowUpAction
-    ? runRoleAgentTask({
-        taskName: "produceTeamReview",
-        context: {
-          teamReview: activeFollowUpAction.teamReview
-        }
-      })
-    : undefined;
-  const selectedCloseoutNote = activeChallengeResponse
-    ? runRoleAgentTask({
-        taskName: "produceCloseoutNote",
-        context: {
-          closeoutNote: activeChallengeResponse.closeoutNote
-        }
-      })
-    : undefined;
+  const selectedTeamReview = agentTaskResults.teamReview;
+  const selectedCloseoutNote = agentTaskResults.closeoutNote;
   const activeFollowUpActions = activeChoiceDetail
     ? buildFollowUpButtons(
         activeChoiceDetail.followUpActions,
@@ -329,12 +294,16 @@ export const buildRunModel = (runState, catalog) => {
       )
     : [];
   const selectedChallengeResponseMessages =
-    buildSelectedChallengeResponseMessages(activeChallengeResponse);
+    buildSelectedChallengeResponseMessages(
+      activeChallengeResponse,
+      agentTaskResults
+    );
   const selectedFollowUpChatMessages = buildSelectedFollowUpChatMessages({
     activeFollowUpAction,
     selectedRolePushback,
     activeChallengeResponses,
-    selectedChallengeResponseMessages
+    selectedChallengeResponseMessages,
+    agentTaskResults
   });
   const sessionResultRows = activeFollowUpAction
     ? [
@@ -429,8 +398,11 @@ export const buildRunModel = (runState, catalog) => {
     selectedChatMessages: buildSelectedChatMessages({
       activeChoiceDetail,
       activeFollowUpActions,
-      selectedFollowUpChatMessages
+      selectedFollowUpChatMessages,
+      agentTaskResults
     }),
+    agentTaskResults,
+    orchestrationPlan,
     sessionResultRows,
     simulationPhases: buildSimulationPhases(
       catalog,
