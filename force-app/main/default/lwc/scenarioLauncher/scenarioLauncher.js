@@ -19,28 +19,8 @@ export default class ScenarioLauncher extends LightningElement {
     return DELIVERY_ROOM_CATALOG.modeHighlights;
   }
 
-  get deliverySnapshot() {
-    return DELIVERY_ROOM_CATALOG.deliverySnapshot;
-  }
-
   get sectionSubtitles() {
     return DELIVERY_ROOM_CATALOG.sectionSubtitles;
-  }
-
-  get deliveryRoles() {
-    return DELIVERY_ROOM_CATALOG.deliveryRoles;
-  }
-
-  get scenarios() {
-    return DELIVERY_ROOM_CATALOG.scenarios;
-  }
-
-  get learningPath() {
-    return DELIVERY_ROOM_CATALOG.scenario001LearningPath;
-  }
-
-  get transcriptPreview() {
-    return DELIVERY_ROOM_CATALOG.scenario001TranscriptPreview;
   }
 
   get scenarioMoment() {
@@ -168,6 +148,14 @@ export default class ScenarioLauncher extends LightningElement {
 
   get hasSelectedFollowUpAction() {
     return Boolean(this.selectedFollowUpActionId);
+  }
+
+  get hasStartedRun() {
+    return (
+      this.hasSelectedChoice ||
+      this.hasSelectedFollowUpAction ||
+      this.hasSelectedChallengeResponse
+    );
   }
 
   get activeChoiceDetail() {
@@ -447,14 +435,6 @@ export default class ScenarioLauncher extends LightningElement {
     return Boolean(this.selectedCloseoutNote);
   }
 
-  get deferredCapabilities() {
-    return DELIVERY_ROOM_CATALOG.deferredCapabilities;
-  }
-
-  get currentConstraints() {
-    return DELIVERY_ROOM_CATALOG.currentConstraints;
-  }
-
   get supportingContextToggleLabel() {
     return this.isSupportingContextExpanded
       ? "Hide supporting context"
@@ -466,7 +446,7 @@ export default class ScenarioLauncher extends LightningElement {
   }
 
   get supportingContextSummary() {
-    return "Delivery snapshot, team roles, scenario board, learning path, transcript notes, deferred capabilities, and constraints are available below.";
+    return "Optional reference for the static local MVP boundaries. The chat-first run above is the primary Scenario 001 learner surface.";
   }
 
   handleChoiceSelect(event) {
