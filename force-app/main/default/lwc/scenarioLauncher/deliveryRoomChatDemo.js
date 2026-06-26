@@ -194,7 +194,7 @@ const ROLE_PROFILES = {
   },
   AR: {
     displayName: "Marcus Reed",
-    roleTitle: "Architecture Reviewer",
+    roleTitle: "Technical Architect",
     initials: "MR"
   },
   SE: {
@@ -229,6 +229,13 @@ const LEARNER_PROFILES = {
     displayName: "You",
     roleTitle: "QA Lead",
     initials: "QA"
+  }
+};
+
+const NPC_ROLE_OWNERSHIP = {
+  AR: {
+    ownedRoleId: TECHNICAL_ARCHITECT_ROLE_ID,
+    reviewerRoleTitle: "Architecture Reviewer"
   }
 };
 
@@ -941,7 +948,17 @@ const getProfile = (speaker, learnerRoleId) => {
     );
   }
 
-  return ROLE_PROFILES[speaker] || ROLE_PROFILES.SIM;
+  const profile = ROLE_PROFILES[speaker] || ROLE_PROFILES.SIM;
+  const ownership = NPC_ROLE_OWNERSHIP[speaker];
+
+  if (ownership?.ownedRoleId === learnerRoleId) {
+    return {
+      ...profile,
+      roleTitle: ownership.reviewerRoleTitle
+    };
+  }
+
+  return profile;
 };
 
 const buildChoiceButtons = (choices) =>
@@ -1037,7 +1054,8 @@ export const buildInitialDemoMessages = (roleId = getActiveRoleId()) =>
   ).map((message, index) =>
     normalizeMessage({
       ...message,
-      key: `demo-initial-${index}`
+      key: `demo-initial-${index}`,
+      learnerRoleId: roleId
     })
   );
 
@@ -1051,23 +1069,29 @@ export const buildLearnerMessage = ({ key, text, label, roleId }) =>
     learnerRoleId: roleId
   });
 
-export const normalizeRunMessage = (message, keyPrefix) =>
+export const normalizeRunMessage = (
+  message,
+  keyPrefix,
+  roleId = getActiveRoleId()
+) =>
   normalizeMessage({
     key: `${keyPrefix}-${message.key}`,
     speaker: message.speaker,
     text: message.text,
     type: message.type === "learnerChoice" ? "learner" : "role",
     label: message.label,
-    learningNote: message.learningNote
+    learningNote: message.learningNote,
+    learnerRoleId: roleId
   });
 
-const buildReactionMessages = (choiceId) =>
+const buildReactionMessages = (choiceId, roleId = getActiveRoleId()) =>
   CHOICE_REACTION_SCENARIOS[choiceId]?.messages.map((message, index) =>
     normalizeMessage({
       ...message,
       key: `demo-reaction-${choiceId}-${index}`,
       reactionState: message.state,
-      label: "War Room reaction"
+      label: "War Room reaction",
+      learnerRoleId: roleId
     })
   );
 
@@ -1146,14 +1170,15 @@ export const buildChallengePrompt = (runModel, roleId = getActiveRoleId()) => {
 
 export const buildMessagesAfterChoice = (
   runModel,
+  roleId = getActiveRoleId(),
   choiceId = runModel.activeChoiceDetail?.id
 ) =>
-  buildReactionMessages(choiceId) ||
+  buildReactionMessages(choiceId, roleId) ||
   runModel.selectedChatMessages
     .filter((message) =>
       ["agentFollowUp", "simulationNote"].includes(message.type)
     )
-    .map((message) => normalizeRunMessage(message, "demo-choice"));
+    .map((message) => normalizeRunMessage(message, "demo-choice", roleId));
 
 export const buildMessagesAfterFollowUp = (
   runModel,
@@ -1166,14 +1191,16 @@ export const buildMessagesAfterFollowUp = (
         speaker: "AR",
         text: "That gives architecture a usable QA gate. Keep the evidence tied to the exact Case behavior and persona assumptions we are releasing.",
         reactionState: "positive",
-        label: "War Room follow-up"
+        label: "War Room follow-up",
+        learnerRoleId: roleId
       }),
       normalizeMessage({
         key: "demo-follow-up-qa-product",
         speaker: "PO",
         text: "I can support that if the release-review language stays crisp: what passed, what remains at risk, and who owns the next step.",
         reactionState: "concerned",
-        label: "War Room follow-up"
+        label: "War Room follow-up",
+        learnerRoleId: roleId
       })
     ];
   }
@@ -1182,7 +1209,7 @@ export const buildMessagesAfterFollowUp = (
     .filter((message) =>
       ["finalResponse", "teamChallenge"].includes(message.type)
     )
-    .map((message) => normalizeRunMessage(message, "demo-follow-up"));
+    .map((message) => normalizeRunMessage(message, "demo-follow-up", roleId));
 };
 
 export const buildMessagesAfterChallenge = (
@@ -1196,14 +1223,15 @@ export const buildMessagesAfterChallenge = (
         speaker: "SIM",
         text: "That is a credible QA closeout. The room now has a bounded validation claim, an evidence standard, and a named path for unresolved release risk.",
         reactionState: "positive",
-        label: "War Room closeout"
+        label: "War Room closeout",
+        learnerRoleId: roleId
       })
     ];
   }
 
   return runModel.selectedChallengeResponseMessages
     .filter((message) => message.type === "challengeReaction")
-    .map((message) => normalizeRunMessage(message, "demo-challenge"));
+    .map((message) => normalizeRunMessage(message, "demo-challenge", roleId));
 };
 
 const getExecutiveIndicatorValue = (confidencePercent, sentiment) => {
@@ -1327,7 +1355,7 @@ export const buildDemoScoreSummary = (
     ],
     dimensions,
     sentiment: sentiment.map((item) => {
-      const profile = getProfile(item.speaker);
+      const profile = getProfile(item.speaker, roleId);
       const reactionLabel = REACTION_LABELS[item.state];
 
       return {

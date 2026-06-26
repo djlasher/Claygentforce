@@ -409,12 +409,15 @@ export default class ScenarioLauncher extends LightningElement {
         )
       })
     ];
-    this.queueDemoMessages(buildMessagesAfterChoice(runModel, choiceId), () => {
-      this.demoPrompt = buildFollowUpPrompt(
-        this.demoRunModel,
-        this.selectedDemoRoleId
-      );
-    });
+    this.queueDemoMessages(
+      buildMessagesAfterChoice(runModel, this.selectedDemoRoleId, choiceId),
+      () => {
+        this.demoPrompt = buildFollowUpPrompt(
+          this.demoRunModel,
+          this.selectedDemoRoleId
+        );
+      }
+    );
   }
 
   handleDemoFollowUpActionSelect(event) {
