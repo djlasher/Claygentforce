@@ -18,8 +18,9 @@ import {
   buildMessagesAfterChallenge,
   buildMessagesAfterChoice,
   buildMessagesAfterFollowUp,
-  CHAT_DEMO_DELAYS,
-  getActiveRoleId
+  getActiveRoleId,
+  getMessageDelay,
+  getPromptDelay
 } from "./deliveryRoomChatDemo";
 import { DELIVERY_ROOM_CATALOG } from "./scenarioCatalog";
 
@@ -312,6 +313,8 @@ export default class ScenarioLauncher extends LightningElement {
   }
 
   queueDemoMessages(messages, onComplete) {
+    const promptDelay = getPromptDelay(messages);
+
     const revealMessage = (index) => {
       if (index >= messages.length) {
         // eslint-disable-next-line @lwc/lwc/no-async-operation
@@ -323,21 +326,23 @@ export default class ScenarioLauncher extends LightningElement {
           if (onComplete) {
             onComplete();
           }
-        }, CHAT_DEMO_DELAYS.prompt);
+        }, promptDelay);
         this.demoTimerIds = [...this.demoTimerIds, promptTimerId];
         return;
       }
 
+      const message = messages[index];
+
       this.isDemoTyping = true;
       // eslint-disable-next-line @lwc/lwc/no-async-operation
       const timerId = window.setTimeout(() => {
-        this.demoTranscript = [...this.demoTranscript, messages[index]];
+        this.demoTranscript = [...this.demoTranscript, message];
         this.isDemoTyping = false;
         this.demoTimerIds = this.demoTimerIds.filter(
           (activeTimerId) => activeTimerId !== timerId
         );
         revealMessage(index + 1);
-      }, CHAT_DEMO_DELAYS.message);
+      }, getMessageDelay(message));
       this.demoTimerIds = [...this.demoTimerIds, timerId];
     };
 

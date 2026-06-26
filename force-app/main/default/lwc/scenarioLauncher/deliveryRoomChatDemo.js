@@ -117,9 +117,14 @@ const INITIAL_MESSAGES = [
   }
 ];
 
-export const CHAT_DEMO_DELAYS = {
-  message: 420,
-  prompt: 560
+export const getMessageDelay = (message) =>
+  Math.min(1500 + message.text.length * 25, 3500);
+
+export const getPromptDelay = (messages) => {
+  const finalMessage = messages[messages.length - 1];
+  const textLength = finalMessage?.text?.length || 0;
+
+  return Math.min(1800 + textLength * 6, 2500);
 };
 
 export const getActiveRoleId = () => ACTIVE_ROLE_ID;
