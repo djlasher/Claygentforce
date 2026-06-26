@@ -120,6 +120,11 @@
                 <div class="demo-chat-meta">
                   <strong>{message.displayName}</strong>
                   <span>{message.roleTitle}</span>
+                  <template if:true={message.hasReaction}>
+                    <span class={message.reactionCssClass}>
+                      {message.reactionLabel}
+                    </span>
+                  </template>
                 </div>
                 <p>{message.text}</p>
                 <template if:true={message.learningNote}>
@@ -207,10 +212,13 @@
             aria-labelledby="demo-score-heading"
           >
             <div>
-              <p class="eyebrow">Local demo score</p>
+              <p class="eyebrow">War Room Assessment</p>
               <h4 id="demo-score-heading" class="demo-score-heading">
-                {demoScore.title}: {demoScore.total}/100
+                {demoScore.confidenceLabel}: {demoScore.confidencePercent}%
               </h4>
+              <p class="demo-score-subtitle">
+                Numeric score retained: {demoScore.total}/100
+              </p>
             </div>
             <dl class="demo-score-grid">
               <template for:each={demoScore.dimensions} for:item="dimension">
@@ -220,10 +228,26 @@
                 </div>
               </template>
             </dl>
+            <div class="demo-sentiment-section">
+              <p class="demo-score-section-title">Team Sentiment</p>
+              <dl class="demo-sentiment-list">
+                <template for:each={demoScore.sentiment} for:item="sentiment">
+                  <div key={sentiment.key} class="demo-sentiment-item">
+                    <dt>
+                      <span>{sentiment.name}</span>
+                      <small>{sentiment.person}</small>
+                    </dt>
+                    <dd>
+                      <span class={sentiment.cssClass}>{sentiment.state}</span>
+                    </dd>
+                  </div>
+                </template>
+              </dl>
+            </div>
             <div class="demo-score-notes">
-              <p><strong>What you did well:</strong> {demoScore.strength}</p>
+              <p><strong>Strengths:</strong> {demoScore.strength}</p>
               <p>
-                <strong>Evidence gap / next improvement:</strong>
+                <strong>Risk Areas:</strong>
                 {demoScore.evidenceGap}
               </p>
               <p>
