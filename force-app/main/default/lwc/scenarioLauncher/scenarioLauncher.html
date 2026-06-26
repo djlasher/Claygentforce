@@ -40,11 +40,11 @@
           <div>
             <p class="eyebrow">Role chat simulation</p>
             <h3 id="demo-chat-heading" class="section-heading">
-              Delivery Room Chat
+              Salesforce Delivery War Room
             </h3>
             <p class="section-subtitle">
-              A local deterministic demo of a Salesforce delivery-room
-              conversation.
+              A local deterministic project-room simulation for practicing
+              Salesforce consulting judgment under delivery pressure.
             </p>
           </div>
           <template if:true={hasDemoStarted}>
@@ -58,31 +58,52 @@
           </template>
         </div>
 
-        <div class="demo-role-grid" aria-label="Select learner role">
-          <template for:each={demoRoleOptions} for:item="role">
-            <button
-              key={role.id}
-              class={role.cssClass}
-              type="button"
-              data-role-id={role.id}
-              aria-pressed={role.ariaPressed}
-              disabled={role.disabled}
-              onclick={handleDemoRoleSelect}
-            >
-              <span class="demo-role-title">{role.title}</span>
-              <span class="demo-role-description">{role.description}</span>
-              <span class="demo-role-status">{role.status}</span>
-            </button>
+        <div class="demo-role-groups" aria-label="Select learner role">
+          <template for:each={demoRoleGroups} for:item="group">
+            <section key={group.id} class="demo-role-group">
+              <button
+                class="demo-role-group-toggle"
+                type="button"
+                data-group-id={group.id}
+                aria-expanded={group.ariaExpanded}
+                onclick={handleDemoRoleGroupToggle}
+              >
+                <span>{group.title}</span>
+                <span>{group.toggleLabel}</span>
+              </button>
+
+              <template if:true={group.isExpanded}>
+                <div class="demo-role-grid">
+                  <template for:each={group.roles} for:item="role">
+                    <button
+                      key={role.id}
+                      class={role.cssClass}
+                      type="button"
+                      data-role-id={role.id}
+                      aria-pressed={role.ariaPressed}
+                      disabled={role.disabled}
+                      onclick={handleDemoRoleSelect}
+                    >
+                      <span class="demo-role-title">{role.title}</span>
+                      <span class="demo-role-description">
+                        {role.description}
+                      </span>
+                      <span class="demo-role-status">{role.status}</span>
+                    </button>
+                  </template>
+                </div>
+              </template>
+            </section>
           </template>
         </div>
 
         <div
           class="demo-chat-window"
-          aria-label="Delivery room chat transcript"
+          aria-label="Salesforce delivery war room transcript"
         >
           <template if:false={hasDemoTranscript}>
             <p class="demo-empty-state">
-              Select Technical Architect to start the local chat simulation.
+              Select Technical Architect to enter the War Room.
             </p>
           </template>
 

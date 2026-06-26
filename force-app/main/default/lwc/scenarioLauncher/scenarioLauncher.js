@@ -10,7 +10,7 @@ import {
 import {
   buildChoicePrompt,
   buildChallengePrompt,
-  buildDemoRoleOptions,
+  buildDemoRoleGroups,
   buildDemoScoreSummary,
   buildFollowUpPrompt,
   buildInitialDemoMessages,
@@ -18,6 +18,7 @@ import {
   buildMessagesAfterChallenge,
   buildMessagesAfterChoice,
   buildMessagesAfterFollowUp,
+  DEFAULT_EXPANDED_ROLE_GROUP_IDS,
   getActiveRoleId,
   getMessageDelay,
   getPromptDelay
@@ -33,6 +34,7 @@ export default class ScenarioLauncher extends LightningElement {
   demoScore;
   isDemoTyping = false;
   demoTimerIds = [];
+  expandedDemoRoleGroupIds = DEFAULT_EXPANDED_ROLE_GROUP_IDS;
   isClassicRunExpanded = false;
   isSupportingContextExpanded = false;
 
@@ -44,8 +46,11 @@ export default class ScenarioLauncher extends LightningElement {
     return buildRunModel(this.chatRunState, DELIVERY_ROOM_CATALOG);
   }
 
-  get demoRoleOptions() {
-    return buildDemoRoleOptions(this.selectedDemoRoleId);
+  get demoRoleGroups() {
+    return buildDemoRoleGroups(
+      this.expandedDemoRoleGroupIds,
+      this.selectedDemoRoleId
+    );
   }
 
   get hasDemoStarted() {
@@ -444,6 +449,19 @@ export default class ScenarioLauncher extends LightningElement {
     this.demoTranscript = [];
     this.demoPrompt = undefined;
     this.demoScore = undefined;
+  }
+
+  handleDemoRoleGroupToggle(event) {
+    const groupId = event.currentTarget.dataset.groupId;
+
+    if (this.expandedDemoRoleGroupIds.includes(groupId)) {
+      this.expandedDemoRoleGroupIds = this.expandedDemoRoleGroupIds.filter(
+        (expandedGroupId) => expandedGroupId !== groupId
+      );
+      return;
+    }
+
+    this.expandedDemoRoleGroupIds = [...this.expandedDemoRoleGroupIds, groupId];
   }
 
   handleChoiceSelect(event) {

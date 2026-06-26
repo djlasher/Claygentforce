@@ -1,40 +1,171 @@
 const ACTIVE_ROLE_ID = "technical-architect";
 
-const ROLE_OPTIONS = [
+export const DEFAULT_EXPANDED_ROLE_GROUP_IDS = ["core-delivery"];
+
+const ROLE_GROUPS = [
   {
-    id: ACTIVE_ROLE_ID,
-    title: "Technical Architect",
-    description: "Lead the delivery-room path through architecture tradeoffs.",
-    status: "Active",
-    disabled: false
+    id: "core-delivery",
+    title: "Core Delivery Team",
+    roles: [
+      {
+        id: ACTIVE_ROLE_ID,
+        title: "Technical Architect",
+        description: "Lead the war-room path through architecture tradeoffs.",
+        status: "Active",
+        disabled: false
+      },
+      {
+        id: "business-analyst",
+        title: "Business Analyst",
+        description: "Shape intake, criteria, and stakeholder language.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "qa-lead",
+        title: "QA Lead",
+        description: "Drive validation coverage and evidence confidence.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "devops-lead",
+        title: "DevOps Lead",
+        description: "Pressure-test release readiness and deployability.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "security-reviewer",
+        title: "Security Reviewer",
+        description: "Review access, sharing, and visibility assumptions.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "delivery-coordinator",
+        title: "Delivery Coordinator",
+        description: "Keep decisions, evidence, and next steps moving.",
+        status: "Coming soon",
+        disabled: true
+      }
+    ]
   },
   {
-    id: "business-analyst",
-    title: "Business Analyst",
-    description: "Shape intake, criteria, and stakeholder language.",
-    status: "Coming soon",
-    disabled: true
+    id: "architecture-platform",
+    title: "Architecture & Platform",
+    roles: [
+      {
+        id: "solution-architect",
+        title: "Solution Architect",
+        description: "Review solution shape and implementation fit.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "enterprise-architect",
+        title: "Enterprise Architect",
+        description: "Connect delivery choices to enterprise standards.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "integration-architect",
+        title: "Integration Architect",
+        description: "Pressure-test system boundaries and handoffs.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "data-architect",
+        title: "Data Architect",
+        description: "Review data model, quality, and migration risk.",
+        status: "Coming soon",
+        disabled: true
+      }
+    ]
   },
   {
-    id: "qa-lead",
-    title: "QA Lead",
-    description: "Drive validation coverage and evidence confidence.",
-    status: "Coming soon",
-    disabled: true
+    id: "salesforce-specialists",
+    title: "Salesforce Specialists",
+    roles: [
+      {
+        id: "agentforce-engineer",
+        title: "Agentforce Engineer",
+        description: "Plan future agent-backed role execution.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "data-cloud-architect",
+        title: "Data Cloud Architect",
+        description: "Map future data-backed evaluation signals.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "omnistudio-developer",
+        title: "OmniStudio Developer",
+        description: "Assess guided experience and automation fit.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "service-cloud-consultant",
+        title: "Service Cloud Consultant",
+        description: "Review support operations and Case experience.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "experience-cloud-consultant",
+        title: "Experience Cloud Consultant",
+        description: "Evaluate external user experience implications.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "revenue-cloud-consultant",
+        title: "Revenue Cloud Consultant",
+        description: "Assess revenue-process impact when relevant.",
+        status: "Coming soon",
+        disabled: true
+      }
+    ]
   },
   {
-    id: "devops-lead",
-    title: "DevOps Lead",
-    description: "Pressure-test release readiness and deployability.",
-    status: "Coming soon",
-    disabled: true
-  },
-  {
-    id: "security-reviewer",
-    title: "Security Reviewer",
-    description: "Review access, sharing, and visibility assumptions.",
-    status: "Coming soon",
-    disabled: true
+    id: "stakeholders-leadership",
+    title: "Stakeholders & Leadership",
+    roles: [
+      {
+        id: "product-owner",
+        title: "Product Owner",
+        description: "Balance scope, outcomes, and stakeholder clarity.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "project-manager",
+        title: "Project Manager",
+        description: "Track readiness, risk, ownership, and timing.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "client-executive",
+        title: "Client Executive",
+        description: "Frame business urgency and sponsor expectations.",
+        status: "Coming soon",
+        disabled: true
+      },
+      {
+        id: "operations-manager",
+        title: "Operations Manager",
+        description: "Represent operational adoption and usability.",
+        status: "Coming soon",
+        disabled: true
+      }
+    ]
   }
 ];
 
@@ -54,9 +185,14 @@ const ROLE_PROFILES = {
     roleTitle: "QA Lead",
     initials: "PS"
   },
+  CS: {
+    displayName: "Dana Brooks",
+    roleTitle: "VP Support Operations",
+    initials: "DB"
+  },
   AR: {
     displayName: "Marcus Reed",
-    roleTitle: "Technical Architect",
+    roleTitle: "Architecture Reviewer",
     initials: "MR"
   },
   SE: {
@@ -92,12 +228,16 @@ const CHOICE_SCORE_PROFILES = {
 
 const INITIAL_MESSAGES = [
   {
+    speaker: "CS",
+    text: "We need support managers to see high-risk Cases before escalations slip. Can we get a focused, trustworthy review path ready for this release?"
+  },
+  {
     speaker: "PO",
-    text: "We need manager visibility for high-risk Cases quickly, but the release still has to be explainable."
+    text: "We can move quickly if the release story is narrow, explainable, and tied to observable Case behavior."
   },
   {
     speaker: "SM",
-    text: "My team needs a focused list they can trust before escalations slip past us."
+    text: "My managers need a focused list they can trust, not another queue that mixes stale or already-closed work into the review path."
   },
   {
     speaker: "QA",
@@ -112,8 +252,8 @@ const INITIAL_MESSAGES = [
     text: "If we can bound the validation path, I can support a narrow release review."
   },
   {
-    speaker: "AR",
-    text: "As Technical Architect, choose the first validation lens for the room."
+    speaker: "SIM",
+    text: "You're representing the Technical Architect role. What validation lens do you want the room to anchor on first?"
   }
 ];
 
@@ -129,14 +269,28 @@ export const getPromptDelay = (messages) => {
 
 export const getActiveRoleId = () => ACTIVE_ROLE_ID;
 
-export const buildDemoRoleOptions = (selectedRoleId) =>
-  ROLE_OPTIONS.map((role) => ({
-    ...role,
-    ariaPressed: role.id === selectedRoleId ? "true" : "false",
-    cssClass: `demo-role-card${role.disabled ? " demo-role-card-disabled" : ""}${
-      role.id === selectedRoleId ? " demo-role-card-selected" : ""
-    }`
-  }));
+const buildDemoRoleOption = (role, selectedRoleId) => ({
+  ...role,
+  ariaPressed: role.id === selectedRoleId ? "true" : "false",
+  cssClass: `demo-role-card${role.disabled ? " demo-role-card-disabled" : ""}${
+    role.id === selectedRoleId ? " demo-role-card-selected" : ""
+  }`
+});
+
+export const buildDemoRoleGroups = (expandedGroupIds, selectedRoleId) =>
+  ROLE_GROUPS.map((group) => {
+    const isExpanded = expandedGroupIds.includes(group.id);
+
+    return {
+      ...group,
+      ariaExpanded: isExpanded ? "true" : "false",
+      isExpanded,
+      toggleLabel: isExpanded ? "Hide" : "Show",
+      roles: group.roles.map((role) =>
+        buildDemoRoleOption(role, selectedRoleId)
+      )
+    };
+  });
 
 const getProfile = (speaker) => ROLE_PROFILES[speaker] || ROLE_PROFILES.SIM;
 
