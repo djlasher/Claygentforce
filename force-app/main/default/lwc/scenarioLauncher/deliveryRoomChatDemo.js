@@ -1,4 +1,6 @@
-const ACTIVE_ROLE_ID = "technical-architect";
+const TECHNICAL_ARCHITECT_ROLE_ID = "technical-architect";
+const QA_LEAD_ROLE_ID = "qa-lead";
+const PLAYABLE_ROLE_IDS = [TECHNICAL_ARCHITECT_ROLE_ID, QA_LEAD_ROLE_ID];
 
 export const DEFAULT_EXPANDED_ROLE_GROUP_IDS = ["core-delivery"];
 
@@ -8,7 +10,7 @@ const ROLE_GROUPS = [
     title: "Core Delivery Team",
     roles: [
       {
-        id: ACTIVE_ROLE_ID,
+        id: TECHNICAL_ARCHITECT_ROLE_ID,
         title: "Technical Architect",
         description: "Lead the war-room path through architecture tradeoffs.",
         status: "Active",
@@ -22,11 +24,11 @@ const ROLE_GROUPS = [
         disabled: true
       },
       {
-        id: "qa-lead",
+        id: QA_LEAD_ROLE_ID,
         title: "QA Lead",
         description: "Drive validation coverage and evidence confidence.",
-        status: "Coming soon",
-        disabled: true
+        status: "Active",
+        disabled: false
       },
       {
         id: "devops-lead",
@@ -217,6 +219,19 @@ const ROLE_PROFILES = {
   }
 };
 
+const LEARNER_PROFILES = {
+  [TECHNICAL_ARCHITECT_ROLE_ID]: {
+    displayName: "You",
+    roleTitle: "Technical Architect",
+    initials: "TA"
+  },
+  [QA_LEAD_ROLE_ID]: {
+    displayName: "You",
+    roleTitle: "QA Lead",
+    initials: "QA"
+  }
+};
+
 const CHOICE_SCORE_PROFILES = {
   "flow-precedence": [24, 23, 18, 21],
   "permission-visibility": [21, 22, 20, 20],
@@ -226,12 +241,152 @@ const CHOICE_SCORE_PROFILES = {
   "regression-risk": [23, 24, 18, 22]
 };
 
+const QA_SCORE_PROFILES = {
+  "qa-regression-matrix": [23, 24, 21, 22],
+  "qa-permission-edge-testing": [22, 20, 23, 21],
+  "qa-negative-path-testing": [23, 24, 22, 23],
+  "qa-list-filter-validation": [21, 22, 21, 22],
+  "qa-evidence-reproducibility": [22, 21, 25, 22],
+  "qa-release-smoke-coverage": [22, 22, 23, 24]
+};
+
 const REACTION_LABELS = {
   positive: "Positive",
   concerned: "Concerned",
   blocked: "Blocked",
   neutral: "Neutral"
 };
+
+const TECHNICAL_ARCHITECT_CHOICES = [
+  {
+    id: "flow-precedence",
+    label: "Inspect Flow precedence",
+    learnerMessage:
+      "Decision: Validate Flow precedence before declaring release confidence."
+  },
+  {
+    id: "permission-visibility",
+    label: "Check permission visibility",
+    learnerMessage:
+      "Decision: Review permission boundaries before broader release confidence is declared."
+  },
+  {
+    id: "list-view-accuracy",
+    label: "Review list accuracy",
+    learnerMessage:
+      "Decision: Validate whether active Case review remains actionable for support managers."
+  },
+  {
+    id: "stakeholder-tradeoff",
+    label: "Frame stakeholder tradeoff",
+    learnerMessage:
+      "Decision: Align stakeholder expectations around the narrow release promise and unresolved risks."
+  },
+  {
+    id: "release-readiness",
+    label: "Assess release readiness",
+    learnerMessage:
+      "Decision: Treat release readiness as evidence-based confidence, not deployability alone."
+  },
+  {
+    id: "regression-risk",
+    label: "Probe regression risk",
+    learnerMessage:
+      "Decision: Assess regression risk across Case escalation state transitions before release review."
+  }
+];
+
+const QA_CHOICES = [
+  {
+    id: "qa-regression-matrix",
+    label: "Build regression matrix",
+    learnerMessage:
+      "Decision: Anchor QA confidence in a regression matrix across high-risk, clearing, and closed Case paths."
+  },
+  {
+    id: "qa-permission-edge-testing",
+    label: "Test permission edges",
+    learnerMessage:
+      "Decision: Verify manager visibility through realistic permission boundaries before approval."
+  },
+  {
+    id: "qa-negative-path-testing",
+    label: "Probe negative paths",
+    learnerMessage:
+      "Decision: Validate negative paths so false positives and stale risk flags do not pass release review."
+  },
+  {
+    id: "qa-list-filter-validation",
+    label: "Validate list filtering",
+    learnerMessage:
+      "Decision: Confirm the support manager list remains accurate, current, and operationally usable."
+  },
+  {
+    id: "qa-evidence-reproducibility",
+    label: "Require reproducible evidence",
+    learnerMessage:
+      "Decision: Require evidence that another reviewer can reproduce without privileged assumptions."
+  },
+  {
+    id: "qa-release-smoke-coverage",
+    label: "Define smoke coverage",
+    learnerMessage:
+      "Decision: Define must-pass smoke coverage for release review and separate it from exploratory QA."
+  }
+];
+
+const ROLE_CHOICE_PROMPTS = {
+  [TECHNICAL_ARCHITECT_ROLE_ID]: {
+    title: "What consulting decision do you make first?",
+    choices: TECHNICAL_ARCHITECT_CHOICES
+  },
+  [QA_LEAD_ROLE_ID]: {
+    title: "Where should QA establish confidence first?",
+    choices: QA_CHOICES
+  }
+};
+
+const QA_FOLLOW_UP_ACTIONS = [
+  {
+    id: "qa-evidence-plan",
+    label: "Define evidence plan",
+    learnerMessage:
+      "Decision: Define the required evidence, owner, and pass criteria before release approval."
+  },
+  {
+    id: "qa-risk-owner",
+    label: "Assign risk ownership",
+    learnerMessage:
+      "Decision: Assign ownership for unresolved validation risks before the release review proceeds."
+  },
+  {
+    id: "qa-smoke-gate",
+    label: "Set smoke-test gate",
+    learnerMessage:
+      "Decision: Set a must-pass smoke-test gate and keep exploratory coverage outside the release blocker list."
+  }
+];
+
+const QA_CHALLENGE_RESPONSES = [
+  {
+    id: "qa-targeted-validation",
+    label: "Convert concern to must-pass validation",
+    learnerMessage:
+      "Decision: Convert the concern into a must-pass validation step with an owner and evidence standard."
+  },
+  {
+    id: "qa-owned-risk",
+    label: "Log owned release risk",
+    learnerMessage:
+      "Decision: Track this as an owned release-review risk with a clear trigger for escalation."
+  },
+  {
+    id: "qa-scope-guardrail",
+    label: "Protect release scope",
+    learnerMessage:
+      "Decision: Protect the release scope by separating required validation from broader exploratory testing."
+  }
+];
 
 const CHOICE_REACTION_SCENARIOS = {
   "flow-precedence": {
@@ -452,6 +607,224 @@ const CHOICE_REACTION_SCENARIOS = {
       "Stakeholder confidence may dip if regression scope feels too broad for the release window.",
     nextAction:
       "Define must-pass transition tests and explicitly defer lower-priority regression exploration."
+  },
+  "qa-regression-matrix": {
+    confidence: 86,
+    sentiment: [
+      { speaker: "AR", state: "positive" },
+      { speaker: "DO", state: "positive" },
+      { speaker: "PO", state: "concerned" },
+      { speaker: "SE", state: "neutral" },
+      { speaker: "CS", state: "neutral" }
+    ],
+    messages: [
+      {
+        speaker: "AR",
+        state: "positive",
+        text: "That gives the room a credible quality frame. A regression matrix will show which Case paths are release-critical and which can stay exploratory."
+      },
+      {
+        speaker: "DO",
+        state: "positive",
+        text: "I can use that in release review if the must-pass rows stay separated from broader QA coverage."
+      },
+      {
+        speaker: "PO",
+        state: "concerned",
+        text: "The approach is strong, but please keep it tied to the release promise. We cannot let every edge case become a blocker."
+      },
+      {
+        speaker: "SE",
+        state: "neutral",
+        text: "Include visibility paths in the matrix so access confidence is not treated as a separate assumption."
+      }
+    ],
+    strength: "Strong QA governance and regression framing.",
+    riskArea: "Scope can expand if must-pass and exploratory coverage blur.",
+    nextAction:
+      "Define must-pass Case states, expected field outcomes, persona visibility, and evidence owner."
+  },
+  "qa-permission-edge-testing": {
+    confidence: 84,
+    sentiment: [
+      { speaker: "SE", state: "positive" },
+      { speaker: "SM", state: "positive" },
+      { speaker: "AR", state: "neutral" },
+      { speaker: "DO", state: "concerned" },
+      { speaker: "PO", state: "concerned" }
+    ],
+    messages: [
+      {
+        speaker: "SE",
+        state: "positive",
+        text: "Good QA instinct. If a support manager cannot see the right fields and list view through normal access, the scenario is not release-ready."
+      },
+      {
+        speaker: "SM",
+        state: "positive",
+        text: "That is the risk my team will feel first. I need confidence from the manager persona, not an admin walkthrough."
+      },
+      {
+        speaker: "DO",
+        state: "concerned",
+        text: "If permission testing finds gaps late, I need a clear call on whether they block release or become documented follow-up."
+      },
+      {
+        speaker: "PO",
+        state: "concerned",
+        text: "Keep the testing narrow enough that we still have a business-facing release answer."
+      }
+    ],
+    strength: "Strong persona-based access validation.",
+    riskArea:
+      "Late access findings could create release ambiguity without ownership.",
+    nextAction:
+      "Test support-manager visibility with the scenario permission set and document any blocking access gaps."
+  },
+  "qa-negative-path-testing": {
+    confidence: 88,
+    sentiment: [
+      { speaker: "AR", state: "positive" },
+      { speaker: "SE", state: "positive" },
+      { speaker: "CS", state: "positive" },
+      { speaker: "PO", state: "neutral" },
+      { speaker: "DO", state: "neutral" }
+    ],
+    messages: [
+      {
+        speaker: "AR",
+        state: "positive",
+        text: "That is a mature validation move. Negative paths will expose false confidence before stakeholders see it."
+      },
+      {
+        speaker: "SE",
+        state: "positive",
+        text: "I like that this tests what should not happen, not only the happy path. That is where access and clearing assumptions usually fail."
+      },
+      {
+        speaker: "CS",
+        state: "positive",
+        text: "This gives me more confidence that managers will not be chasing stale or incorrectly flagged Cases."
+      },
+      {
+        speaker: "DO",
+        state: "neutral",
+        text: "As long as the negative cases are release-critical, I can support making them part of the gate."
+      }
+    ],
+    strength: "Strong false-positive and stale-state risk control.",
+    riskArea: "Negative testing still needs a bounded pass/fail definition.",
+    nextAction:
+      "Identify the exact negative Case states that must not appear as active high-risk work."
+  },
+  "qa-list-filter-validation": {
+    confidence: 83,
+    sentiment: [
+      { speaker: "SM", state: "positive" },
+      { speaker: "CS", state: "positive" },
+      { speaker: "SE", state: "concerned" },
+      { speaker: "AR", state: "neutral" },
+      { speaker: "PO", state: "neutral" }
+    ],
+    messages: [
+      {
+        speaker: "SM",
+        state: "positive",
+        text: "That is the right operational lens. Managers will judge the whole release by whether the list shows current work they can act on."
+      },
+      {
+        speaker: "CS",
+        state: "positive",
+        text: "If QA proves the list is focused and current, I can explain the release value clearly."
+      },
+      {
+        speaker: "SE",
+        state: "concerned",
+        text: "I still need visibility evidence attached to the list test. A correct list is not enough if the wrong users can see it."
+      },
+      {
+        speaker: "AR",
+        state: "neutral",
+        text: "Tie the list assertions back to the Flow outcomes so the UI validation and automation validation support each other."
+      }
+    ],
+    strength: "Strong operational usability validation.",
+    riskArea: "Access control and automation evidence still need linkage.",
+    nextAction:
+      "Validate list membership, manager visibility, and Flow-driven Case state in one evidence path."
+  },
+  "qa-evidence-reproducibility": {
+    confidence: 87,
+    sentiment: [
+      { speaker: "DO", state: "positive" },
+      { speaker: "AR", state: "positive" },
+      { speaker: "SE", state: "positive" },
+      { speaker: "PO", state: "neutral" },
+      { speaker: "CS", state: "neutral" }
+    ],
+    messages: [
+      {
+        speaker: "DO",
+        state: "positive",
+        text: "Reproducible evidence is exactly what release review needs. It keeps confidence from depending on one person's walkthrough."
+      },
+      {
+        speaker: "AR",
+        state: "positive",
+        text: "That also improves consulting quality. Another reviewer should be able to repeat the path and reach the same conclusion."
+      },
+      {
+        speaker: "SE",
+        state: "positive",
+        text: "Make sure the evidence names the persona and access model. That prevents hidden admin assumptions from creeping back in."
+      },
+      {
+        speaker: "PO",
+        state: "neutral",
+        text: "This is solid. Keep the evidence concise enough that stakeholders can understand what has and has not been proven."
+      }
+    ],
+    strength: "Strong evidence discipline and review repeatability.",
+    riskArea:
+      "Evidence can become too technical unless the release claim stays clear.",
+    nextAction:
+      "Capture repeatable steps, expected outcomes, persona, and unresolved assumptions for each must-pass test."
+  },
+  "qa-release-smoke-coverage": {
+    confidence: 85,
+    sentiment: [
+      { speaker: "DO", state: "positive" },
+      { speaker: "PO", state: "positive" },
+      { speaker: "AR", state: "neutral" },
+      { speaker: "SM", state: "concerned" },
+      { speaker: "SE", state: "neutral" }
+    ],
+    messages: [
+      {
+        speaker: "DO",
+        state: "positive",
+        text: "That is release-friendly. A smoke gate gives us a clear go/no-go signal without pretending it replaces deeper regression testing."
+      },
+      {
+        speaker: "PO",
+        state: "positive",
+        text: "I can defend that with stakeholders if the smoke coverage maps directly to the release promise."
+      },
+      {
+        speaker: "SM",
+        state: "concerned",
+        text: "Please make sure the smoke test includes the manager's actual review path. Otherwise it may pass while the field team still struggles."
+      },
+      {
+        speaker: "AR",
+        state: "neutral",
+        text: "Add one automation-clearing path so the smoke test covers more than the initial high-risk creation moment."
+      }
+    ],
+    strength: "Strong release-gate clarity.",
+    riskArea: "Smoke coverage may miss operational confidence if too narrow.",
+    nextAction:
+      "Define smoke coverage for manager visibility, list accuracy, Flow precedence, and one clearing path."
   }
 };
 
@@ -466,11 +839,7 @@ const INITIAL_MESSAGES = [
   },
   {
     speaker: "SM",
-    text: "My managers need a focused list they can trust, not another queue that mixes stale or already-closed work into the review path."
-  },
-  {
-    speaker: "QA",
-    text: "Before anyone calls this ready, I want evidence for precedence, clearing behavior, and list accuracy."
+    text: "My managers need a focused review path they can trust, not a list that mixes stale or already-closed work into active Case review."
   },
   {
     speaker: "SE",
@@ -479,10 +848,50 @@ const INITIAL_MESSAGES = [
   {
     speaker: "DO",
     text: "If we can bound the validation path, I can support a narrow release review."
+  }
+];
+
+const ROLE_INITIAL_MESSAGES = {
+  [TECHNICAL_ARCHITECT_ROLE_ID]: [
+    ...INITIAL_MESSAGES,
+    {
+      speaker: "QA",
+      text: "Before anyone calls this ready, I want evidence for precedence, clearing behavior, and list accuracy."
+    },
+    {
+      speaker: "SIM",
+      text: "You're representing the Technical Architect role. What validation lens do you want the room to anchor on first?"
+    }
+  ],
+  [QA_LEAD_ROLE_ID]: [
+    ...INITIAL_MESSAGES,
+    {
+      speaker: "AR",
+      text: "From the architecture side, I need QA confidence across Flow behavior, list visibility, access boundaries, and release evidence."
+    },
+    {
+      speaker: "SIM",
+      text: "You're representing QA leadership for this release review. Where do you want validation confidence established first?"
+    }
+  ]
+};
+
+const WAR_ROOM_METADATA = [
+  {
+    label: "Scenario",
+    value: "Case escalation visibility"
   },
   {
-    speaker: "SIM",
-    text: "You're representing the Technical Architect role. What validation lens do you want the room to anchor on first?"
+    label: "Pressure",
+    value: "High"
+  },
+  {
+    label: "Release window",
+    value: "Friday review"
+  },
+  {
+    label: "Mode",
+    value: "Local deterministic"
   }
 ];
 
@@ -496,7 +905,11 @@ export const getPromptDelay = (messages) => {
   return Math.min(1800 + textLength * 6, 2500);
 };
 
-export const getActiveRoleId = () => ACTIVE_ROLE_ID;
+export const getActiveRoleId = () => TECHNICAL_ARCHITECT_ROLE_ID;
+
+export const isPlayableRoleId = (roleId) => PLAYABLE_ROLE_IDS.includes(roleId);
+
+export const getWarRoomMetadata = () => WAR_ROOM_METADATA;
 
 const buildDemoRoleOption = (role, selectedRoleId) => ({
   ...role,
@@ -521,7 +934,68 @@ export const buildDemoRoleGroups = (expandedGroupIds, selectedRoleId) =>
     };
   });
 
-const getProfile = (speaker) => ROLE_PROFILES[speaker] || ROLE_PROFILES.SIM;
+const getProfile = (speaker, learnerRoleId) => {
+  if (speaker === "You") {
+    return (
+      LEARNER_PROFILES[learnerRoleId] || LEARNER_PROFILES[getActiveRoleId()]
+    );
+  }
+
+  return ROLE_PROFILES[speaker] || ROLE_PROFILES.SIM;
+};
+
+const buildChoiceButtons = (choices) =>
+  choices.map((choice) => ({
+    ...choice,
+    ariaPressed: "false",
+    cssClass: "choice-button"
+  }));
+
+const buildActionButtons = (actions) =>
+  actions.map((action) => ({
+    ...action,
+    ariaPressed: "false",
+    cssClass: "follow-up-button"
+  }));
+
+const buildChallengeButtons = (responses) =>
+  responses.map((response) => ({
+    ...response,
+    ariaPressed: "false",
+    cssClass: "challenge-response-button"
+  }));
+
+const ensureSentence = (text) => {
+  if (!text) {
+    return "";
+  }
+
+  return /[.!?]$/.test(text) ? text : `${text}.`;
+};
+
+const sentenceCase = (text) => {
+  if (!text) {
+    return "";
+  }
+
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
+};
+
+const formatLearnerDecisionText = (text) => {
+  if (!text || text.startsWith("Decision:")) {
+    return ensureSentence(text);
+  }
+
+  if (text.startsWith("I would ")) {
+    return ensureSentence(`Decision: ${sentenceCase(text.slice(8))}`);
+  }
+
+  if (text.startsWith("I want to ")) {
+    return ensureSentence(`Decision: ${sentenceCase(text.slice(10))}`);
+  }
+
+  return ensureSentence(`Decision: ${text}`);
+};
 
 const normalizeMessage = ({
   key,
@@ -530,9 +1004,10 @@ const normalizeMessage = ({
   type = "role",
   label = "Local demo message",
   learningNote,
-  reactionState
+  reactionState,
+  learnerRoleId
 }) => {
-  const profile = getProfile(speaker);
+  const profile = getProfile(speaker, learnerRoleId);
   const reactionLabel = REACTION_LABELS[reactionState];
 
   return {
@@ -556,21 +1031,24 @@ const normalizeMessage = ({
   };
 };
 
-export const buildInitialDemoMessages = () =>
-  INITIAL_MESSAGES.map((message, index) =>
+export const buildInitialDemoMessages = (roleId = getActiveRoleId()) =>
+  (
+    ROLE_INITIAL_MESSAGES[roleId] || ROLE_INITIAL_MESSAGES[getActiveRoleId()]
+  ).map((message, index) =>
     normalizeMessage({
       ...message,
       key: `demo-initial-${index}`
     })
   );
 
-export const buildLearnerMessage = ({ key, text, label }) =>
+export const buildLearnerMessage = ({ key, text, label, roleId }) =>
   normalizeMessage({
     key,
     speaker: "You",
-    text,
+    text: formatLearnerDecisionText(text),
     type: "learner",
-    label
+    label,
+    learnerRoleId: roleId
   });
 
 export const normalizeRunMessage = (message, keyPrefix) =>
@@ -593,56 +1071,190 @@ const buildReactionMessages = (choiceId) =>
     })
   );
 
-export const buildChoicePrompt = (runModel) => {
-  const learnerPrompt = runModel.chatPreviewMessages.find(
-    (message) => message.choices
+const findById = (items, itemId) => items.find((item) => item.id === itemId);
+
+const getRoleChoiceConfig = (roleId) =>
+  ROLE_CHOICE_PROMPTS[roleId] || ROLE_CHOICE_PROMPTS[getActiveRoleId()];
+
+export const getDemoChoiceLearnerMessage = (roleId, choiceId, runModel) => {
+  const roleChoice = findById(getRoleChoiceConfig(roleId).choices, choiceId);
+
+  return (
+    roleChoice?.learnerMessage || runModel.activeChoiceDetail?.learnerMessage
   );
+};
+
+export const getDemoFollowUpActionLearnerMessage = (
+  roleId,
+  runModel,
+  actionId
+) => {
+  if (roleId === QA_LEAD_ROLE_ID) {
+    return findById(QA_FOLLOW_UP_ACTIONS, actionId)?.learnerMessage;
+  }
+
+  return runModel.activeFollowUpAction?.learnerMessage;
+};
+
+export const getDemoChallengeResponseLearnerMessage = (
+  roleId,
+  runModel,
+  responseId
+) => {
+  if (roleId === QA_LEAD_ROLE_ID) {
+    return findById(QA_CHALLENGE_RESPONSES, responseId)?.learnerMessage;
+  }
+
+  return runModel.activeChallengeResponse?.learnerMessage;
+};
+
+export const buildChoicePrompt = (runModel, roleId = getActiveRoleId()) => {
+  const rolePrompt = getRoleChoiceConfig(roleId);
 
   return {
     type: "choice",
-    title: "What do you want to inspect first?",
-    choices: learnerPrompt?.choices || []
+    title: rolePrompt.title,
+    choices: buildChoiceButtons(rolePrompt.choices)
   };
 };
 
-export const buildFollowUpPrompt = (runModel) => ({
-  type: "followUp",
-  title: "Which follow-up action do you take?",
-  actions: runModel.activeFollowUpActions
-});
+export const buildFollowUpPrompt = (runModel, roleId = getActiveRoleId()) => {
+  const actions =
+    roleId === QA_LEAD_ROLE_ID
+      ? buildActionButtons(QA_FOLLOW_UP_ACTIONS)
+      : runModel.activeFollowUpActions;
 
-export const buildChallengePrompt = (runModel) => ({
-  type: "challenge",
-  title: "How do you respond to the team challenge?",
-  responses: runModel.activeChallengeResponses
-});
+  return {
+    type: "followUp",
+    title: "Which follow-up action do you take?",
+    actions
+  };
+};
 
-export const buildMessagesAfterChoice = (runModel) =>
-  buildReactionMessages(runModel.activeChoiceDetail?.id) ||
+export const buildChallengePrompt = (runModel, roleId = getActiveRoleId()) => {
+  const responses =
+    roleId === QA_LEAD_ROLE_ID
+      ? buildChallengeButtons(QA_CHALLENGE_RESPONSES)
+      : runModel.activeChallengeResponses;
+
+  return {
+    type: "challenge",
+    title: "How do you respond to the team challenge?",
+    responses
+  };
+};
+
+export const buildMessagesAfterChoice = (
+  runModel,
+  choiceId = runModel.activeChoiceDetail?.id
+) =>
+  buildReactionMessages(choiceId) ||
   runModel.selectedChatMessages
     .filter((message) =>
       ["agentFollowUp", "simulationNote"].includes(message.type)
     )
     .map((message) => normalizeRunMessage(message, "demo-choice"));
 
-export const buildMessagesAfterFollowUp = (runModel) =>
-  runModel.selectedFollowUpChatMessages
+export const buildMessagesAfterFollowUp = (
+  runModel,
+  roleId = getActiveRoleId()
+) => {
+  if (roleId === QA_LEAD_ROLE_ID) {
+    return [
+      normalizeMessage({
+        key: "demo-follow-up-qa-architecture",
+        speaker: "AR",
+        text: "That gives architecture a usable QA gate. Keep the evidence tied to the exact Case behavior and persona assumptions we are releasing.",
+        reactionState: "positive",
+        label: "War Room follow-up"
+      }),
+      normalizeMessage({
+        key: "demo-follow-up-qa-product",
+        speaker: "PO",
+        text: "I can support that if the release-review language stays crisp: what passed, what remains at risk, and who owns the next step.",
+        reactionState: "concerned",
+        label: "War Room follow-up"
+      })
+    ];
+  }
+
+  return runModel.selectedFollowUpChatMessages
     .filter((message) =>
       ["finalResponse", "teamChallenge"].includes(message.type)
     )
     .map((message) => normalizeRunMessage(message, "demo-follow-up"));
+};
 
-export const buildMessagesAfterChallenge = (runModel) =>
-  runModel.selectedChallengeResponseMessages
+export const buildMessagesAfterChallenge = (
+  runModel,
+  roleId = getActiveRoleId()
+) => {
+  if (roleId === QA_LEAD_ROLE_ID) {
+    return [
+      normalizeMessage({
+        key: "demo-challenge-qa-closeout",
+        speaker: "SIM",
+        text: "That is a credible QA closeout. The room now has a bounded validation claim, an evidence standard, and a named path for unresolved release risk.",
+        reactionState: "positive",
+        label: "War Room closeout"
+      })
+    ];
+  }
+
+  return runModel.selectedChallengeResponseMessages
     .filter((message) => message.type === "challengeReaction")
     .map((message) => normalizeRunMessage(message, "demo-challenge"));
+};
 
-export const buildDemoScoreSummary = (runModel, runState) => {
-  if (!runModel.hasCompletedRun) {
+const getExecutiveIndicatorValue = (confidencePercent, sentiment) => {
+  const concernCount = sentiment.filter((item) =>
+    ["concerned", "blocked"].includes(item.state)
+  ).length;
+  const positiveCount = sentiment.filter(
+    (item) => item.state === "positive"
+  ).length;
+
+  return {
+    deliveryConfidence:
+      confidencePercent >= 90
+        ? "High"
+        : confidencePercent >= 80
+          ? "Stable"
+          : confidencePercent >= 70
+            ? "Moderate"
+            : "Elevated risk",
+    teamConsensus:
+      positiveCount >= 3 && concernCount <= 1
+        ? "Strong"
+        : concernCount >= 3
+          ? "Mixed"
+          : "Developing",
+    riskLevel:
+      confidencePercent >= 85
+        ? "Low"
+        : confidencePercent >= 75
+          ? "Moderate"
+          : "High"
+  };
+};
+
+export const buildDemoScoreSummary = (
+  runModel,
+  runState,
+  roleId = getActiveRoleId()
+) => {
+  const hasCompletedDemoRun =
+    roleId === QA_LEAD_ROLE_ID
+      ? Boolean(runState.selectedChallengeResponseId)
+      : runModel.hasCompletedRun;
+
+  if (!hasCompletedDemoRun) {
     return undefined;
   }
 
-  const baseScores = CHOICE_SCORE_PROFILES[runState.selectedChoiceId] || [
+  const scoreProfiles =
+    roleId === QA_LEAD_ROLE_ID ? QA_SCORE_PROFILES : CHOICE_SCORE_PROFILES;
+  const baseScores = scoreProfiles[runState.selectedChoiceId] || [
     20, 20, 20, 20
   ];
   const reactionScenario =
@@ -651,21 +1263,35 @@ export const buildDemoScoreSummary = (runModel, runState) => {
     runState.selectedChallengeResponseId?.includes("targeted-validation")
       ? 2
       : 0;
+  const dimensionLabels =
+    roleId === QA_LEAD_ROLE_ID
+      ? [
+          "Validation coverage",
+          "Regression protection",
+          "Evidence quality",
+          "Test completeness"
+        ]
+      : [
+          "Decision quality",
+          "Evidence coverage",
+          "Stakeholder alignment",
+          "Release readiness"
+        ];
   const dimensions = [
     {
-      label: "Decision quality",
+      label: dimensionLabels[0],
       points: Math.min(25, baseScores[0] + targetedValidationBonus)
     },
     {
-      label: "Evidence coverage",
+      label: dimensionLabels[1],
       points: Math.min(25, baseScores[1] + targetedValidationBonus)
     },
     {
-      label: "Stakeholder alignment",
+      label: dimensionLabels[2],
       points: baseScores[2]
     },
     {
-      label: "Release readiness",
+      label: dimensionLabels[3],
       points: Math.min(25, baseScores[3] + targetedValidationBonus)
     }
   ];
@@ -673,14 +1299,34 @@ export const buildDemoScoreSummary = (runModel, runState) => {
     (sum, dimension) => sum + dimension.points,
     0
   );
+  const confidencePercent = reactionScenario.confidence || total;
+  const sentiment = reactionScenario.sentiment || [];
+  const executiveIndicators = getExecutiveIndicatorValue(
+    confidencePercent,
+    sentiment
+  );
 
   return {
     title: "War Room Assessment",
     total,
     confidenceLabel: "Overall Delivery Confidence",
-    confidencePercent: reactionScenario.confidence || total,
+    confidencePercent,
+    executiveIndicators: [
+      {
+        label: "Delivery Confidence",
+        value: executiveIndicators.deliveryConfidence
+      },
+      {
+        label: "Team Consensus",
+        value: executiveIndicators.teamConsensus
+      },
+      {
+        label: "Risk Level",
+        value: executiveIndicators.riskLevel
+      }
+    ],
     dimensions,
-    sentiment: (reactionScenario.sentiment || []).map((item) => {
+    sentiment: sentiment.map((item) => {
       const profile = getProfile(item.speaker);
       const reactionLabel = REACTION_LABELS[item.state];
 

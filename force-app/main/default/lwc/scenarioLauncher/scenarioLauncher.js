@@ -19,9 +19,13 @@ import {
   buildMessagesAfterChoice,
   buildMessagesAfterFollowUp,
   DEFAULT_EXPANDED_ROLE_GROUP_IDS,
-  getActiveRoleId,
+  getDemoChallengeResponseLearnerMessage,
+  getDemoChoiceLearnerMessage,
+  getDemoFollowUpActionLearnerMessage,
   getMessageDelay,
-  getPromptDelay
+  getPromptDelay,
+  getWarRoomMetadata,
+  isPlayableRoleId
 } from "./deliveryRoomChatDemo";
 import { DELIVERY_ROOM_CATALOG } from "./scenarioCatalog";
 
@@ -51,6 +55,10 @@ export default class ScenarioLauncher extends LightningElement {
       this.expandedDemoRoleGroupIds,
       this.selectedDemoRoleId
     );
+  }
+
+  get warRoomMetadata() {
+    return getWarRoomMetadata();
   }
 
   get hasDemoStarted() {
@@ -365,15 +373,18 @@ export default class ScenarioLauncher extends LightningElement {
   handleDemoRoleSelect(event) {
     const roleId = event.currentTarget.dataset.roleId;
 
-    if (roleId !== getActiveRoleId()) {
+    if (!isPlayableRoleId(roleId)) {
       return;
     }
 
     this.selectedDemoRoleId = roleId;
     this.restartDemoChat();
     this.selectedDemoRoleId = roleId;
-    this.queueDemoMessages(buildInitialDemoMessages(), () => {
-      this.demoPrompt = buildChoicePrompt(this.demoRunModel);
+    this.queueDemoMessages(buildInitialDemoMessages(roleId), () => {
+      this.demoPrompt = buildChoicePrompt(
+        this.demoRunModel,
+        this.selectedDemoRoleId
+      );
     });
   }
 
@@ -390,11 +401,19 @@ export default class ScenarioLauncher extends LightningElement {
       buildLearnerMessage({
         key: `demo-learner-choice-${choiceId}`,
         label: "Selected validation lens",
-        text: runModel.activeChoiceDetail.learnerMessage
+        roleId: this.selectedDemoRoleId,
+        text: getDemoChoiceLearnerMessage(
+          this.selectedDemoRoleId,
+          choiceId,
+          runModel
+        )
       })
     ];
-    this.queueDemoMessages(buildMessagesAfterChoice(runModel), () => {
-      this.demoPrompt = buildFollowUpPrompt(this.demoRunModel);
+    this.queueDemoMessages(buildMessagesAfterChoice(runModel, choiceId), () => {
+      this.demoPrompt = buildFollowUpPrompt(
+        this.demoRunModel,
+        this.selectedDemoRoleId
+      );
     });
   }
 
@@ -411,12 +430,23 @@ export default class ScenarioLauncher extends LightningElement {
       buildLearnerMessage({
         key: `demo-learner-follow-up-${actionId}`,
         label: "Selected follow-up action",
-        text: runModel.activeFollowUpAction.learnerMessage
+        roleId: this.selectedDemoRoleId,
+        text: getDemoFollowUpActionLearnerMessage(
+          this.selectedDemoRoleId,
+          runModel,
+          actionId
+        )
       })
     ];
-    this.queueDemoMessages(buildMessagesAfterFollowUp(runModel), () => {
-      this.demoPrompt = buildChallengePrompt(this.demoRunModel);
-    });
+    this.queueDemoMessages(
+      buildMessagesAfterFollowUp(runModel, this.selectedDemoRoleId),
+      () => {
+        this.demoPrompt = buildChallengePrompt(
+          this.demoRunModel,
+          this.selectedDemoRoleId
+        );
+      }
+    );
   }
 
   handleDemoChallengeResponseSelect(event) {
@@ -431,15 +461,24 @@ export default class ScenarioLauncher extends LightningElement {
       buildLearnerMessage({
         key: `demo-learner-challenge-${responseId}`,
         label: "Selected challenge response",
-        text: runModel.activeChallengeResponse.learnerMessage
+        roleId: this.selectedDemoRoleId,
+        text: getDemoChallengeResponseLearnerMessage(
+          this.selectedDemoRoleId,
+          runModel,
+          responseId
+        )
       })
     ];
-    this.queueDemoMessages(buildMessagesAfterChallenge(runModel), () => {
-      this.demoScore = buildDemoScoreSummary(
-        this.demoRunModel,
-        this.chatRunState
-      );
-    });
+    this.queueDemoMessages(
+      buildMessagesAfterChallenge(runModel, this.selectedDemoRoleId),
+      () => {
+        this.demoScore = buildDemoScoreSummary(
+          this.demoRunModel,
+          this.chatRunState,
+          this.selectedDemoRoleId
+        );
+      }
+    );
   }
 
   handleDemoReset() {

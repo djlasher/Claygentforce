@@ -58,6 +58,15 @@
           </template>
         </div>
 
+        <dl class="demo-metadata-strip" aria-label="War Room metadata">
+          <template for:each={warRoomMetadata} for:item="item">
+            <div key={item.label} class="demo-metadata-item">
+              <dt>{item.label}</dt>
+              <dd>{item.value}</dd>
+            </div>
+          </template>
+        </dl>
+
         <div class="demo-role-groups" aria-label="Select learner role">
           <template for:each={demoRoleGroups} for:item="group">
             <section key={group.id} class="demo-role-group">
@@ -103,7 +112,7 @@
         >
           <template if:false={hasDemoTranscript}>
             <p class="demo-empty-state">
-              Select Technical Architect to enter the War Room.
+              Select Technical Architect or QA Lead to enter the War Room.
             </p>
           </template>
 
@@ -145,7 +154,7 @@
               <template if:true={isDemoChoicePrompt}>
                 <div
                   class="choice-preview"
-                  aria-label="Technical Architect choices"
+                  aria-label="War Room learner choices"
                 >
                   <template for:each={demoPrompt.choices} for:item="choice">
                     <button
@@ -217,6 +226,17 @@
                 Numeric score retained: {demoScore.total}/100
               </p>
             </div>
+            <dl class="demo-executive-grid">
+              <template
+                for:each={demoScore.executiveIndicators}
+                for:item="indicator"
+              >
+                <div key={indicator.label} class="demo-executive-item">
+                  <dt>{indicator.label}</dt>
+                  <dd>{indicator.value}</dd>
+                </div>
+              </template>
+            </dl>
             <dl class="demo-score-grid">
               <template for:each={demoScore.dimensions} for:item="dimension">
                 <div key={dimension.label} class="demo-score-item">
