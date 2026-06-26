@@ -2,47 +2,54 @@
 
 Claygentforce is a Salesforce delivery team simulation and enablement project.
 
-The goal is to build a realistic, AI-assisted Salesforce delivery simulator that helps learners practice requirements discovery, architecture decisions, implementation planning, admin configuration, DevOps workflows, QA review, security review, stakeholder tradeoffs, and incident response in a safe sandbox environment.
+The goal is to help learners practice Salesforce delivery judgment in a safe sandbox: requirements discovery, architecture decisions, implementation planning, admin configuration, DevOps workflows, QA review, security review, stakeholder tradeoffs, deployment readiness, and incident response.
 
-This project is not intended to be a simple Salesforce demo app. It is intended to become a guided learning environment where users experience the kinds of ambiguity, constraints, mistakes, reviews, and consequences that happen on real Salesforce delivery teams.
+Claygentforce is not a generic chatbot, quiz app, or simple Salesforce demo. It is a guided delivery-room simulator where learners experience the ambiguity, constraints, review pressure, tradeoffs, and consequences that happen on real Salesforce projects.
 
 ---
 
-## Core Idea
+## Product Direction
 
-Claygentforce simulates a Salesforce project team using role-based AI agents.
+The product direction is:
 
-Each agent represents a delivery role, such as:
+1. **Real Salesforce implementation first**  
+   Scenarios should include realistic metadata, automation, permissions, layouts, validation, and deployment discipline when those things support the learning objective.
 
-- Business Analyst
-- Technical Architect
-- Salesforce Admin
-- Salesforce Developer
-- QA Engineer
-- DevOps Engineer
-- Security Reviewer
-- Product Owner
-- Client Stakeholder
-- Incident Commander
+2. **Deterministic local orchestration second**  
+   Scenario runs should be driven by local state, explicit task plans, bounded learner choices, local role-agent task outputs, and compact closeout feedback before introducing dynamic agents.
 
-The learner interacts with these roles while working through realistic Salesforce delivery scenarios. The system should guide the learner through requirements, solution design, implementation, testing, deployment, review, and post-release support.
+3. **Agentforce/Data Cloud-backed role agents later**  
+   After the local orchestration pattern is stable, selected local role-agent tasks can be replaced or enriched by Agentforce, Data Cloud context, Apex, persistence, or other server-backed behavior.
 
-The long-term vision is a training platform that teaches Salesforce delivery judgment, not just Salesforce syntax.
+The current learner experience should stay chat-first. Scenario context should appear through delivery-role messages, learner prompts, bounded choices, role pushback, decision quality signals, and closeout summaries rather than large always-visible dashboards.
 
 ---
 
 ## Current Status
 
-The project currently contains:
+Scenario 001, **Case Escalation and Manager Visibility**, is the active implemented vertical slice.
 
-- an SFDX project with manifest structure
-- documentation scaffolding
-- expanded agent prompt coverage across a full delivery team
-- simulation runbook and run modes
-- reusable scenario templates
-- Scenario 001 delivery artifacts
-- initial Case field metadata for Scenario 001
-- scenario-specific deployment manifests
-- development and issue tracking documentation
+It currently includes:
 
-The next major milestone is validating the first Salesforce metadata increment against a connected org and continuing scenario-driven implementation from there.
+- Salesforce DX project structure and manifests
+- Case high-risk fields
+- before-save Case Flow with precedence paths
+- Case layout/list view/permission set support
+- read-only Case risk panel LWC
+- source-controlled Claygentforce app/home tab/launcher page
+- chat-first `scenarioLauncher` LWC
+- deterministic local orchestration modules inside the launcher bundle
+- non-scored Decision Quality Signals
+- local role-agent task routing
+- launcher-only deployment manifest
+- scenario artifacts, run logs, smoke checklist, devlog, roadmap, and issue log
+
+The current architecture is intentionally local and deterministic. It has no Apex, persistence, external AI calls, live Agentforce invocation, Data Cloud integration, freeform chat input, async streaming, randomization, or scoring.
+
+---
+
+## Guiding Principle
+
+Claygentforce should make Salesforce delivery judgment easier to practice, inspect, and improve.
+
+If a feature does not improve that learning loop, defer it.

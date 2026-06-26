@@ -4,6 +4,97 @@ This file tracks setup problems, tool friction, confusing errors, and the fixes/
 
 ---
 
+# 2026-06-21 — Launcher-only deploy validation hit Flow version limit
+
+## Symptoms
+
+A deployment validation for launcher/orchestration-only work failed with:
+
+`Error in Scenario001_Case_High_Risk_Flagging - We couldn't create a new flow version because you reached the maximum number of versions for this flow.`
+
+The active work only changed the `scenarioLauncher` Lightning Web Component bundle and local orchestration JavaScript modules. The Flow was not being intentionally changed.
+
+## Cause
+
+The validation command used the full Scenario 001 manifest:
+
+`manifest/scenario-001-package.xml`
+
+That manifest includes `Scenario001_Case_High_Risk_Flagging`. Even when the current work is launcher-only, validating or deploying a manifest that includes the Flow attempts to create another Flow version. The org had already reached the maximum number of versions for that Flow.
+
+## Fix
+
+A launcher-only manifest was added:
+
+`manifest/scenario-launcher-package.xml`
+
+It includes only:
+
+- `LightningComponentBundle: scenarioLauncher`
+
+Launcher-only validation and deployment should use:
+
+`sf project deploy validate --manifest manifest/scenario-launcher-package.xml --target-org Claygentforce`
+
+`sf project deploy start --manifest manifest/scenario-launcher-package.xml --target-org Claygentforce`
+
+The full Scenario 001 manifest remains available for full scenario deployments, but should not be used for normal launcher-only LWC iterations.
+
+## Lesson Learned
+
+Do not validate or deploy the full Scenario 001 manifest for launcher-only work.
+
+Use the narrowest manifest that matches the work being changed. Flow metadata is versioned during deployment, so including a Flow in routine validations can consume Flow versions and eventually block deployment even when the Flow behavior is not changing.
+
+When Flow work is actually needed again, clean up old Flow versions in the org before attempting another Flow deployment.
+
+---
+
+# 2026-06-21 — Local role-agent Team Challenge rendered duplicate challenge buttons
+
+## Symptoms
+
+During visual testing of the Scenario 001 launcher, the Team Challenge message rendered the challenge response choices twice:
+
+- once as raw/default buttons inside the Team Challenge bubble
+- once as the intended styled buttons inside the dedicated challenge response prompt
+
+The UI also still showed a `Simulation note`, which felt like fake LWC content rather than a role-agent output, and some challenge-response wording made the intended path feel unclear.
+
+## Cause
+
+The local role-agent orchestration refactor spread the full `rolePushback` object into the Team Challenge message. That object included `challengeResponses`.
+
+The template renders response buttons whenever a chat message has `challengeResponses`, so the Team Challenge bubble accidentally received interactive response choices. The dedicated challenge prompt also received the same response choices, causing duplicate rendering.
+
+Separately, the coordinator guidance still used simulation-note labeling even though the architecture had moved toward local role-agent task routing.
+
+## Fix
+
+The role-agent message builder now strips `challengeResponses` from the Team Challenge message before rendering it. Challenge response choices remain only on the dedicated challenge response prompt.
+
+The former simulation note is now routed through the local coordinator role-agent task and displays as `Delivery Coordinator` with a `Local coordinator task` label.
+
+The challenge response copy was tightened so the two response paths are clearer:
+
+- `Add targeted validation` means turn the challenge into a concrete validation step now.
+- `Capture follow-up risk` means record the unresolved risk, owner, and trigger for release review rather than treating it as validated.
+
+## Lesson Learned
+
+Interactive options should be attached only to the prompt that owns the interaction, not to role feedback messages.
+
+As orchestration grows, role-agent outputs need normalized message shapes that separate:
+
+- message content
+- task metadata
+- interactive choices
+- follow-up state
+
+This prevents future local-agent or Agentforce-backed responses from accidentally rendering controls in the wrong place.
+
+---
+
 # 2026-06-02 — Lightning App Page tab did not appear in custom app navigation
 
 ## Symptoms
