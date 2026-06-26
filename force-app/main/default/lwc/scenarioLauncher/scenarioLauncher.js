@@ -7,14 +7,82 @@ import {
   selectFollowUpAction,
   selectLearnerChoice
 } from "./deliveryRoomOrchestrator";
+import {
+  buildChoicePrompt,
+  buildChallengePrompt,
+  buildDemoRoleOptions,
+  buildDemoScoreSummary,
+  buildFollowUpPrompt,
+  buildInitialDemoMessages,
+  buildLearnerMessage,
+  buildMessagesAfterChallenge,
+  buildMessagesAfterChoice,
+  buildMessagesAfterFollowUp,
+  CHAT_DEMO_DELAYS,
+  getActiveRoleId
+} from "./deliveryRoomChatDemo";
 import { DELIVERY_ROOM_CATALOG } from "./scenarioCatalog";
 
 export default class ScenarioLauncher extends LightningElement {
   runState = createInitialRunState();
+  chatRunState = createInitialRunState();
+  selectedDemoRoleId;
+  demoTranscript = [];
+  demoPrompt;
+  demoScore;
+  isDemoTyping = false;
+  demoTimerIds = [];
+  isClassicRunExpanded = false;
   isSupportingContextExpanded = false;
 
   get runModel() {
     return buildRunModel(this.runState, DELIVERY_ROOM_CATALOG);
+  }
+
+  get demoRunModel() {
+    return buildRunModel(this.chatRunState, DELIVERY_ROOM_CATALOG);
+  }
+
+  get demoRoleOptions() {
+    return buildDemoRoleOptions(this.selectedDemoRoleId);
+  }
+
+  get hasDemoStarted() {
+    return Boolean(this.selectedDemoRoleId);
+  }
+
+  get hasDemoTranscript() {
+    return this.demoTranscript.length > 0;
+  }
+
+  get hasDemoPrompt() {
+    return Boolean(this.demoPrompt);
+  }
+
+  get isDemoChoicePrompt() {
+    return this.demoPrompt?.type === "choice";
+  }
+
+  get isDemoFollowUpPrompt() {
+    return this.demoPrompt?.type === "followUp";
+  }
+
+  get isDemoChallengePrompt() {
+    return this.demoPrompt?.type === "challenge";
+  }
+
+  get hasDemoScore() {
+    return Boolean(this.demoScore);
+  }
+
+  get classicRunToggleLabel() {
+    return this.isClassicRunExpanded
+      ? "Hide classic bounded run"
+      : "Show classic bounded run";
+  }
+
+  get classicRunAriaExpanded() {
+    return this.isClassicRunExpanded ? "true" : "false";
   }
 
   get productSummary() {
@@ -231,6 +299,148 @@ export default class ScenarioLauncher extends LightningElement {
     return "Optional reference for the static local MVP boundaries. The chat-first run above is the primary Scenario 001 learner surface.";
   }
 
+  disconnectedCallback() {
+    this.clearDemoTimers();
+  }
+
+  clearDemoTimers() {
+    this.demoTimerIds.forEach((timerId) => {
+      window.clearTimeout(timerId);
+    });
+    this.demoTimerIds = [];
+    this.isDemoTyping = false;
+  }
+
+  queueDemoMessages(messages, onComplete) {
+    const revealMessage = (index) => {
+      if (index >= messages.length) {
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        const promptTimerId = window.setTimeout(() => {
+          this.isDemoTyping = false;
+          this.demoTimerIds = this.demoTimerIds.filter(
+            (timerId) => timerId !== promptTimerId
+          );
+          if (onComplete) {
+            onComplete();
+          }
+        }, CHAT_DEMO_DELAYS.prompt);
+        this.demoTimerIds = [...this.demoTimerIds, promptTimerId];
+        return;
+      }
+
+      this.isDemoTyping = true;
+      // eslint-disable-next-line @lwc/lwc/no-async-operation
+      const timerId = window.setTimeout(() => {
+        this.demoTranscript = [...this.demoTranscript, messages[index]];
+        this.isDemoTyping = false;
+        this.demoTimerIds = this.demoTimerIds.filter(
+          (activeTimerId) => activeTimerId !== timerId
+        );
+        revealMessage(index + 1);
+      }, CHAT_DEMO_DELAYS.message);
+      this.demoTimerIds = [...this.demoTimerIds, timerId];
+    };
+
+    revealMessage(0);
+  }
+
+  restartDemoChat() {
+    this.clearDemoTimers();
+    this.chatRunState = resetRunState();
+    this.demoTranscript = [];
+    this.demoPrompt = undefined;
+    this.demoScore = undefined;
+  }
+
+  handleDemoRoleSelect(event) {
+    const roleId = event.currentTarget.dataset.roleId;
+
+    if (roleId !== getActiveRoleId()) {
+      return;
+    }
+
+    this.selectedDemoRoleId = roleId;
+    this.restartDemoChat();
+    this.selectedDemoRoleId = roleId;
+    this.queueDemoMessages(buildInitialDemoMessages(), () => {
+      this.demoPrompt = buildChoicePrompt(this.demoRunModel);
+    });
+  }
+
+  handleDemoChoiceSelect(event) {
+    const choiceId = event.currentTarget.dataset.choiceId;
+    this.clearDemoTimers();
+    this.demoPrompt = undefined;
+    this.demoScore = undefined;
+    this.chatRunState = selectLearnerChoice(this.chatRunState, choiceId);
+    const runModel = this.demoRunModel;
+
+    this.demoTranscript = [
+      ...this.demoTranscript,
+      buildLearnerMessage({
+        key: `demo-learner-choice-${choiceId}`,
+        label: "Selected validation lens",
+        text: runModel.activeChoiceDetail.learnerMessage
+      })
+    ];
+    this.queueDemoMessages(buildMessagesAfterChoice(runModel), () => {
+      this.demoPrompt = buildFollowUpPrompt(this.demoRunModel);
+    });
+  }
+
+  handleDemoFollowUpActionSelect(event) {
+    const actionId = event.currentTarget.dataset.actionId;
+    this.clearDemoTimers();
+    this.demoPrompt = undefined;
+    this.demoScore = undefined;
+    this.chatRunState = selectFollowUpAction(this.chatRunState, actionId);
+    const runModel = this.demoRunModel;
+
+    this.demoTranscript = [
+      ...this.demoTranscript,
+      buildLearnerMessage({
+        key: `demo-learner-follow-up-${actionId}`,
+        label: "Selected follow-up action",
+        text: runModel.activeFollowUpAction.learnerMessage
+      })
+    ];
+    this.queueDemoMessages(buildMessagesAfterFollowUp(runModel), () => {
+      this.demoPrompt = buildChallengePrompt(this.demoRunModel);
+    });
+  }
+
+  handleDemoChallengeResponseSelect(event) {
+    const responseId = event.currentTarget.dataset.responseId;
+    this.clearDemoTimers();
+    this.demoPrompt = undefined;
+    this.chatRunState = selectChallengeResponse(this.chatRunState, responseId);
+    const runModel = this.demoRunModel;
+
+    this.demoTranscript = [
+      ...this.demoTranscript,
+      buildLearnerMessage({
+        key: `demo-learner-challenge-${responseId}`,
+        label: "Selected challenge response",
+        text: runModel.activeChallengeResponse.learnerMessage
+      })
+    ];
+    this.queueDemoMessages(buildMessagesAfterChallenge(runModel), () => {
+      this.demoScore = buildDemoScoreSummary(
+        this.demoRunModel,
+        this.chatRunState
+      );
+    });
+  }
+
+  handleDemoReset() {
+    this.clearDemoTimers();
+    this.selectedDemoRoleId = undefined;
+    this.chatRunState = resetRunState();
+    this.demoTranscript = [];
+    this.demoPrompt = undefined;
+    this.demoScore = undefined;
+  }
+
   handleChoiceSelect(event) {
     this.runState = selectLearnerChoice(
       this.runState,
@@ -254,6 +464,10 @@ export default class ScenarioLauncher extends LightningElement {
 
   handleResetPreview() {
     this.runState = resetRunState();
+  }
+
+  handleClassicRunToggle() {
+    this.isClassicRunExpanded = !this.isClassicRunExpanded;
   }
 
   handleSupportingContextToggle() {

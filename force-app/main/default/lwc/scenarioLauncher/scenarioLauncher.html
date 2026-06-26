@@ -35,6 +35,185 @@
         </div>
       </section>
 
+      <section class="demo-chat-panel" aria-labelledby="demo-chat-heading">
+        <div class="section-header section-header-row">
+          <div>
+            <p class="eyebrow">Role chat simulation</p>
+            <h3 id="demo-chat-heading" class="section-heading">
+              Delivery Room Chat
+            </h3>
+            <p class="section-subtitle">
+              A local deterministic demo of a Salesforce delivery-room
+              conversation.
+            </p>
+          </div>
+          <template if:true={hasDemoStarted}>
+            <button
+              class="reset-run-button"
+              type="button"
+              onclick={handleDemoReset}
+            >
+              Restart chat
+            </button>
+          </template>
+        </div>
+
+        <div class="demo-role-grid" aria-label="Select learner role">
+          <template for:each={demoRoleOptions} for:item="role">
+            <button
+              key={role.id}
+              class={role.cssClass}
+              type="button"
+              data-role-id={role.id}
+              aria-pressed={role.ariaPressed}
+              disabled={role.disabled}
+              onclick={handleDemoRoleSelect}
+            >
+              <span class="demo-role-title">{role.title}</span>
+              <span class="demo-role-description">{role.description}</span>
+              <span class="demo-role-status">{role.status}</span>
+            </button>
+          </template>
+        </div>
+
+        <div
+          class="demo-chat-window"
+          aria-label="Delivery room chat transcript"
+        >
+          <template if:false={hasDemoTranscript}>
+            <p class="demo-empty-state">
+              Select Technical Architect to start the local chat simulation.
+            </p>
+          </template>
+
+          <template for:each={demoTranscript} for:item="message">
+            <article
+              key={message.key}
+              class={message.cssClass}
+              data-type={message.type}
+            >
+              <div class="demo-chat-avatar" aria-hidden="true">
+                {message.initials}
+              </div>
+              <div class="demo-chat-bubble">
+                <div class="demo-chat-meta">
+                  <strong>{message.displayName}</strong>
+                  <span>{message.roleTitle}</span>
+                </div>
+                <p>{message.text}</p>
+                <template if:true={message.learningNote}>
+                  <p class="learning-note">{message.learningNote}</p>
+                </template>
+              </div>
+            </article>
+          </template>
+
+          <template if:true={isDemoTyping}>
+            <div class="demo-typing-indicator" aria-live="polite">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </template>
+
+          <template if:true={hasDemoPrompt}>
+            <div class="demo-prompt-panel">
+              <p class="demo-prompt-title">{demoPrompt.title}</p>
+              <template if:true={isDemoChoicePrompt}>
+                <div
+                  class="choice-preview"
+                  aria-label="Technical Architect choices"
+                >
+                  <template for:each={demoPrompt.choices} for:item="choice">
+                    <button
+                      key={choice.id}
+                      class={choice.cssClass}
+                      type="button"
+                      data-choice-id={choice.id}
+                      aria-pressed={choice.ariaPressed}
+                      onclick={handleDemoChoiceSelect}
+                    >
+                      {choice.label}
+                    </button>
+                  </template>
+                </div>
+              </template>
+              <template if:true={isDemoFollowUpPrompt}>
+                <div
+                  class="follow-up-action-list"
+                  aria-label="Follow-up actions"
+                >
+                  <template for:each={demoPrompt.actions} for:item="action">
+                    <button
+                      key={action.id}
+                      class={action.cssClass}
+                      type="button"
+                      data-action-id={action.id}
+                      aria-pressed={action.ariaPressed}
+                      onclick={handleDemoFollowUpActionSelect}
+                    >
+                      {action.label}
+                    </button>
+                  </template>
+                </div>
+              </template>
+              <template if:true={isDemoChallengePrompt}>
+                <div
+                  class="challenge-response-actions"
+                  aria-label="Challenge response choices"
+                >
+                  <template for:each={demoPrompt.responses} for:item="response">
+                    <button
+                      key={response.id}
+                      class={response.cssClass}
+                      type="button"
+                      data-response-id={response.id}
+                      aria-pressed={response.ariaPressed}
+                      onclick={handleDemoChallengeResponseSelect}
+                    >
+                      {response.label}
+                    </button>
+                  </template>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
+
+        <template if:true={hasDemoScore}>
+          <section
+            class="demo-score-panel"
+            aria-labelledby="demo-score-heading"
+          >
+            <div>
+              <p class="eyebrow">Local demo score</p>
+              <h4 id="demo-score-heading" class="demo-score-heading">
+                {demoScore.title}: {demoScore.total}/100
+              </h4>
+            </div>
+            <dl class="demo-score-grid">
+              <template for:each={demoScore.dimensions} for:item="dimension">
+                <div key={dimension.label} class="demo-score-item">
+                  <dt>{dimension.label}</dt>
+                  <dd>{dimension.points}/25</dd>
+                </div>
+              </template>
+            </dl>
+            <div class="demo-score-notes">
+              <p><strong>What you did well:</strong> {demoScore.strength}</p>
+              <p>
+                <strong>Evidence gap / next improvement:</strong>
+                {demoScore.evidenceGap}
+              </p>
+              <p>
+                <strong>Next validation action:</strong>
+                {demoScore.nextAction}
+              </p>
+            </div>
+          </section>
+        </template>
+      </section>
+
       <section
         class="chat-preview-panel"
         aria-labelledby="chat-preview-heading"
@@ -49,6 +228,15 @@
           </div>
           <div class="simulation-header-actions">
             <span class="section-badge">Local Simulation</span>
+            <button
+              class="reset-run-button"
+              type="button"
+              aria-expanded={classicRunAriaExpanded}
+              aria-controls="classic-run-content"
+              onclick={handleClassicRunToggle}
+            >
+              {classicRunToggleLabel}
+            </button>
             <template if:true={hasStartedRun}>
               <button
                 class="reset-run-button"
@@ -61,386 +249,421 @@
           </div>
         </div>
 
-        <div class="session-shell" aria-label="Current simulation session">
-          <dl class="session-summary">
-            <template for:each={simulationSessionSummary} for:item="item">
-              <div key={item.label} class="session-summary-item">
-                <dt>{item.label}</dt>
-                <dd>{item.value}</dd>
-              </div>
-            </template>
-          </dl>
-
-          <ol class="phase-strip" aria-label="Simulation progress">
-            <template for:each={simulationPhases} for:item="phase">
-              <li
-                key={phase.id}
-                class={phase.cssClass}
-                aria-current={phase.ariaCurrent}
-              >
-                {phase.label}
-              </li>
-            </template>
-          </ol>
-        </div>
-
-        <section
-          class="scenario-moment-panel"
-          aria-labelledby="scenario-moment-heading"
-        >
-          <div class="scenario-moment-header">
-            <div class="chat-avatar" aria-hidden="true">
-              {scenarioMoment.speaker}
-            </div>
-            <div>
-              <p class="eyebrow">{scenarioMoment.role}</p>
-              <h4 id="scenario-moment-heading" class="scenario-moment-heading">
-                {scenarioMoment.title}
-              </h4>
-            </div>
-          </div>
-          <div class="scenario-moment-copy">
-            <p>{scenarioMoment.situation}</p>
-            <p><strong>Pressure:</strong> {scenarioMoment.pressure}</p>
-            <p><strong>What is at risk:</strong> {scenarioMoment.stakes}</p>
-          </div>
-          <ul class="scenario-moment-list">
-            <template for:each={scenarioMomentContextBullets} for:item="item">
-              <li key={item}>{item}</li>
-            </template>
-          </ul>
-          <p class="scenario-moment-prompt">{scenarioMoment.learnerPrompt}</p>
-        </section>
-
-        <div
-          class="chat-window"
-          aria-label="Static delivery room conversation preview"
-        >
-          <template for:each={chatPreviewMessages} for:item="message">
-            <article
-              key={message.key}
-              class="chat-message"
-              data-type={message.type}
-            >
-              <div class="chat-avatar" aria-hidden="true">
-                {message.speaker}
-              </div>
-              <div class="chat-bubble">
-                <div class="chat-meta">
-                  <span class="chat-role">{message.role}</span>
-                  <span class="chat-label">Local static simulation</span>
-                </div>
-                <p>{message.text}</p>
-                <template if:true={message.choices}>
-                  <div
-                    class="choice-preview"
-                    aria-label="Bounded learner choices"
-                  >
-                    <template for:each={message.choices} for:item="choice">
-                      <button
-                        key={choice.id}
-                        class={choice.cssClass}
-                        type="button"
-                        data-choice-id={choice.id}
-                        aria-pressed={choice.ariaPressed}
-                        onclick={handleChoiceSelect}
-                      >
-                        {choice.label}
-                      </button>
-                    </template>
-                  </div>
-                </template>
-              </div>
-            </article>
-          </template>
-          <template for:each={selectedChatMessages} for:item="selectedMessage">
-            <article
-              key={selectedMessage.key}
-              class={selectedMessage.cssClass}
-              data-type={selectedMessage.type}
-            >
-              <div class="chat-avatar" aria-hidden="true">
-                {selectedMessage.speaker}
-              </div>
-              <div class="chat-bubble">
-                <div class="chat-meta">
-                  <span class="chat-role">{selectedMessage.role}</span>
-                  <span class="chat-label">{selectedMessage.label}</span>
-                </div>
-                <p>{selectedMessage.text}</p>
-                <template if:true={selectedMessage.learningNote}>
-                  <p class="learning-note">{selectedMessage.learningNote}</p>
-                </template>
-                <template if:true={selectedMessage.followUpActions}>
-                  <div
-                    class="follow-up-action-list"
-                    aria-label="Bounded follow-up actions"
-                  >
-                    <template
-                      for:each={selectedMessage.followUpActions}
-                      for:item="action"
-                    >
-                      <button
-                        key={action.id}
-                        class={action.cssClass}
-                        type="button"
-                        data-action-id={action.id}
-                        aria-pressed={action.ariaPressed}
-                        onclick={handleFollowUpActionSelect}
-                      >
-                        {action.label}
-                      </button>
-                    </template>
-                  </div>
-                </template>
-                <template if:true={selectedMessage.challengeResponses}>
-                  <div
-                    class="challenge-response-actions"
-                    aria-label="Bounded challenge response choices"
-                  >
-                    <template
-                      for:each={selectedMessage.challengeResponses}
-                      for:item="response"
-                    >
-                      <button
-                        key={response.id}
-                        class={response.cssClass}
-                        type="button"
-                        data-response-id={response.id}
-                        aria-pressed={response.ariaPressed}
-                        onclick={handleChallengeResponseSelect}
-                      >
-                        {response.label}
-                      </button>
-                    </template>
-                  </div>
-                </template>
-              </div>
-            </article>
-          </template>
-        </div>
-
-        <template if:true={hasSelectedEvidenceBeforeCompletion}>
-          <section
-            class="evidence-panel"
-            aria-labelledby="evidence-panel-heading"
-          >
-            <div class="evidence-header">
-              <div>
-                <p class="eyebrow">Recommended validation evidence</p>
-                <h4 id="evidence-panel-heading" class="evidence-heading">
-                  {selectedChoiceLabel}
-                </h4>
-              </div>
-            </div>
-
-            <dl class="evidence-grid">
-              <div>
-                <dt>Recommended evidence</dt>
-                <dd>{selectedEvidence.recommendedEvidence}</dd>
-              </div>
-              <div>
-                <dt>Why it matters</dt>
-                <dd>{selectedEvidence.whyItMatters}</dd>
-              </div>
-              <div>
-                <dt>What not to claim yet</dt>
-                <dd>{selectedEvidence.whatNotToClaimYet}</dd>
-              </div>
-            </dl>
-          </section>
-        </template>
-
-        <template if:true={hasSessionResult}>
-          <section
-            class="session-result-panel"
-            aria-labelledby="session-result-heading"
-          >
-            <div class="session-result-section">
-              <p class="eyebrow">Decision path</p>
-              <h4 id="session-result-heading" class="session-result-heading">
-                Session Result
-              </h4>
-              <dl class="decision-path-summary">
-                <template for:each={sessionResultRows} for:item="row">
-                  <div key={row.label} class="session-result-item">
-                    <dt>{row.label}</dt>
-                    <dd>{row.value}</dd>
+        <template if:true={isClassicRunExpanded}>
+          <div id="classic-run-content">
+            <div class="session-shell" aria-label="Current simulation session">
+              <dl class="session-summary">
+                <template for:each={simulationSessionSummary} for:item="item">
+                  <div key={item.label} class="session-summary-item">
+                    <dt>{item.label}</dt>
+                    <dd>{item.value}</dd>
                   </div>
                 </template>
               </dl>
-            </div>
 
-            <template if:true={hasSelectedDecisionQuality}>
-              <div
-                class="decision-quality-section"
-                aria-labelledby="decision-quality-heading"
-              >
-                <p class="eyebrow">Decision quality</p>
-                <h4
-                  id="decision-quality-heading"
-                  class="session-result-heading"
-                >
-                  Decision Quality Signals
-                </h4>
-                <p class="decision-quality-intro">
-                  Non-scored review signals for this selected path.
-                </p>
-                <p class="decision-quality-type">
-                  {selectedDecisionQuality.signalType}
-                </p>
-                <dl class="decision-quality-grid">
-                  <template for:each={decisionQualityRows} for:item="row">
-                    <div key={row.label} class="decision-quality-item">
-                      <dt>{row.label}</dt>
-                      <dd>{row.value}</dd>
-                    </div>
-                  </template>
-                </dl>
-              </div>
-            </template>
-
-            <template if:true={hasCompletedRun}>
-              <div
-                class="completed-run-section"
-                aria-labelledby="completed-run-heading"
-              >
-                <p class="eyebrow">Run status</p>
-                <h4 id="completed-run-heading" class="session-result-heading">
-                  Scenario Run Closed
-                </h4>
-                <p class="completed-run-intro">
-                  This static run is complete. Review the selected path,
-                  evidence gap, and next validation action before claiming
-                  readiness.
-                </p>
-                <dl class="completed-run-grid">
-                  <template for:each={completedRunSummaryRows} for:item="row">
-                    <div key={row.label} class="completed-run-item">
-                      <dt>{row.label}</dt>
-                      <dd>{row.value}</dd>
-                    </div>
-                  </template>
-                </dl>
-              </div>
-            </template>
-
-            <div class="outcome-summary-section">
-              <p class="eyebrow">Outcome summary</p>
-              <h4 class="session-result-heading">{selectedOutcome.label}</h4>
-              <div class="outcome-summary-copy">
-                <p>{selectedOutcome.summary}</p>
-                <p>
-                  <strong>Consequence:</strong> {selectedOutcome.consequence}
-                </p>
-                <p>
-                  <strong>Recommended next step:</strong>
-                  <span>{selectedOutcome.recommendedNextStep}</span>
-                </p>
-              </div>
-            </div>
-
-            <template if:true={hasSelectedTeamReview}>
-              <div
-                class="team-review-section"
-                aria-labelledby="team-review-heading"
-              >
-                <p class="eyebrow">Delivery feedback</p>
-                <h4 id="team-review-heading" class="session-result-heading">
-                  Team Review
-                </h4>
-                <div class="team-review-card">
-                  <p class="team-review-role">{selectedTeamReview.role}</p>
-                  <p>{selectedTeamReview.summary}</p>
-                  <p>
-                    <strong>Strength:</strong>
-                    <span>{selectedTeamReview.strength}</span>
-                  </p>
-                  <p>
-                    <strong>Watch out:</strong>
-                    <span>{selectedTeamReview.watchOut}</span>
-                  </p>
-                </div>
-              </div>
-            </template>
-
-            <template if:true={hasSelectedRolePushback}>
-              <div
-                class="team-challenge-section"
-                aria-labelledby="team-challenge-heading"
-              >
-                <p class="eyebrow">Delivery challenge</p>
-                <h4 id="team-challenge-heading" class="session-result-heading">
-                  Team Challenge
-                </h4>
-                <div class="team-challenge-card">
-                  <div class="team-challenge-role">
-                    <span class="chat-avatar" aria-hidden="true">
-                      {selectedRolePushback.speaker}
-                    </span>
-                    <strong>{selectedRolePushback.role}</strong>
-                  </div>
-                  <p>
-                    <strong>Challenge:</strong>
-                    <span>{selectedRolePushback.challenge}</span>
-                  </p>
-                  <p>
-                    <strong>Risk if ignored:</strong>
-                    <span>{selectedRolePushback.riskIfIgnored}</span>
-                  </p>
-                  <p>
-                    <strong>Suggested response:</strong>
-                    <span>{selectedRolePushback.suggestedResponse}</span>
-                  </p>
-                </div>
-              </div>
-            </template>
-
-            <template if:true={hasSelectedCloseoutNote}>
-              <div
-                class="closeout-note-section"
-                aria-labelledby="closeout-note-heading"
-              >
-                <p class="eyebrow">Run closeout</p>
-                <h4 id="closeout-note-heading" class="session-result-heading">
-                  Closeout Note
-                </h4>
-                <div class="closeout-note-card">
-                  <p>{selectedCloseoutNote.summary}</p>
-                  <p>
-                    <strong>Next step:</strong>
-                    <span>{selectedCloseoutNote.nextStep}</span>
-                  </p>
-                </div>
-              </div>
-            </template>
-
-            <template if:true={hasSelectedValidationChecklist}>
-              <div
-                class="manual-validation-section"
-                aria-labelledby="manual-validation-heading"
-              >
-                <p class="eyebrow">Validation next steps</p>
-                <h4
-                  id="manual-validation-heading"
-                  class="session-result-heading"
-                >
-                  Manual Validation Checklist
-                </h4>
-                <ol class="manual-validation-list">
-                  <template
-                    for:each={selectedValidationChecklist}
-                    for:item="item"
+              <ol class="phase-strip" aria-label="Simulation progress">
+                <template for:each={simulationPhases} for:item="phase">
+                  <li
+                    key={phase.id}
+                    class={phase.cssClass}
+                    aria-current={phase.ariaCurrent}
                   >
-                    <li key={item}>{item}</li>
-                  </template>
-                </ol>
-              </div>
-            </template>
-          </section>
-        </template>
+                    {phase.label}
+                  </li>
+                </template>
+              </ol>
+            </div>
 
-        <p class="chat-preview-note">{sectionSubtitles.chatPreviewNote}</p>
+            <section
+              class="scenario-moment-panel"
+              aria-labelledby="scenario-moment-heading"
+            >
+              <div class="scenario-moment-header">
+                <div class="chat-avatar" aria-hidden="true">
+                  {scenarioMoment.speaker}
+                </div>
+                <div>
+                  <p class="eyebrow">{scenarioMoment.role}</p>
+                  <h4
+                    id="scenario-moment-heading"
+                    class="scenario-moment-heading"
+                  >
+                    {scenarioMoment.title}
+                  </h4>
+                </div>
+              </div>
+              <div class="scenario-moment-copy">
+                <p>{scenarioMoment.situation}</p>
+                <p><strong>Pressure:</strong> {scenarioMoment.pressure}</p>
+                <p><strong>What is at risk:</strong> {scenarioMoment.stakes}</p>
+              </div>
+              <ul class="scenario-moment-list">
+                <template
+                  for:each={scenarioMomentContextBullets}
+                  for:item="item"
+                >
+                  <li key={item}>{item}</li>
+                </template>
+              </ul>
+              <p class="scenario-moment-prompt">
+                {scenarioMoment.learnerPrompt}
+              </p>
+            </section>
+
+            <div
+              class="chat-window"
+              aria-label="Static delivery room conversation preview"
+            >
+              <template for:each={chatPreviewMessages} for:item="message">
+                <article
+                  key={message.key}
+                  class="chat-message"
+                  data-type={message.type}
+                >
+                  <div class="chat-avatar" aria-hidden="true">
+                    {message.speaker}
+                  </div>
+                  <div class="chat-bubble">
+                    <div class="chat-meta">
+                      <span class="chat-role">{message.role}</span>
+                      <span class="chat-label">Local static simulation</span>
+                    </div>
+                    <p>{message.text}</p>
+                    <template if:true={message.choices}>
+                      <div
+                        class="choice-preview"
+                        aria-label="Bounded learner choices"
+                      >
+                        <template for:each={message.choices} for:item="choice">
+                          <button
+                            key={choice.id}
+                            class={choice.cssClass}
+                            type="button"
+                            data-choice-id={choice.id}
+                            aria-pressed={choice.ariaPressed}
+                            onclick={handleChoiceSelect}
+                          >
+                            {choice.label}
+                          </button>
+                        </template>
+                      </div>
+                    </template>
+                  </div>
+                </article>
+              </template>
+              <template
+                for:each={selectedChatMessages}
+                for:item="selectedMessage"
+              >
+                <article
+                  key={selectedMessage.key}
+                  class={selectedMessage.cssClass}
+                  data-type={selectedMessage.type}
+                >
+                  <div class="chat-avatar" aria-hidden="true">
+                    {selectedMessage.speaker}
+                  </div>
+                  <div class="chat-bubble">
+                    <div class="chat-meta">
+                      <span class="chat-role">{selectedMessage.role}</span>
+                      <span class="chat-label">{selectedMessage.label}</span>
+                    </div>
+                    <p>{selectedMessage.text}</p>
+                    <template if:true={selectedMessage.learningNote}>
+                      <p class="learning-note">
+                        {selectedMessage.learningNote}
+                      </p>
+                    </template>
+                    <template if:true={selectedMessage.followUpActions}>
+                      <div
+                        class="follow-up-action-list"
+                        aria-label="Bounded follow-up actions"
+                      >
+                        <template
+                          for:each={selectedMessage.followUpActions}
+                          for:item="action"
+                        >
+                          <button
+                            key={action.id}
+                            class={action.cssClass}
+                            type="button"
+                            data-action-id={action.id}
+                            aria-pressed={action.ariaPressed}
+                            onclick={handleFollowUpActionSelect}
+                          >
+                            {action.label}
+                          </button>
+                        </template>
+                      </div>
+                    </template>
+                    <template if:true={selectedMessage.challengeResponses}>
+                      <div
+                        class="challenge-response-actions"
+                        aria-label="Bounded challenge response choices"
+                      >
+                        <template
+                          for:each={selectedMessage.challengeResponses}
+                          for:item="response"
+                        >
+                          <button
+                            key={response.id}
+                            class={response.cssClass}
+                            type="button"
+                            data-response-id={response.id}
+                            aria-pressed={response.ariaPressed}
+                            onclick={handleChallengeResponseSelect}
+                          >
+                            {response.label}
+                          </button>
+                        </template>
+                      </div>
+                    </template>
+                  </div>
+                </article>
+              </template>
+            </div>
+
+            <template if:true={hasSelectedEvidenceBeforeCompletion}>
+              <section
+                class="evidence-panel"
+                aria-labelledby="evidence-panel-heading"
+              >
+                <div class="evidence-header">
+                  <div>
+                    <p class="eyebrow">Recommended validation evidence</p>
+                    <h4 id="evidence-panel-heading" class="evidence-heading">
+                      {selectedChoiceLabel}
+                    </h4>
+                  </div>
+                </div>
+
+                <dl class="evidence-grid">
+                  <div>
+                    <dt>Recommended evidence</dt>
+                    <dd>{selectedEvidence.recommendedEvidence}</dd>
+                  </div>
+                  <div>
+                    <dt>Why it matters</dt>
+                    <dd>{selectedEvidence.whyItMatters}</dd>
+                  </div>
+                  <div>
+                    <dt>What not to claim yet</dt>
+                    <dd>{selectedEvidence.whatNotToClaimYet}</dd>
+                  </div>
+                </dl>
+              </section>
+            </template>
+
+            <template if:true={hasSessionResult}>
+              <section
+                class="session-result-panel"
+                aria-labelledby="session-result-heading"
+              >
+                <div class="session-result-section">
+                  <p class="eyebrow">Decision path</p>
+                  <h4
+                    id="session-result-heading"
+                    class="session-result-heading"
+                  >
+                    Session Result
+                  </h4>
+                  <dl class="decision-path-summary">
+                    <template for:each={sessionResultRows} for:item="row">
+                      <div key={row.label} class="session-result-item">
+                        <dt>{row.label}</dt>
+                        <dd>{row.value}</dd>
+                      </div>
+                    </template>
+                  </dl>
+                </div>
+
+                <template if:true={hasSelectedDecisionQuality}>
+                  <div
+                    class="decision-quality-section"
+                    aria-labelledby="decision-quality-heading"
+                  >
+                    <p class="eyebrow">Decision quality</p>
+                    <h4
+                      id="decision-quality-heading"
+                      class="session-result-heading"
+                    >
+                      Decision Quality Signals
+                    </h4>
+                    <p class="decision-quality-intro">
+                      Non-scored review signals for this selected path.
+                    </p>
+                    <p class="decision-quality-type">
+                      {selectedDecisionQuality.signalType}
+                    </p>
+                    <dl class="decision-quality-grid">
+                      <template for:each={decisionQualityRows} for:item="row">
+                        <div key={row.label} class="decision-quality-item">
+                          <dt>{row.label}</dt>
+                          <dd>{row.value}</dd>
+                        </div>
+                      </template>
+                    </dl>
+                  </div>
+                </template>
+
+                <template if:true={hasCompletedRun}>
+                  <div
+                    class="completed-run-section"
+                    aria-labelledby="completed-run-heading"
+                  >
+                    <p class="eyebrow">Run status</p>
+                    <h4
+                      id="completed-run-heading"
+                      class="session-result-heading"
+                    >
+                      Scenario Run Closed
+                    </h4>
+                    <p class="completed-run-intro">
+                      This static run is complete. Review the selected path,
+                      evidence gap, and next validation action before claiming
+                      readiness.
+                    </p>
+                    <dl class="completed-run-grid">
+                      <template
+                        for:each={completedRunSummaryRows}
+                        for:item="row"
+                      >
+                        <div key={row.label} class="completed-run-item">
+                          <dt>{row.label}</dt>
+                          <dd>{row.value}</dd>
+                        </div>
+                      </template>
+                    </dl>
+                  </div>
+                </template>
+
+                <div class="outcome-summary-section">
+                  <p class="eyebrow">Outcome summary</p>
+                  <h4 class="session-result-heading">
+                    {selectedOutcome.label}
+                  </h4>
+                  <div class="outcome-summary-copy">
+                    <p>{selectedOutcome.summary}</p>
+                    <p>
+                      <strong>Consequence:</strong>
+                      {selectedOutcome.consequence}
+                    </p>
+                    <p>
+                      <strong>Recommended next step:</strong>
+                      <span>{selectedOutcome.recommendedNextStep}</span>
+                    </p>
+                  </div>
+                </div>
+
+                <template if:true={hasSelectedTeamReview}>
+                  <div
+                    class="team-review-section"
+                    aria-labelledby="team-review-heading"
+                  >
+                    <p class="eyebrow">Delivery feedback</p>
+                    <h4 id="team-review-heading" class="session-result-heading">
+                      Team Review
+                    </h4>
+                    <div class="team-review-card">
+                      <p class="team-review-role">{selectedTeamReview.role}</p>
+                      <p>{selectedTeamReview.summary}</p>
+                      <p>
+                        <strong>Strength:</strong>
+                        <span>{selectedTeamReview.strength}</span>
+                      </p>
+                      <p>
+                        <strong>Watch out:</strong>
+                        <span>{selectedTeamReview.watchOut}</span>
+                      </p>
+                    </div>
+                  </div>
+                </template>
+
+                <template if:true={hasSelectedRolePushback}>
+                  <div
+                    class="team-challenge-section"
+                    aria-labelledby="team-challenge-heading"
+                  >
+                    <p class="eyebrow">Delivery challenge</p>
+                    <h4
+                      id="team-challenge-heading"
+                      class="session-result-heading"
+                    >
+                      Team Challenge
+                    </h4>
+                    <div class="team-challenge-card">
+                      <div class="team-challenge-role">
+                        <span class="chat-avatar" aria-hidden="true">
+                          {selectedRolePushback.speaker}
+                        </span>
+                        <strong>{selectedRolePushback.role}</strong>
+                      </div>
+                      <p>
+                        <strong>Challenge:</strong>
+                        <span>{selectedRolePushback.challenge}</span>
+                      </p>
+                      <p>
+                        <strong>Risk if ignored:</strong>
+                        <span>{selectedRolePushback.riskIfIgnored}</span>
+                      </p>
+                      <p>
+                        <strong>Suggested response:</strong>
+                        <span>{selectedRolePushback.suggestedResponse}</span>
+                      </p>
+                    </div>
+                  </div>
+                </template>
+
+                <template if:true={hasSelectedCloseoutNote}>
+                  <div
+                    class="closeout-note-section"
+                    aria-labelledby="closeout-note-heading"
+                  >
+                    <p class="eyebrow">Run closeout</p>
+                    <h4
+                      id="closeout-note-heading"
+                      class="session-result-heading"
+                    >
+                      Closeout Note
+                    </h4>
+                    <div class="closeout-note-card">
+                      <p>{selectedCloseoutNote.summary}</p>
+                      <p>
+                        <strong>Next step:</strong>
+                        <span>{selectedCloseoutNote.nextStep}</span>
+                      </p>
+                    </div>
+                  </div>
+                </template>
+
+                <template if:true={hasSelectedValidationChecklist}>
+                  <div
+                    class="manual-validation-section"
+                    aria-labelledby="manual-validation-heading"
+                  >
+                    <p class="eyebrow">Validation next steps</p>
+                    <h4
+                      id="manual-validation-heading"
+                      class="session-result-heading"
+                    >
+                      Manual Validation Checklist
+                    </h4>
+                    <ol class="manual-validation-list">
+                      <template
+                        for:each={selectedValidationChecklist}
+                        for:item="item"
+                      >
+                        <li key={item}>{item}</li>
+                      </template>
+                    </ol>
+                  </div>
+                </template>
+              </section>
+            </template>
+
+            <p class="chat-preview-note">{sectionSubtitles.chatPreviewNote}</p>
+          </div>
+        </template>
       </section>
 
       <section
