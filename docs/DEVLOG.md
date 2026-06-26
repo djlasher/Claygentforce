@@ -4,6 +4,84 @@ This file tracks development progress, project milestones, validation steps, and
 
 ---
 
+## Project origin and early development context
+
+The earliest stages of Claygentforce were not formally tracked in this development log. The project started as a Salesforce DX proof-of-concept for a realistic delivery simulation grounded in actual Salesforce metadata rather than a disconnected mock app.
+
+Early work focused on proving the foundation for Scenario 001, including Case risk fields, Flow automation, manager visibility concepts, a read-only Case record panel, app/page navigation, scenario documentation, smoke-test artifacts, and reusable scenario templates. At that stage, the center of gravity was still Salesforce artifact simulation: showing how real metadata, validation paths, and delivery artifacts could support a learning experience.
+
+Formal devlog tracking began after that foundation was already underway. The first dated entries therefore start late in the project and capture the shift from static Case-record learning surfaces into the later launcher, chat-first, orchestration, and War Room experiences.
+
+---
+
+## 2026-06-26 — Salesforce Delivery War Room and multi-perspective consulting simulation milestone
+
+### Summary
+
+Today marked the largest product and UX pivot in Claygentforce so far. The project moved from a Salesforce artifact-centered simulator toward a multi-perspective consulting judgment platform built around the new **Salesforce Delivery War Room** experience.
+
+The key realization was that the Case fields, Flow, layout, list view, and other Scenario 001 Salesforce artifacts remain valuable as grounding and proof-of-concept material, but they are no longer the main product surface. The primary product is now the War Room simulation: a realistic consulting environment where learners practice decision-making under delivery pressure through different professional perspectives.
+
+The current product thesis is now: **Trailhead teaches implementation; Claygentforce teaches consulting judgment.**
+
+### Files Updated
+
+- force-app/main/default/lwc/scenarioLauncher/*
+- docs/DEVLOG.md
+- docs/ROADMAP.md
+- docs/AI_SESSION_STARTER.md
+
+### Notes
+
+- Added the primary **Salesforce Delivery War Room** demo surface.
+- Added role-selection and grouped/collapsible future-role cards while keeping the chat visible immediately after role selection.
+- Added delayed chat transcript rendering, typing indicators, and pacing that feels like a live project-room conversation.
+- Started War Room runs with a stakeholder/client ask so participant messages react to a concrete delivery request instead of floating in isolation.
+- Added professional participant profiles, names, role titles, and clean chat-style message rendering.
+- Added the **Technical Architect** playable perspective.
+- Added the **QA Lead** playable perspective on the same Scenario 001 engagement.
+- Implemented role ownership logic so the learner-owned role is not duplicated as an NPC.
+- Added perspective-specific decision trees, learner decision phrasing, dynamic reactions, and assessment dimensions.
+- Added deterministic room reaction logic so participants respond differently depending on learner decisions.
+- Added participant reaction states: Positive, Concerned, Neutral, and Blocked.
+- Added **War Room Assessment** with delivery confidence, team consensus, risk level, team sentiment, strengths, risk areas, recommended next action, and numeric scoring.
+- Removed gray inset educational note boxes from War Room chat messages because they broke the live-consulting-room feel.
+- Added compact War Room metadata to make the simulation feel like a live delivery engagement.
+- Kept all work local and deterministic: no Apex, persistence, external AI calls, Agentforce invocation, Data Cloud integration, or new Salesforce metadata outside the existing launcher bundle were added.
+
+### Product Direction Change
+
+The long-term direction changed from:
+
+> Simulate building Salesforce solutions.
+
+To:
+
+> Simulate being a Salesforce consultant in realistic delivery situations.
+
+The emerging architecture is now:
+
+> Scenario → Professional Perspective → Decision Tree → Dynamic Team Reactions → Professional Assessment
+
+Scenario 001 should continue to be used as the active proving ground. Near-term expansion should prioritize additional perspectives on the same scenario before adding Scenario 002.
+
+### Validation Notes
+
+- Launcher-only validation and deployment continued to use `manifest/scenario-launcher-package.xml`.
+- The War Room was visually reviewed throughout the session in the Salesforce org.
+- Manual demo validation confirmed the War Room experience is now visually polished and demo-ready.
+- No new issues were logged during this session.
+
+### Next Actions
+
+- Stop adding new features before the immediate demo; the current state is strong enough to show.
+- Next implementation priority should be another perspective on Scenario 001, likely Security Reviewer or Business Analyst.
+- Keep Scenario 002 deferred until the multi-perspective model is stronger.
+- Continue treating Salesforce metadata as grounding/reference material, not the primary learner surface.
+- Do not re-center the project on Flow-building or object-configuration walkthroughs.
+
+---
+
 ## 2026-06-21 — Local orchestration prototype milestone
 
 ### Summary
