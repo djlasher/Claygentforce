@@ -127,7 +127,7 @@ const LEARNER_CHOICE_DETAILS = [
           challenge:
             "Clearing is important, but will managers still have enough visibility into Cases that were previously escalated?",
           riskIfIgnored:
-            "Active queues stay clean, but historical escalation context may be hard to explain later.",
+            "Active review lists stay clean, but historical escalation context may be hard to explain later.",
           suggestedResponse:
             "Validate active clearing now and capture historical reporting as a future review question."
         },
@@ -303,15 +303,15 @@ const LEARNER_CHOICE_DETAILS = [
     simulationNote: {
       speaker: "SIM",
       role: "Simulation note",
-      text: "Capture list view evidence across open flagged, closed flagged, and clean-path Cases before claiming the queue view is accurate."
+      text: "Capture list view evidence across open flagged, closed flagged, and clean-path Cases before claiming the manager review list is accurate."
     },
     validationEvidence: {
       recommendedEvidence:
         "List view results for open high-risk Cases, closed Cases, and Cases where criteria no longer match.",
       whyItMatters:
-        "Managers need a focused queue view they can trust during operational review.",
+        "Managers need a focused review list they can trust during operational review.",
       whatNotToClaimYet:
-        "Do not claim queue accuracy until closed and clean-path records are checked in the target org."
+        "Do not claim review-list accuracy until closed and clean-path records are checked in the target org."
     },
     followUpActions: [
       {
@@ -329,7 +329,7 @@ const LEARNER_CHOICE_DETAILS = [
         outcome: {
           label: "Closed lifecycle validated",
           summary:
-            "The manager queue stays focused on active work instead of completed Cases.",
+            "The manager review list stays focused on active work instead of completed Cases.",
           consequence:
             "Without this test, closed escalation records may create false operational noise.",
           recommendedNextStep:
@@ -358,26 +358,27 @@ const LEARNER_CHOICE_DETAILS = [
           challenge:
             "Closed Case exclusion keeps the active list clean, but where will managers review prior escalations if needed?",
           riskIfIgnored:
-            "The team may solve active queue noise while losing sight of historical review context.",
+            "The team may solve active-list noise while losing sight of historical review context.",
           suggestedResponse:
             "Keep closed Cases out of active escalation and capture historical reporting as a later enhancement."
         },
         decisionQuality: {
           signalType: "Lifecycle evidence",
           primarySignal:
-            "Ties closed Case behavior to both field clearing and active queue membership.",
+            "Ties closed Case behavior to both field clearing and active review-list membership.",
           evidenceGap:
-            "Needs historical review expectations captured outside the active manager queue.",
+            "Needs historical review expectations captured outside the active manager review list.",
           reviewerLens:
             "QA and Support would check whether completed work leaves active escalation cleanly.",
           futureEvaluationNote:
-            "Later evaluation can look for lifecycle validation before queue-confidence claims."
+            "Later evaluation can look for lifecycle validation before review-list confidence claims."
         }
       },
       {
-        id: "test-active-queue-usefulness",
-        label: "Test active queue usefulness",
-        learnerMessage: "I would test whether the active queue stays useful.",
+        id: "test-active-review-list-usefulness",
+        label: "Test whether the active review list stays useful",
+        learnerMessage:
+          "I would test whether the active manager review list stays useful.",
         response: {
           speaker: "SM",
           role: "Support Manager",
@@ -386,7 +387,7 @@ const LEARNER_CHOICE_DETAILS = [
             "Include manual override, Strategic customer, stale escalation, and priority examples if time allows."
         },
         outcome: {
-          label: "Queue usefulness framed",
+          label: "Review-list usefulness framed",
           summary:
             "The validation lens shifts from field correctness to manager actionability.",
           consequence:
@@ -405,7 +406,7 @@ const LEARNER_CHOICE_DETAILS = [
           role: "Support Manager",
           summary:
             "Useful operational path. The team can review whether the manager list is accurate and actionable.",
-          strength: "Looks beyond field correctness to queue usefulness.",
+          strength: "Looks beyond field correctness to review-list usefulness.",
           watchOut:
             "Watch for escalation noise if too many active Cases appear without clear review priority.",
           futureEvaluationType: "operational-usefulness"
@@ -427,7 +428,7 @@ const LEARNER_CHOICE_DETAILS = [
           evidenceGap:
             "Needs representative active Cases to reveal noise from stale, Strategic, override, and priority paths.",
           reviewerLens:
-            "Support would judge whether the resulting queue is focused enough for daily review.",
+            "Support would judge whether the resulting review list is focused enough for daily review.",
           futureEvaluationNote:
             "Later evaluation can identify whether the learner considers operational usefulness alongside technical behavior."
         }
@@ -733,7 +734,7 @@ const LEARNER_CHOICE_DETAILS = [
       role: "QA",
       text: "Focus regression coverage on clearing behavior, High Risk Reason changes, closed Cases, stale escalation, manual override, and Strategic customer precedence.",
       learningNote:
-        "Evidence: regression rows for changing Priority, disabling override, closing a Case, changing Customer Tier, and aging queue records."
+        "Evidence: regression rows for changing Priority, disabling override, closing a Case, changing Customer Tier, and aging review-list records."
     },
     simulationNote: {
       speaker: "SIM",
@@ -1222,7 +1223,7 @@ export const DELIVERY_ROOM_CATALOG = {
       role: "Support Manager",
       focus: "Operational review",
       label: "Simulated review note",
-      text: "The Open High-Risk Cases list needs to stay focused enough that managers can act on it during queue review."
+      text: "The Open High-Risk Cases list needs to stay focused enough that managers can act on it during active Case review."
     }
   ],
 
