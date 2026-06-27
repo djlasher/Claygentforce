@@ -14,6 +14,46 @@ Formal devlog tracking began after that foundation was already underway. The fir
 
 ---
 
+## 2026-06-26 — Final War Room demo polish and LWC cleanup
+
+### Summary
+
+Completed a final focused demo-polish pass after peer review confirmed the Salesforce Delivery War Room was visually strong and demo-worthy. This pass intentionally avoided adding new product scope and instead tightened the existing MVP so it is ready to leave alone until the demo.
+
+The work reinforced the current direction: the War Room is the product surface, while older Salesforce artifact and prototype sections should stay out of the primary demo flow unless explicitly needed.
+
+### Files Updated
+
+- force-app/main/default/lwc/scenarioLauncher/*
+- docs/DEVLOG.md
+
+### Notes
+
+- Removed or demoted unnecessary legacy/bottom UI sections so the page stays focused on the War Room experience.
+- Refactored large deterministic LWC content into smaller dictionary/config-style modules inside the existing `scenarioLauncher` bundle.
+- Kept `scenarioLauncher.js` focused on UI state, event handling, transcript queueing, and rendering behavior.
+- Split War Room data and helpers into dedicated modules for participants, perspectives, Scenario 001 data, and assessment logic.
+- Improved War Room Assessment presentation so Strengths, Risk Areas, and Recommended Next Action have clearer spacing and hierarchy.
+- Tightened option/message wording so choices read more like concrete consulting actions while remaining appropriately technical for Salesforce consultant/developer audiences.
+- Removed awkward terminology such as vague “queue” language where it did not literally mean Salesforce Queue.
+- Fixed reaction badge behavior so participant sentiment indicators do not disappear after later learner decisions when reaction state exists.
+- Preserved current accepted behavior: Technical Architect perspective, QA Lead perspective, stakeholder kickoff, pacing, typing indicator, grouped role selection, dynamic reactions, and War Room Assessment.
+- No new Salesforce metadata was added.
+
+### Validation Notes
+
+- The user validated locally and confirmed the final result looks good.
+- Launcher-only validation/deployment continued to use `manifest/scenario-launcher-package.xml`.
+- No issue-log update was needed.
+
+### Next Actions
+
+- Leave the demo alone until the next planned presentation.
+- Future work should resume only after the demo feedback is known.
+- Likely next implementation directions remain additional perspectives on Scenario 001, but polish and demo stability should take priority over new scope.
+
+---
+
 ## 2026-06-26 — Salesforce Delivery War Room and multi-perspective consulting simulation milestone
 
 ### Summary
